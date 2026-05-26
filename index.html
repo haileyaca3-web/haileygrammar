@@ -1,0 +1,1849 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hailey's Grammar</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;500;600;700;900&family=Gowun+Batang:wght@400;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F7F4ED;
+  --ink: #1F2937;
+  --paper: #FFFDF7;
+  --moss: #4A6B47;
+  --rust: #B85A3E;
+  --sky: #6B9BB5;
+  --gold: #C99A47;
+  --silver: #A8A29E;
+  --bronze: #A0744A;
+  --muted: #8B8578;
+  --line: #D9D1BE;
+  --danger: #B84A3E;
+  --success: #5C8A4F;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Gowun Batang', 'Noto Serif KR', serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  letter-spacing: -0.01em;
+}
+
+.sim-nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  background: var(--ink); color: var(--paper);
+  padding: 6px 12px; z-index: 1000;
+  display: flex; gap: 6px; align-items: center;
+  font-size: 11px; overflow-x: auto; white-space: nowrap;
+}
+.sim-nav strong { margin-right: 6px; color: var(--gold); font-weight: 700; }
+.sim-nav button {
+  background: transparent; color: var(--paper);
+  border: 1px solid rgba(255,253,247,0.3);
+  padding: 3px 8px; border-radius: 4px;
+  cursor: pointer; font-size: 10px; font-family: inherit;
+}
+.sim-nav button:hover { background: rgba(255,253,247,0.1); }
+.sim-nav button.active { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+
+.back-bar {
+  position: sticky; top: 36px;
+  background: var(--bg); z-index: 100;
+  padding: 12px 20px;
+  display: flex; align-items: center; gap: 12px;
+  transition: all 0.2s;
+}
+.back-bar.scrolled { 
+  border-bottom: 1px solid var(--line); 
+  background: rgba(247,244,237,0.95); 
+  backdrop-filter: blur(8px); 
+}
+.back-btn {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 20px; padding: 10px 18px 10px 14px;
+  cursor: pointer; font-family: inherit; font-size: 14px;
+  color: var(--ink); font-weight: 600;
+  display: flex; align-items: center; gap: 6px;
+}
+.back-btn:hover { background: var(--ink); color: var(--paper); border-color: var(--ink); transform: translateX(-2px); }
+.back-btn .arrow {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 900; font-size: 16px; line-height: 1;
+}
+.breadcrumb { font-size: 13px; color: var(--muted); font-weight: 500; }
+.breadcrumb .sep { margin: 0 6px; opacity: 0.4; }
+.breadcrumb .current { color: var(--ink); font-weight: 700; }
+
+.page { display: none; min-height: 100vh; padding-top: 36px; }
+.page.active { display: block; }
+
+.main-wrap { padding: 12px 20px 60px; max-width: 900px; margin: 0 auto; }
+.header-bar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 24px; padding-bottom: 16px;
+  border-bottom: 1px solid var(--line);
+}
+.header-bar .greeting {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px; font-weight: 700;
+}
+.header-bar .greeting .student-name { color: var(--rust); }
+.icon-btn {
+  background: var(--paper); border: 1px solid var(--line);
+  padding: 10px 16px; border-radius: 20px; font-size: 13px;
+  cursor: pointer; font-family: inherit; color: var(--ink); font-weight: 500;
+}
+.icon-btn:hover { background: var(--ink); color: var(--paper); }
+
+.unit-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 6px; flex-wrap: wrap;
+}
+.unit-title-main {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 30px; font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.unit-title-main .pt { color: var(--rust); }
+
+.notes-btn {
+  background: var(--ink); color: var(--paper); border: none;
+  padding: 10px 20px; border-radius: 22px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px -4px rgba(31,41,55,0.3);
+}
+.notes-btn:hover { 
+  background: var(--rust); transform: translateY(-2px); 
+  box-shadow: 0 6px 16px -4px rgba(184,90,62,0.4);
+}
+
+.video-btn {
+  background: var(--rust); color: var(--paper); border: none;
+  padding: 10px 20px 10px 16px; border-radius: 22px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px -4px rgba(184,90,62,0.3);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.video-btn:hover {
+  background: var(--ink); transform: translateY(-2px);
+  box-shadow: 0 6px 16px -4px rgba(31,41,55,0.3);
+}
+.video-btn .play-icon {
+  width: 16px; height: 16px;
+  background: var(--paper); border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.video-btn .play-icon::after {
+  content: '';
+  width: 0; height: 0;
+  border-left: 6px solid var(--rust);
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  margin-left: 2px;
+}
+.video-btn:hover .play-icon::after {
+  border-left-color: var(--ink);
+}
+
+/* 영상 모달 */
+.video-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31,41,55,0.85);
+  z-index: 999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  backdrop-filter: blur(8px);
+}
+.video-modal.show { display: flex; }
+.video-modal-content {
+  background: var(--ink);
+  border-radius: 18px;
+  width: 100%;
+  max-width: 900px;
+  max-height: 90vh;
+  overflow: hidden;
+  position: relative;
+}
+.video-modal-header {
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255,253,247,0.1);
+}
+.video-modal-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px; font-weight: 700;
+  color: var(--paper);
+}
+.video-modal-title .sub {
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 13px;
+  color: var(--gold); margin-left: 8px;
+}
+.video-modal-close {
+  background: transparent; border: 1px solid rgba(255,253,247,0.3);
+  color: var(--paper); width: 32px; height: 32px;
+  border-radius: 50%; cursor: pointer;
+  font-size: 18px; font-family: inherit;
+  display: flex; align-items: center; justify-content: center;
+}
+.video-modal-close:hover {
+  background: var(--rust); border-color: var(--rust);
+}
+.video-iframe-wrap {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  background: #000;
+}
+.video-iframe-wrap iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+.video-modal-footer {
+  padding: 14px 24px;
+  background: rgba(0,0,0,0.3);
+  font-size: 12px;
+  color: rgba(255,253,247,0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.video-modal-footer .progress-info {
+  display: flex; gap: 14px; align-items: center;
+}
+.video-modal-footer .progress-dot {
+  width: 6px; height: 6px;
+  background: var(--success);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.section-sub { color: var(--muted); font-size: 14px; margin-bottom: 22px; }
+
+.btn-primary {
+  width: 100%; padding: 18px; background: var(--ink); color: var(--paper);
+  border: none; border-radius: 10px; font-size: 16px; font-weight: 700;
+  cursor: pointer; font-family: inherit; margin-top: 8px; letter-spacing: 0.05em;
+}
+.btn-primary:hover { background: var(--moss); }
+.btn-secondary {
+  width: 100%; padding: 16px; background: transparent; color: var(--ink);
+  border: 1.5px solid var(--line); border-radius: 10px;
+  font-size: 15px; font-weight: 500; cursor: pointer; font-family: inherit; margin-top: 8px;
+}
+.btn-secondary:hover { border-color: var(--ink); }
+.btn-accent {
+  background: var(--rust); color: var(--paper); border: none; border-radius: 10px;
+  font-weight: 700; cursor: pointer; font-family: inherit;
+  padding: 16px 12px; font-size: 14px;
+}
+.btn-accent:hover { background: #9D4830; }
+
+/* 3단계 카드 */
+.step-grid { display: grid; grid-template-columns: 1fr; gap: 14px; margin-bottom: 24px; }
+.step-card {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 16px; padding: 18px 22px; cursor: pointer;
+  display: flex; align-items: center; gap: 20px; transition: all 0.2s;
+}
+.step-card:hover { transform: translateY(-2px); border-color: var(--ink); }
+.step-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 44px; line-height: 1; min-width: 50px;
+}
+.step-card.s1 { background: linear-gradient(135deg, #FFFDF7 0%, rgba(74,107,71,0.06) 100%); }
+.step-card.s1 .step-num { color: var(--moss); }
+.step-card.s2 { background: linear-gradient(135deg, #FFFDF7 0%, rgba(184,90,62,0.08) 100%); border-color: var(--rust); }
+.step-card.s2 .step-num { color: var(--rust); }
+.step-card.s3 { background: linear-gradient(135deg, #FFFDF7 0%, rgba(107,155,181,0.08) 100%); }
+.step-card.s3 .step-num { color: var(--sky); }
+.step-tag {
+  font-size: 10px; letter-spacing: 0.2em;
+  color: var(--muted); font-weight: 700; margin-bottom: 4px;
+}
+.step-name {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 22px; font-weight: 800; margin-bottom: 4px;
+}
+.step-desc { font-size: 14px; color: var(--muted); line-height: 1.55; }
+.step-badge {
+  display: inline-block; background: var(--rust); color: white;
+  padding: 2px 8px; border-radius: 8px;
+  font-size: 10px; font-weight: 700;
+  margin-left: 6px; letter-spacing: 0.1em;
+}
+
+/* ===== 랭킹 섹션 ===== */
+.ranking-tabs {
+  display: flex; gap: 6px; margin-bottom: 14px;
+  background: var(--paper); padding: 4px; border-radius: 14px;
+  border: 1px solid var(--line);
+}
+.rank-tab {
+  flex: 1; padding: 14px; background: transparent; border: none;
+  cursor: pointer; font-family: inherit; font-size: 14px;
+  font-weight: 700; color: var(--muted); border-radius: 10px;
+  transition: all 0.2s;
+}
+.rank-tab.active {
+  background: var(--ink); color: var(--paper);
+}
+.rank-tab .sub { font-size: 10px; font-weight: 500; opacity: 0.7; display: block; margin-top: 2px; }
+
+.ranking-board {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 18px; padding: 22px; margin-bottom: 16px;
+}
+.ranking-head {
+  display: flex; justify-content: space-between;
+  align-items: flex-end; margin-bottom: 16px;
+  padding-bottom: 12px; border-bottom: 1px solid var(--line);
+}
+.ranking-head .title-group {
+  display: flex; flex-direction: column; gap: 2px;
+}
+.ranking-head h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 800;
+}
+.ranking-head .ranking-period {
+  font-size: 11px; color: var(--muted); font-weight: 500;
+}
+.ranking-reset {
+  font-size: 11px; color: var(--muted);
+  background: var(--bg); padding: 4px 10px;
+  border-radius: 12px; font-weight: 600;
+}
+
+/* 트로피 시스템 */
+.trophy {
+  display: inline-block;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic;
+  font-weight: 700;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  text-align: center; line-height: 22px;
+  font-size: 12px; color: white;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+.trophy.gold { background: var(--gold); }
+.trophy.silver { background: var(--silver); }
+.trophy.bronze { background: var(--bronze); }
+.trophy-group {
+  display: inline-flex; gap: 2px; margin-left: 6px;
+  vertical-align: middle;
+}
+
+/* 반별 랭킹 */
+.class-rank-list { display: flex; flex-direction: column; gap: 8px; }
+.class-rank-row {
+  display: grid;
+  grid-template-columns: 50px 1fr auto;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--bg);
+  border-radius: 12px;
+  gap: 14px;
+}
+.class-rank-row.top1 { 
+  background: linear-gradient(90deg, rgba(201,154,71,0.15), rgba(201,154,71,0.05));
+  border: 1.5px solid rgba(201,154,71,0.5);
+}
+.class-rank-row.top2 { 
+  background: linear-gradient(90deg, rgba(168,162,158,0.15), rgba(168,162,158,0.05));
+  border: 1.5px solid rgba(168,162,158,0.5);
+}
+.class-rank-row.top3 { 
+  background: linear-gradient(90deg, rgba(160,116,74,0.15), rgba(160,116,74,0.05));
+  border: 1.5px solid rgba(160,116,74,0.5);
+}
+.class-rank-row.me-class {
+  background: var(--ink); color: var(--paper);
+}
+.class-rank-row.me-class .crank-rate { color: var(--gold); }
+
+.crank-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 28px;
+  text-align: center;
+}
+.class-rank-row.top1 .crank-num { color: var(--gold); }
+.class-rank-row.top2 .crank-num { color: var(--silver); }
+.class-rank-row.top3 .crank-num { color: var(--bronze); }
+
+.crank-info { display: flex; flex-direction: column; gap: 2px; }
+.crank-name {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 800; font-size: 17px;
+  display: flex; align-items: center;
+}
+.crank-meta { font-size: 12px; color: var(--muted); font-weight: 500; }
+.class-rank-row.me-class .crank-meta { color: rgba(255,253,247,0.6); }
+
+.crank-rate {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 24px; color: var(--rust);
+}
+.class-rank-row.top1 .crank-rate { color: var(--gold); }
+
+/* 개별 랭킹 */
+.indi-rank-list { display: flex; flex-direction: column; gap: 6px; }
+.indi-rank-row {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  padding: 14px 18px;
+  background: var(--bg);
+  border-radius: 10px;
+  font-size: 15px;
+  gap: 12px;
+}
+.indi-rank-row.me { background: var(--ink); color: var(--paper); }
+.indi-rank-row.me .irank-pts { color: var(--gold); }
+.indi-rank-row.top1, .indi-rank-row.top2, .indi-rank-row.top3 { font-weight: 700; }
+
+.irank-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 20px;
+}
+.indi-rank-row.top1 .irank-num { color: var(--gold); }
+.indi-rank-row.top2 .irank-num { color: var(--silver); }
+.indi-rank-row.top3 .irank-num { color: var(--bronze); }
+
+.irank-name { font-weight: 700; display: flex; align-items: center; }
+.irank-class { font-size: 12px; color: var(--muted); font-weight: 400; }
+.indi-rank-row.me .irank-class { color: rgba(255,253,247,0.6); }
+
+.irank-pts {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 18px;
+}
+
+/* 명예의 전당 (트로피 설명) */
+.hall-of-fame {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 10px 16px;
+  border-radius: 10px;
+  margin-top: 12px;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  font-size: 11px;
+}
+.hall-title {
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700; font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 0.05em;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.hall-title::before {
+  content: ''; width: 4px; height: 4px;
+  background: var(--gold); border-radius: 50%;
+}
+.hall-desc { font-size: 10px; opacity: 0.8; line-height: 1.4; }
+.trophy-legend {
+  display: flex; gap: 8px;
+  font-size: 10px;
+}
+.trophy-legend-item {
+  display: flex; align-items: center; gap: 3px;
+}
+.trophy-legend-item .t {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-weight: 700;
+  font-size: 9px; color: white;
+  text-align: center; line-height: 14px;
+}
+
+/* ===== 내용 정리 ===== */
+.notes-wrap { max-width: 760px; margin: 0 auto; padding: 12px 20px 60px; }
+.notes-toc {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 14px; padding: 18px 22px;
+  margin-bottom: 20px; position: sticky;
+  top: 88px; z-index: 50;
+}
+.notes-toc-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 14px; font-weight: 800;
+  margin-bottom: 12px; color: var(--rust);
+  letter-spacing: 0.05em;
+}
+.toc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36px, 1fr));
+  gap: 6px;
+}
+.toc-num {
+  background: var(--bg); border: 1px solid var(--line);
+  border-radius: 6px; padding: 6px 4px;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 14px;
+  text-align: center; cursor: pointer; color: var(--ink);
+}
+.toc-num:hover { background: var(--ink); color: var(--paper); }
+
+.notes-section {
+  background: var(--paper); border-radius: 16px;
+  padding: 32px 36px; border: 1px solid var(--line);
+  line-height: 1.85; font-size: 16px;
+  margin-bottom: 16px; scroll-margin-top: 200px;
+}
+.notes-section h2 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 24px; font-weight: 900;
+  margin-bottom: 4px; letter-spacing: -0.02em;
+}
+.notes-section .topic-label {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 14px;
+  color: var(--rust); margin-bottom: 12px; letter-spacing: 0.05em;
+}
+.notes-section h3 {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 16px; margin: 18px 0 8px;
+  font-weight: 700; color: var(--rust);
+}
+.answer-blank {
+  display: inline-block; 
+  background: var(--bg);
+  border: 1px dashed var(--moss); 
+  padding: 4px 14px;
+  border-radius: 6px; 
+  color: var(--moss);
+  font-weight: 700; 
+  margin: 2px 0; 
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  user-select: none;
+  position: relative;
+}
+/* 숨겨진 상태 (기본) */
+.answer-blank.hidden {
+  background: linear-gradient(135deg, var(--bg) 0%, rgba(74,107,71,0.08) 100%);
+  color: var(--moss);
+  border: 1.5px dashed var(--moss);
+  letter-spacing: 0.05em;
+}
+.answer-blank.hidden::before {
+  content: '▸ ';
+  font-weight: 900;
+  margin-right: 4px;
+}
+.answer-blank.hidden:hover {
+  background: var(--moss);
+  color: var(--paper);
+  transform: translateY(-1px);
+}
+.answer-blank.hidden .answer-text { display: none; }
+.answer-blank.hidden .answer-placeholder { display: inline; }
+
+/* 펼쳐진 상태 */
+.answer-blank.revealed {
+  background: rgba(74,107,71,0.1);
+  border: 1px solid var(--moss);
+  color: var(--moss);
+}
+.answer-blank.revealed::before {
+  content: '✓ ';
+  font-weight: 900;
+  margin-right: 4px;
+  color: var(--success);
+}
+.answer-blank.revealed .answer-text { display: inline; }
+.answer-blank.revealed .answer-placeholder { display: none; }
+.answer-blank.revealed:hover {
+  background: rgba(74,107,71,0.18);
+}
+.example-box {
+  background: var(--bg); border-left: 3px solid var(--moss);
+  padding: 12px 18px; border-radius: 0 10px 10px 0;
+  margin: 10px 0; font-size: 15px;
+}
+.example-box .eng { font-weight: 700; }
+.example-box .kor { color: var(--muted); font-size: 14px; margin-top: 4px; font-weight: 400; }
+.example-box.wrong { border-left-color: var(--danger); background: rgba(184,90,62,0.04); }
+.example-box.correct { border-left-color: var(--success); background: rgba(92,138,79,0.04); }
+.lesson-warn {
+  background: rgba(201,154,71,0.08);
+  border-left: 3px solid var(--gold);
+  padding: 14px 18px; border-radius: 0 10px 10px 0;
+  margin: 14px 0; font-size: 13px;
+}
+.lesson-warn strong { color: var(--gold); font-weight: 800; }
+.key-point {
+  background: var(--ink); color: var(--paper); 
+  padding: 14px 18px; border-radius: 10px; 
+  margin-top: 14px; font-size: 13px;
+}
+.key-point .label {
+  font-family: 'Noto Serif KR', serif; font-weight: 700; 
+  margin-bottom: 4px; color: var(--gold);
+}
+
+/* 단원 선택 */
+.chapter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+}
+.chapter-card {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 12px; padding: 14px 16px; cursor: pointer;
+  display: flex; align-items: center; gap: 12px;
+}
+.chapter-card:hover { border-color: var(--ink); transform: translateY(-1px); }
+.chapter-card.completed { background: rgba(92,138,79,0.06); border-color: rgba(92,138,79,0.3); }
+.chapter-card.in-progress { background: rgba(201,154,71,0.06); border-color: rgba(201,154,71,0.4); }
+.ch-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 26px;
+  color: var(--muted); width: 40px; text-align: center;
+}
+.chapter-card.completed .ch-num { color: var(--success); }
+.chapter-card.in-progress .ch-num { color: var(--gold); }
+.ch-info { flex: 1; min-width: 0; }
+.ch-title {
+  font-weight: 700; font-size: 15px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.ch-meta { font-size: 12px; color: var(--muted); margin-top: 2px; font-weight: 400; }
+.ch-status-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--line); flex-shrink: 0;
+}
+.chapter-card.completed .ch-status-dot { background: var(--success); }
+.chapter-card.in-progress .ch-status-dot { background: var(--gold); }
+
+.area-header {
+  margin: 22px 0 10px; padding: 11px 16px;
+  background: var(--ink); color: var(--paper);
+  border-radius: 10px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: 'Noto Serif KR', serif;
+  font-weight: 700; font-size: 15px;
+}
+.area-header .area-progress {
+  font-size: 11px; background: rgba(255,253,247,0.2);
+  padding: 3px 10px; border-radius: 10px; font-weight: 500;
+}
+
+/* 퀴즈 공통 */
+.quiz-wrap { max-width: 640px; margin: 0 auto; padding: 12px 20px 80px; }
+.quiz-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 20px; gap: 16px;
+}
+.quiz-progress {
+  flex: 1; height: 6px; background: var(--line);
+  border-radius: 3px; overflow: hidden;
+}
+.quiz-progress > div { height: 100%; border-radius: 3px; }
+.quiz-count {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 22px;
+}
+.quiz-count .total { color: var(--muted); font-weight: 400; }
+
+.timer-ring { position: relative; width: 60px; height: 60px; }
+.timer-ring svg { transform: rotate(-90deg); }
+.timer-ring .bg { stroke: var(--line); }
+.timer-ring .fg { transition: stroke-dashoffset 1s linear; stroke-linecap: round; }
+.timer-num {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 22px;
+}
+
+.context-bar {
+  background: var(--paper); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 16px; margin-bottom: 16px;
+  font-size: 13px; display: flex; justify-content: space-between; align-items: center;
+}
+.context-bar .crumb { color: var(--muted); }
+.context-bar strong { color: var(--rust); font-weight: 700; }
+
+.q-card {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 18px; padding: 28px;
+}
+.q-tag {
+  font-size: 10px; letter-spacing: 0.2em; color: var(--rust);
+  font-weight: 700; margin-bottom: 14px;
+  display: flex; gap: 8px; align-items: center;
+}
+.q-tag .type-label {
+  background: var(--rust); color: white; padding: 2px 8px;
+  border-radius: 4px; letter-spacing: 0.1em;
+}
+.q-tag .type-label.learn { background: var(--moss); }
+.q-tag .type-label.mastery { background: var(--rust); }
+.q-text { font-size: 17px; font-weight: 500; line-height: 1.6; margin-bottom: 22px; }
+
+.q-multi {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px;
+}
+.q-multi button {
+  background: var(--bg); border: 1.5px solid var(--line);
+  padding: 16px 12px; border-radius: 10px; cursor: pointer;
+  font-family: inherit; font-size: 16px; font-weight: 600; color: var(--ink);
+}
+.q-multi button:hover { background: #EFE9DA; }
+.q-multi button.selected { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+.q-ox { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 8px; }
+.q-ox button {
+  padding: 36px 20px; background: var(--bg); border: 2px solid var(--line);
+  border-radius: 14px; font-family: 'Cormorant Garamond', serif;
+  font-style: italic; font-size: 50px; font-weight: 700;
+  cursor: pointer; color: var(--ink);
+}
+.q-ox button.o { color: var(--success); }
+.q-ox button.x { color: var(--danger); }
+.q-ox button.selected.o { background: var(--success); color: white; border-color: var(--success); }
+.q-ox button.selected.x { background: var(--danger); color: white; border-color: var(--danger); }
+
+.q-sentence-box {
+  background: var(--bg); border-left: 3px solid var(--ink);
+  padding: 16px 20px; border-radius: 0 10px 10px 0;
+  margin: 16px 0 22px; font-size: 19px; font-weight: 700;
+}
+
+.q-helper {
+  margin-top: 12px; padding: 10px 14px;
+  background: rgba(74,107,71,0.06); border-radius: 8px;
+  font-size: 13px; color: var(--moss); font-weight: 500;
+}
+
+.quiz-bottom { margin-top: 24px; display: flex; gap: 12px; }
+.quiz-bottom button { flex: 1; }
+
+/* 결과 */
+.result-wrap { max-width: 640px; margin: 0 auto; padding: 12px 20px 60px; }
+.result-hero {
+  background: linear-gradient(135deg, var(--ink) 0%, #2F3F58 100%);
+  color: var(--paper); border-radius: 18px;
+  padding: 28px 28px; text-align: center;
+  position: relative; overflow: hidden; margin-bottom: 18px;
+}
+.result-hero::before {
+  content: ''; position: absolute; top: -50px; right: -50px;
+  width: 200px; height: 200px; border-radius: 50%;
+  background: var(--gold); opacity: 0.1;
+}
+.result-label {
+  font-size: 12px; letter-spacing: 0.3em; color: var(--gold);
+  margin-bottom: 12px; font-weight: 700;
+}
+.result-score {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 64px;
+  line-height: 1; margin-bottom: 8px; letter-spacing: -0.04em;
+}
+.result-score .total { color: rgba(255,253,247,0.4); font-size: 32px; }
+.result-msg { font-size: 15px; color: rgba(255,253,247,0.85); font-weight: 500; }
+
+.weak-section {
+  background: var(--paper); border: 1.5px solid var(--line);
+  border-radius: 18px; padding: 24px; margin-bottom: 20px;
+}
+.weak-title {
+  font-family: 'Noto Serif KR', serif;
+  font-size: 20px; font-weight: 800; margin-bottom: 6px;
+}
+.weak-title .pt { color: var(--rust); }
+.weak-sub { font-size: 13px; color: var(--muted); margin-bottom: 16px; }
+
+.weak-list { display: flex; flex-direction: column; gap: 8px; }
+.weak-item {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 18px; background: rgba(184,90,62,0.05);
+  border: 1px solid rgba(184,90,62,0.2); border-radius: 10px;
+}
+.weak-num {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 22px; color: var(--rust); width: 36px;
+}
+.weak-info { flex: 1; }
+.weak-name { font-weight: 700; font-size: 15px; margin-bottom: 2px; }
+.weak-detail { font-size: 12px; color: var(--muted); }
+.weak-percent {
+  font-family: 'Cormorant Garamond', serif; font-style: italic;
+  font-weight: 700; font-size: 18px; color: var(--rust);
+}
+
+.result-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+
+@media (min-width: 601px) and (max-width: 1024px) {
+  /* 태블릿 */
+  body { font-size: 16px; }
+  .main-wrap { max-width: 760px; padding: 14px 24px 80px; }
+  .quiz-wrap { max-width: 720px; }
+  .notes-wrap { max-width: 720px; }
+  .step-card { padding: 20px 24px; }
+  .step-num { font-size: 48px; }
+  .step-name { font-size: 22px; }
+  .step-desc { font-size: 14px; line-height: 1.6; }
+  .q-text { font-size: 20px; }
+  .q-option { padding: 18px 22px; font-size: 17px; }
+  .q-ox button { padding: 48px 24px; font-size: 54px; }
+  .q-multi button { padding: 18px 14px; font-size: 17px; }
+  .notes-section { padding: 36px 40px; font-size: 17px; }
+  .notes-section h2 { font-size: 26px; }
+  .notes-section h3 { font-size: 17px; }
+  .ch-title { font-size: 15px; }
+  .crank-name { font-size: 18px; }
+  .indi-rank-row { font-size: 16px; padding: 16px 20px; }
+  .timer-num { font-size: 24px; }
+  .quiz-count { font-size: 24px; }
+  .result-score { font-size: 72px; }
+  .result-score .total { font-size: 36px; }
+}
+
+@media (max-width: 600px) {
+  .step-num { font-size: 40px; min-width: 44px; }
+  .chapter-grid { grid-template-columns: 1fr; }
+  .q-multi { grid-template-columns: repeat(2, 1fr); }
+  .back-bar { padding: 10px 16px; top: 30px; }
+  .unit-header { gap: 10px; }
+  .unit-title-main { font-size: 22px; }
+  .notes-section { padding: 22px; }
+  .notes-toc { padding: 14px; top: 80px; }
+  .hall-of-fame { flex-direction: column; align-items: flex-start; }
+  .trophy-legend { flex-wrap: wrap; }
+  .class-rank-row { grid-template-columns: 40px 1fr auto; gap: 10px; padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+
+<nav class="sim-nav">
+  <strong>SIM v7</strong>
+  <button onclick="navTo('main')" class="active">메인</button>
+  <button onclick="navTo('ranking')">전체 랭킹</button>
+  <button onclick="navTo('notes')">내용 정리</button>
+  <button onclick="navTo('learn-chapter')">학습-단원</button>
+  <button onclick="navTo('learn-quiz')">학습 문제</button>
+  <button onclick="navTo('test-chapter')">테스트-단원</button>
+  <button onclick="navTo('difficulty')">난이도</button>
+  <button onclick="navTo('quiz-mastery')">Mastery</button>
+  <button onclick="navTo('result')">결과</button>
+  <button onclick="navTo('extra')">추가 문제</button>
+</nav>
+
+<!-- ========================================== -->
+<!-- 1. 메인 -->
+<!-- ========================================== -->
+<div class="page active" id="page-main">
+  <div class="main-wrap" style="padding-top:30px;">
+    <div class="header-bar">
+      <div class="greeting">
+        <span style="opacity:0.85;">안녕하세요,</span> <span class="student-name">민준</span>님
+        <span class="trophy-group" style="margin-left:4px;">
+          <span class="trophy gold">1</span>
+          <span class="trophy bronze">3</span>
+        </span>
+      </div>
+      <button class="icon-btn">로그아웃</button>
+    </div>
+
+    <div class="unit-header">
+      <div class="unit-title-main">문장의 <span class="pt">5형식</span></div>
+      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
+      <button class="video-btn" onclick="openVideo()">
+        <span class="play-icon"></span> 영상 강의
+      </button>
+    </div>
+    <div class="section-sub">Spark · Unit 01 · 24개 단원 학습 시스템</div>
+
+    <div class="step-grid">
+      <div class="step-card s1" onclick="navTo('learn-chapter')">
+        <div class="step-num">Ⅰ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 1 <span class="step-badge" style="background:var(--moss);">반별 랭킹</span></div>
+          <div class="step-name">학습하기</div>
+          <div class="step-desc">내용 확인용 객관식 + OX 문제<br>우리 반 평균 정답률이 랭킹에 반영돼요</div>
+        </div>
+      </div>
+      <div class="step-card s2" onclick="navTo('test-chapter')">
+        <div class="step-num">Ⅱ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 2 <span class="step-badge">개별 랭킹</span></div>
+          <div class="step-name">테스트 보기</div>
+          <div class="step-desc">Foundation · Bridge · Mastery 3단계<br>개인 실력 평가 + 개별 순위 적립</div>
+        </div>
+      </div>
+      <div class="step-card s3" onclick="navTo('extra')">
+        <div class="step-num">Ⅲ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 3</div>
+          <div class="step-name">추가 문제</div>
+          <div class="step-desc">테스트에서 약했던 단원만 자동 추출<br>비슷한 문제로 더 연습</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 명예의 전당 (작은 안내) -->
+    <div class="hall-of-fame">
+      <div class="hall-title">명예의 전당 — 1·2·3위 상장 누적</div>
+      <div class="trophy-legend">
+        <div class="trophy-legend-item">
+          <span class="t" style="background:var(--gold);">1</span> 금
+        </div>
+        <div class="trophy-legend-item">
+          <span class="t" style="background:var(--silver);">2</span> 은
+        </div>
+        <div class="trophy-legend-item">
+          <span class="t" style="background:var(--bronze);">3</span> 동
+        </div>
+      </div>
+    </div>
+
+    <!-- 랭킹 탭 -->
+    <div class="ranking-tabs">
+      <button class="rank-tab active" onclick="switchRank('class', this)">
+        반별 랭킹 <span class="sub">학습하기 정답률</span>
+      </button>
+      <button class="rank-tab" onclick="switchRank('indi', this)">
+        개별 랭킹 <span class="sub">테스트 점수</span>
+      </button>
+    </div>
+
+    <!-- 반별 랭킹 -->
+    <div id="rank-class">
+      <div class="ranking-board">
+        <div class="ranking-head">
+          <div class="title-group">
+            <h3>반별 랭킹</h3>
+            <div class="ranking-period">2026년 5월 · 학습 정답률 평균</div>
+          </div>
+          <div class="ranking-reset">5/31 초기화</div>
+        </div>
+
+        <div class="class-rank-list">
+          <div class="class-rank-row top1">
+            <div class="crank-num">1</div>
+            <div class="crank-info">
+              <div class="crank-name">
+                A반
+                <span class="trophy-group">
+                  <span class="trophy gold">1</span>
+                  <span class="trophy gold">1</span>
+                  <span class="trophy silver">2</span>
+                </span>
+              </div>
+              <div class="crank-meta">중2 · 8명 · 학습 156회</div>
+            </div>
+            <div class="crank-rate">92.4%</div>
+          </div>
+          <div class="class-rank-row top2 me-class">
+            <div class="crank-num">2</div>
+            <div class="crank-info">
+              <div class="crank-name">
+                B반 (우리 반)
+                <span class="trophy-group">
+                  <span class="trophy silver">2</span>
+                  <span class="trophy bronze">3</span>
+                </span>
+              </div>
+              <div class="crank-meta">중2 · 9명 · 학습 142회</div>
+            </div>
+            <div class="crank-rate">87.8%</div>
+          </div>
+          <div class="class-rank-row top3">
+            <div class="crank-num">3</div>
+            <div class="crank-info">
+              <div class="crank-name">
+                C반
+                <span class="trophy-group">
+                  <span class="trophy bronze">3</span>
+                </span>
+              </div>
+              <div class="crank-meta">중2 · 7명 · 학습 128회</div>
+            </div>
+            <div class="crank-rate">81.2%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 개별 랭킹 -->
+    <div id="rank-indi" style="display:none;">
+      <div class="ranking-board">
+        <div class="ranking-head">
+          <div class="title-group">
+            <h3>개별 랭킹</h3>
+            <div class="ranking-period">2026년 5월 · 테스트 누적 점수</div>
+          </div>
+          <div class="ranking-reset">5/31 초기화</div>
+        </div>
+
+        <div class="indi-rank-list">
+          <div class="indi-rank-row top1">
+            <div class="irank-num">1</div>
+            <div>
+              <div class="irank-name">
+                윤OO
+                <span class="trophy-group">
+                  <span class="trophy gold">1</span>
+                  <span class="trophy gold">1</span>
+                  <span class="trophy silver">2</span>
+                </span>
+              </div>
+              <div class="irank-class">A반</div>
+            </div>
+            <div></div>
+            <div class="irank-pts">2,480</div>
+          </div>
+          <div class="indi-rank-row top2">
+            <div class="irank-num">2</div>
+            <div>
+              <div class="irank-name">
+                박OO
+                <span class="trophy-group">
+                  <span class="trophy silver">2</span>
+                  <span class="trophy bronze">3</span>
+                </span>
+              </div>
+              <div class="irank-class">B반</div>
+            </div>
+            <div></div>
+            <div class="irank-pts">2,340</div>
+          </div>
+          <div class="indi-rank-row top3">
+            <div class="irank-num">3</div>
+            <div>
+              <div class="irank-name">
+                이OO
+                <span class="trophy-group">
+                  <span class="trophy bronze">3</span>
+                </span>
+              </div>
+              <div class="irank-class">A반</div>
+            </div>
+            <div></div>
+            <div class="irank-pts">2,180</div>
+          </div>
+          <div class="indi-rank-row">
+            <div class="irank-num">4</div>
+            <div>
+              <div class="irank-name">최OO</div>
+              <div class="irank-class">C반</div>
+            </div>
+            <div></div>
+            <div class="irank-pts">2,050</div>
+          </div>
+          <div class="indi-rank-row me">
+            <div class="irank-num">5</div>
+            <div>
+              <div class="irank-name">
+                김민준 (나)
+                <span class="trophy-group">
+                  <span class="trophy gold">1</span>
+                  <span class="trophy bronze">3</span>
+                </span>
+              </div>
+              <div class="irank-class">B반</div>
+            </div>
+            <div></div>
+            <div class="irank-pts">1,920</div>
+          </div>
+        </div>
+
+        <button class="btn-secondary" style="margin-top:14px;" onclick="navTo('ranking')">전체 랭킹 보기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 2. 전체 랭킹 페이지 -->
+<!-- ========================================== -->
+<div class="page" id="page-ranking">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">전체 랭킹</span></div>
+  </div>
+  <div class="main-wrap">
+    <div class="unit-title-main"><span class="pt">전체</span> 랭킹</div>
+    <div class="section-sub">2026년 5월 · 5/31에 자동 초기화</div>
+
+    <div class="ranking-tabs">
+      <button class="rank-tab active" onclick="switchRank2('class', this)">반별 (학습)</button>
+      <button class="rank-tab" onclick="switchRank2('indi', this)">개별 (테스트)</button>
+    </div>
+
+    <div id="rank2-class">
+      <div class="ranking-board">
+        <div class="ranking-head">
+          <div class="title-group">
+            <h3>반별 랭킹 (전체)</h3>
+            <div class="ranking-period">학습하기 정답률 평균</div>
+          </div>
+        </div>
+        <div class="class-rank-list">
+          <div class="class-rank-row top1">
+            <div class="crank-num">1</div>
+            <div class="crank-info">
+              <div class="crank-name">A반 <span class="trophy-group"><span class="trophy gold">1</span><span class="trophy gold">1</span><span class="trophy silver">2</span></span></div>
+              <div class="crank-meta">중2 · 8명 · 학습 156회 · 정답 1,442/1,560</div>
+            </div>
+            <div class="crank-rate">92.4%</div>
+          </div>
+          <div class="class-rank-row top2 me-class">
+            <div class="crank-num">2</div>
+            <div class="crank-info">
+              <div class="crank-name">B반 (우리) <span class="trophy-group"><span class="trophy silver">2</span><span class="trophy bronze">3</span></span></div>
+              <div class="crank-meta">중2 · 9명 · 학습 142회 · 정답 1,247/1,420</div>
+            </div>
+            <div class="crank-rate">87.8%</div>
+          </div>
+          <div class="class-rank-row top3">
+            <div class="crank-num">3</div>
+            <div class="crank-info">
+              <div class="crank-name">C반 <span class="trophy-group"><span class="trophy bronze">3</span></span></div>
+              <div class="crank-meta">중2 · 7명 · 학습 128회 · 정답 1,039/1,280</div>
+            </div>
+            <div class="crank-rate">81.2%</div>
+          </div>
+          <div class="class-rank-row">
+            <div class="crank-num">4</div>
+            <div class="crank-info">
+              <div class="crank-name">D반</div>
+              <div class="crank-meta">중1 · 6명 · 학습 95회 · 정답 731/950</div>
+            </div>
+            <div class="crank-rate">76.9%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="rank2-indi" style="display:none;">
+      <div class="ranking-board">
+        <div class="ranking-head">
+          <div class="title-group">
+            <h3>개별 랭킹 (전체 24명)</h3>
+            <div class="ranking-period">테스트 누적 점수</div>
+          </div>
+        </div>
+        <div class="indi-rank-list">
+          <div class="indi-rank-row top1">
+            <div class="irank-num">1</div>
+            <div><div class="irank-name">윤OO <span class="trophy-group"><span class="trophy gold">1</span><span class="trophy gold">1</span><span class="trophy silver">2</span></span></div><div class="irank-class">A반</div></div>
+            <div></div><div class="irank-pts">2,480</div>
+          </div>
+          <div class="indi-rank-row top2">
+            <div class="irank-num">2</div>
+            <div><div class="irank-name">박OO <span class="trophy-group"><span class="trophy silver">2</span><span class="trophy bronze">3</span></span></div><div class="irank-class">B반</div></div>
+            <div></div><div class="irank-pts">2,340</div>
+          </div>
+          <div class="indi-rank-row top3">
+            <div class="irank-num">3</div>
+            <div><div class="irank-name">이OO <span class="trophy-group"><span class="trophy bronze">3</span></span></div><div class="irank-class">A반</div></div>
+            <div></div><div class="irank-pts">2,180</div>
+          </div>
+          <div class="indi-rank-row">
+            <div class="irank-num">4</div>
+            <div><div class="irank-name">최OO</div><div class="irank-class">C반</div></div>
+            <div></div><div class="irank-pts">2,050</div>
+          </div>
+          <div class="indi-rank-row me">
+            <div class="irank-num">5</div>
+            <div><div class="irank-name">김민준 (나) <span class="trophy-group"><span class="trophy gold">1</span><span class="trophy bronze">3</span></span></div><div class="irank-class">B반</div></div>
+            <div></div><div class="irank-pts">1,920</div>
+          </div>
+          <div class="indi-rank-row">
+            <div class="irank-num">6</div>
+            <div><div class="irank-name">정OO</div><div class="irank-class">A반</div></div>
+            <div></div><div class="irank-pts">1,840</div>
+          </div>
+          <div class="indi-rank-row">
+            <div class="irank-num">7</div>
+            <div><div class="irank-name">강OO</div><div class="irank-class">B반</div></div>
+            <div></div><div class="irank-pts">1,760</div>
+          </div>
+          <div class="indi-rank-row">
+            <div class="irank-num">8</div>
+            <div><div class="irank-name">한OO</div><div class="irank-class">C반</div></div>
+            <div></div><div class="irank-pts">1,680</div>
+          </div>
+        </div>
+        <div style="text-align:center; padding:14px; color:var(--muted); font-size:12px;">... 외 16명</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 내용 정리 -->
+<!-- ========================================== -->
+<div class="page" id="page-notes">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">내용 정리</span></div>
+  </div>
+  <div class="notes-wrap">
+    <div class="unit-header" style="margin-bottom:16px;">
+      <div class="unit-title-main">문장의 <span class="pt">5형식</span></div>
+      <span style="font-family:'Cormorant Garamond'; font-style:italic; font-size:18px; color:var(--muted); font-weight:700;">Complete Notes</span>
+    </div>
+
+    <div class="notes-toc">
+      <div class="notes-toc-title">빠른 이동 (24개 단원)</div>
+      <div class="toc-grid">
+        <div class="toc-num" onclick="scrollTo('n1')">1</div>
+        <div class="toc-num" onclick="scrollTo('n2')">2</div>
+        <div class="toc-num" onclick="scrollTo('n3')">3</div>
+        <div class="toc-num" onclick="scrollTo('n4')">4</div>
+        <div class="toc-num" onclick="scrollTo('n5')">5</div>
+        <div class="toc-num" onclick="scrollTo('n8')">8</div>
+        <div class="toc-num">9</div>
+        <div class="toc-num">10</div>
+        <div class="toc-num">11</div>
+        <div class="toc-num">12</div>
+        <div class="toc-num">13</div>
+        <div class="toc-num">14</div>
+        <div class="toc-num">15</div>
+        <div class="toc-num">16</div>
+        <div class="toc-num">17</div>
+        <div class="toc-num">18</div>
+        <div class="toc-num">19</div>
+        <div class="toc-num">20</div>
+        <div class="toc-num">21</div>
+        <div class="toc-num">22</div>
+        <div class="toc-num">23</div>
+        <div class="toc-num">24</div>
+      </div>
+    </div>
+
+    <div class="notes-section" id="n1">
+      <div class="topic-label">Chapter 1</div>
+      <h2>8품사</h2>
+      <h3>핵심 정리</h3>
+      <p>답: <span class="answer-blank hidden" onclick="toggleAnswer(this)"><span class="answer-placeholder">답 확인하기</span><span class="answer-text">명사, 대명사, 동사, 형용사, 부사, 전치사, 접속사, 감탄사</span></span></p>
+      <h3>설명</h3>
+      <p>영어의 모든 단어는 여덟 가지 품사 중 하나에 속한다. 품사는 단어가 문장 안에서 어떤 역할을 할 수 있는지를 결정한다. 명사·대명사는 주어·목적어·보어 자리에, 동사는 문장의 형식을 결정하는 자리에, 형용사와 부사는 다른 말을 꾸며주는 자리에 들어간다.</p>
+    </div>
+
+    <div class="notes-section" id="n2">
+      <div class="topic-label">Chapter 2</div>
+      <h2>수식어</h2>
+      <h3>핵심 정리</h3>
+      <p>답: <span class="answer-blank hidden" onclick="toggleAnswer(this)"><span class="answer-placeholder">답 확인하기</span><span class="answer-text">전치사+명사, 부사</span></span></p>
+      <h3>설명</h3>
+      <p>형식을 결정하지 않고 의미만 풍부하게 해주는 것이 수식어. 부사와 전치사구가 있다.</p>
+      <div class="example-box">
+        <div class="eng">She sings beautifully.</div>
+        <div class="kor">→ beautifully를 가리면 1형식</div>
+      </div>
+    </div>
+
+    <div class="notes-section" id="n3">
+      <div class="topic-label">Chapter 3</div>
+      <h2>1형식</h2>
+      <h3>핵심 정리</h3>
+      <p>답: <span class="answer-blank hidden" onclick="toggleAnswer(this)"><span class="answer-placeholder">답 확인하기</span><span class="answer-text">주어(S) + 동사(V)</span></span></p>
+      <div class="example-box"><div class="eng">Birds fly.</div></div>
+      <div class="example-box"><div class="eng">The baby is sleeping.</div></div>
+    </div>
+
+    <div class="notes-section" id="n8">
+      <div class="topic-label">Chapter 8</div>
+      <h2>감각동사</h2>
+      <h3>핵심 정리</h3>
+      <p>답: <span class="answer-blank hidden" onclick="toggleAnswer(this)"><span class="answer-placeholder">답 확인하기</span><span class="answer-text">look, sound, smell, taste, feel</span></span></p>
+      <h3>설명</h3>
+      <p>오감으로 느낀 바를 설명하는 동사. <strong style="color:var(--rust);">감각동사 뒤에는 반드시 형용사가 와야 한다.</strong> 이 부분에서 학생들이 가장 많이 틀린다.</p>
+      <div class="example-box correct"><div class="eng">She looks beautiful. (O)</div></div>
+      <div class="example-box wrong">
+        <div class="eng">She looks beautifully. (X)</div>
+        <div class="kor">"아름답게"라는 한국어 해석에 끌려 부사를 쓰면 안 된다.</div>
+      </div>
+      <div class="lesson-warn">
+        <strong>주의</strong><br>
+        감각동사 뒤에 명사를 쓰고 싶을 때는 like를 붙여야 한다.
+        <div style="margin-top:8px;">
+          <strong>She looks like her mother.</strong>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">like는 전치사 → 1형식</div>
+        </div>
+      </div>
+      <div class="key-point">
+        <div class="label">핵심</div>
+        감각동사 + 형용사 → 2형식 / 감각동사 + like + 명사 → 1형식
+      </div>
+    </div>
+
+    <div style="text-align:center; padding:40px 20px; color:var(--muted); font-size:13px;">
+      ... 단원 9 ~ 24도 동일한 방식
+    </div>
+    <button class="btn-primary" onclick="navBack()" style="max-width:300px; margin:0 auto; display:block;">← 메인으로</button>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 학습-단원 -->
+<!-- ========================================== -->
+<div class="page" id="page-learn-chapter">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">학습하기</span></div>
+  </div>
+  <div class="main-wrap">
+    <div class="unit-header">
+      <div class="unit-title-main"><span class="pt">학습하기</span></div>
+      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
+      <button class="video-btn" onclick="openVideo()">
+        <span class="play-icon"></span> 영상 강의
+      </button>
+    </div>
+    <div class="section-sub">우리 반 평균 정답률이 반별 랭킹에 반영돼요</div>
+
+    <div style="background:rgba(74,107,71,0.06); border:1px solid var(--moss); border-radius:10px; padding:10px 16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <span style="font-size:11px; color:var(--moss); font-weight:700;">B반 정답률</span>
+        <span style="font-family:'Noto Serif KR'; font-weight:800; color:var(--moss);">87.8% · 2위</span>
+      </div>
+      <span style="font-size:11px; color:var(--muted);">1위까지 4.6%</span>
+    </div>
+
+    <div class="area-header"><span>1형식 영역</span><span class="area-progress">4단원</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-card completed" onclick="navTo('learn-quiz')">
+        <div class="ch-num">1</div>
+        <div class="ch-info"><div class="ch-title">8품사</div><div class="ch-meta">완료</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card completed" onclick="navTo('learn-quiz')">
+        <div class="ch-num">2</div>
+        <div class="ch-info"><div class="ch-title">수식어</div><div class="ch-meta">완료</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card in-progress" onclick="navTo('learn-quiz')">
+        <div class="ch-num">3</div>
+        <div class="ch-info"><div class="ch-title">1형식</div><div class="ch-meta">학습 중</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card" onclick="navTo('learn-quiz')">
+        <div class="ch-num">4</div>
+        <div class="ch-info"><div class="ch-title">1형식 동사 16개</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+    </div>
+
+    <div class="area-header"><span>2형식 영역</span><span class="area-progress">6단원</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-card" onclick="navTo('learn-quiz')">
+        <div class="ch-num">5</div>
+        <div class="ch-info"><div class="ch-title">2형식</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card in-progress" onclick="navTo('learn-quiz')">
+        <div class="ch-num">8</div>
+        <div class="ch-info"><div class="ch-title">감각동사</div><div class="ch-meta">학습 중</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+    </div>
+
+    <div style="font-size:12px; color:var(--muted); padding:14px; background:var(--paper); border:1px dashed var(--line); border-radius:10px; text-align:center; margin-top:20px;">
+      11~24단원도 동일한 방식
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 학습 문제 (OX) -->
+<!-- ========================================== -->
+<div class="page" id="page-learn-quiz">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">학습하기 <span class="sep">›</span> 8단원 <span class="sep">›</span> <span class="current">문제 풀이</span></div>
+  </div>
+  <div class="quiz-wrap">
+    <div class="context-bar">
+      <div class="crumb">8단원 · <strong>감각동사</strong></div>
+      <div style="color:var(--moss); font-weight:700;">학습 문제 · 반별 랭킹 반영</div>
+    </div>
+
+    <div class="quiz-topbar">
+      <div class="quiz-count">5 <span class="total">/ 6</span></div>
+      <div class="quiz-progress"><div style="width:83%; background:var(--moss);"></div></div>
+      <div class="timer-ring">
+        <svg width="60" height="60">
+          <circle class="bg" cx="30" cy="30" r="26" stroke-width="4" fill="none"/>
+          <circle class="fg" cx="30" cy="30" r="26" stroke-width="4" fill="none" stroke-dasharray="163.36" stroke-dashoffset="100" style="stroke:var(--moss);"/>
+        </svg>
+        <div class="timer-num">12</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-tag">학습 문제 [OX] <span class="type-label learn">CHECK</span></div>
+      <div class="q-text">다음 문장이 어법상 옳으면 O, 틀리면 X를 선택하세요.</div>
+      <div class="q-sentence-box">She looks beautifully today.</div>
+      <div class="q-ox">
+        <button class="o" onclick="selectOX(this)">O</button>
+        <button class="x selected" onclick="selectOX(this)">X</button>
+      </div>
+      <div class="q-helper">
+        look은 감각동사. 뒤에 부사가 아닌 형용사가 와야 합니다.
+      </div>
+    </div>
+
+    <div class="quiz-bottom">
+      <button class="btn-secondary">건너뛰기</button>
+      <button class="btn-primary" onclick="navTo('main')">완료 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 테스트-단원 -->
+<!-- ========================================== -->
+<div class="page" id="page-test-chapter">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">테스트 보기</span></div>
+  </div>
+  <div class="main-wrap">
+    <div class="unit-header">
+      <div class="unit-title-main"><span class="pt">테스트</span> 보기</div>
+      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
+      <button class="video-btn" onclick="openVideo()">
+        <span class="play-icon"></span> 영상 강의
+      </button>
+    </div>
+    <div class="section-sub">개인 점수가 개별 랭킹에 반영돼요. 신중하게 풀어주세요</div>
+
+    <div style="background:rgba(184,90,62,0.06); border:1px solid var(--rust); border-radius:10px; padding:10px 16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
+      <div style="display:flex; gap:12px; align-items:center;">
+        <span style="font-size:11px; color:var(--rust); font-weight:700;">내 랭킹</span>
+        <span style="font-family:'Noto Serif KR'; font-weight:800; color:var(--rust);">5위 / 24명</span>
+      </div>
+      <span style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:16px; color:var(--rust);">1,920 pt</span>
+    </div>
+
+    <div class="area-header"><span>1형식 영역</span><span class="area-progress">4단원 · 평균 85%</span></div>
+    <div class="chapter-grid">
+      <div class="chapter-card completed" onclick="navTo('difficulty')">
+        <div class="ch-num">1</div>
+        <div class="ch-info"><div class="ch-title">8품사</div><div class="ch-meta">완료 · 90%</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card in-progress" onclick="navTo('difficulty')">
+        <div class="ch-num">8</div>
+        <div class="ch-info"><div class="ch-title">감각동사</div><div class="ch-meta">진행 중</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card" onclick="navTo('difficulty')">
+        <div class="ch-num">2</div>
+        <div class="ch-info"><div class="ch-title">수식어</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+      <div class="chapter-card" onclick="navTo('difficulty')">
+        <div class="ch-num">3</div>
+        <div class="ch-info"><div class="ch-title">1형식</div></div>
+        <div class="ch-status-dot"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 난이도 -->
+<!-- ========================================== -->
+<div class="page" id="page-difficulty">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">테스트 <span class="sep">›</span> 8단원 <span class="sep">›</span> <span class="current">난이도</span></div>
+  </div>
+  <div class="main-wrap">
+    <div class="unit-header">
+      <div class="unit-title-main"><span class="pt">난이도</span> 선택</div>
+      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
+      <button class="video-btn" onclick="openVideo()">
+        <span class="play-icon"></span> 영상 강의
+      </button>
+    </div>
+    <div class="section-sub">8단원 감각동사</div>
+
+    <div style="display:grid; grid-template-columns:1fr; gap:12px;">
+      <div onclick="navTo('quiz-mastery')" style="background:linear-gradient(135deg, #FFFDF7 0%, rgba(92,138,79,0.06) 100%); border:1.5px solid var(--line); border-radius:14px; padding:22px 24px; cursor:pointer; display:flex; align-items:center; gap:18px;">
+        <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:30px; width:130px; text-align:center; color:var(--success);">Foundation</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; color:var(--muted); font-weight:700; letter-spacing:0.1em; margin-bottom:4px;">기초</div>
+          <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:16px;">객관식 선택형</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">개념 이해 확인 · 5문제 · 30초</div>
+        </div>
+      </div>
+      <div onclick="navTo('quiz-mastery')" style="background:linear-gradient(135deg, #FFFDF7 0%, rgba(201,154,71,0.06) 100%); border:1.5px solid var(--line); border-radius:14px; padding:22px 24px; cursor:pointer; display:flex; align-items:center; gap:18px;">
+        <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:30px; width:130px; text-align:center; color:var(--gold);">Bridge</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; color:var(--muted); font-weight:700; letter-spacing:0.1em; margin-bottom:4px;">중급</div>
+          <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:16px;">틀린 번호 찾고 고치기</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">어법 오류 판별 · 5문제 · 45초</div>
+        </div>
+      </div>
+      <div onclick="navTo('quiz-mastery')" style="background:linear-gradient(135deg, #FFFDF7 0%, rgba(184,90,62,0.06) 100%); border:1.5px solid var(--line); border-radius:14px; padding:22px 24px; cursor:pointer; display:flex; align-items:center; gap:18px;">
+        <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:30px; width:130px; text-align:center; color:var(--rust);">Mastery</div>
+        <div style="flex:1;">
+          <div style="font-size:11px; color:var(--muted); font-weight:700; letter-spacing:0.1em; margin-bottom:4px;">고급</div>
+          <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:16px;">단어 골라 영작하기</div>
+          <div style="font-size:12px; color:var(--muted); margin-top:4px;">함정 단어 + 영작 · 5문제 · 60초</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- Mastery 영작 -->
+<!-- ========================================== -->
+<div class="page" id="page-quiz-mastery">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">테스트 <span class="sep">›</span> 8단원 <span class="sep">›</span> <span class="current">Mastery</span></div>
+  </div>
+  <div class="quiz-wrap">
+    <div class="context-bar">
+      <div class="crumb">8단원 · <strong>감각동사</strong></div>
+      <div style="color:var(--rust); font-weight:700;">Mastery · 개별 랭킹</div>
+    </div>
+
+    <div class="quiz-topbar">
+      <div class="quiz-count">1 <span class="total">/ 5</span></div>
+      <div class="quiz-progress"><div style="width:20%; background:var(--rust);"></div></div>
+      <div class="timer-ring">
+        <svg width="60" height="60">
+          <circle class="bg" cx="30" cy="30" r="26" stroke-width="4" fill="none"/>
+          <circle class="fg" cx="30" cy="30" r="26" stroke-width="4" fill="none" stroke-dasharray="163.36" stroke-dashoffset="50" style="stroke:var(--rust);"/>
+        </svg>
+        <div class="timer-num">45</div>
+      </div>
+    </div>
+
+    <div class="q-card">
+      <div class="q-tag">[Mastery-1] <span class="type-label mastery">영작</span></div>
+      <div class="q-text">아래의 단어 중 <strong>필요한 단어만 골라</strong> 영작하세요.</div>
+      
+      <div style="background:rgba(74,107,71,0.05); border:1.5px dashed var(--moss); border-radius:12px; padding:14px 16px; margin-bottom:14px;">
+        <div style="font-size:11px; color:var(--moss); font-weight:700; letter-spacing:0.1em; margin-bottom:10px;">단어 카드 (함정 포함)</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px;">
+          <div style="background:var(--paper); border:1.5px solid var(--moss); padding:8px 14px; border-radius:20px; font-weight:700; font-size:14px;">happy</div>
+          <div style="background:var(--moss); color:white; border:1.5px solid var(--moss); padding:8px 14px; border-radius:20px; font-weight:700; font-size:14px;">He</div>
+          <div style="background:var(--paper); border:1.5px solid var(--moss); padding:8px 14px; border-radius:20px; font-weight:700; font-size:14px;">happily</div>
+          <div style="background:var(--moss); color:white; border:1.5px solid var(--moss); padding:8px 14px; border-radius:20px; font-weight:700; font-size:14px;">looks</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(184,90,62,0.06); border-left:3px solid var(--rust); padding:12px 16px; border-radius:0 10px 10px 0; margin:12px 0 18px; font-size:15px; font-weight:600;">
+        <div style="font-size:11px; color:var(--rust); font-weight:700; letter-spacing:0.1em; margin-bottom:4px;">한국어 문장</div>
+        그는 행복해 보인다.
+      </div>
+
+      <textarea style="width:100%; min-height:90px; padding:14px; background:var(--bg); border:1.5px solid var(--line); border-radius:10px; font-family:'Gowun Batang', serif; font-size:16px; resize:vertical;">He looks happy</textarea>
+
+      <div style="font-size:12px; color:var(--muted); margin:14px 0 6px; font-weight:700;">이 문장은 몇 형식인가요?</div>
+      <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:6px;">
+        <button style="background:var(--bg); border:1.5px solid var(--line); padding:10px 6px; border-radius:8px; font-weight:700;">1형식</button>
+        <button style="background:var(--ink); color:var(--paper); border:1.5px solid var(--ink); padding:10px 6px; border-radius:8px; font-weight:700;">2형식</button>
+        <button style="background:var(--bg); border:1.5px solid var(--line); padding:10px 6px; border-radius:8px; font-weight:700;">3형식</button>
+        <button style="background:var(--bg); border:1.5px solid var(--line); padding:10px 6px; border-radius:8px; font-weight:700;">4형식</button>
+        <button style="background:var(--bg); border:1.5px solid var(--line); padding:10px 6px; border-radius:8px; font-weight:700;">5형식</button>
+      </div>
+
+      <div class="q-helper">
+        happily(부사)는 보어가 될 수 없는 함정. looks + happy(형용사) → 2형식
+      </div>
+    </div>
+
+    <div class="quiz-bottom">
+      <button class="btn-secondary">건너뛰기</button>
+      <button class="btn-primary" onclick="navTo('result')">다음 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 결과 -->
+<!-- ========================================== -->
+<div class="page" id="page-result">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">테스트 <span class="sep">›</span> 8단원 <span class="sep">›</span> <span class="current">결과</span></div>
+  </div>
+  <div class="result-wrap">
+    <div class="result-hero">
+      <div class="result-label">5형식 · 8단원 · 감각동사</div>
+      <div class="result-score">11<span class="total">/15</span></div>
+      <div class="result-msg">잘했어요! 개별 랭킹 +88 pt 적립</div>
+    </div>
+
+    <div style="background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:20px;">
+      <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:14px; margin-bottom:12px;">난이도별 정답률</div>
+      <div style="display:flex; gap:10px;">
+        <div style="flex:1; text-align:center; background:rgba(92,138,79,0.08); padding:14px; border-radius:10px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-size:14px; color:var(--success); font-weight:700;">Foundation</div>
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:24px; color:var(--success); margin-top:2px;">5/5</div>
+        </div>
+        <div style="flex:1; text-align:center; background:rgba(201,154,71,0.08); padding:14px; border-radius:10px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-size:14px; color:var(--gold); font-weight:700;">Bridge</div>
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:24px; color:var(--gold); margin-top:2px;">4/5</div>
+        </div>
+        <div style="flex:1; text-align:center; background:rgba(184,90,62,0.08); padding:14px; border-radius:10px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-size:14px; color:var(--rust); font-weight:700;">Mastery</div>
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:24px; color:var(--rust); margin-top:2px;">2/5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 랭킹 변화 -->
+    <div style="background:linear-gradient(135deg, var(--paper) 0%, rgba(201,154,71,0.08) 100%); border:1.5px solid var(--gold); border-radius:12px; padding:14px 18px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:14px; color:var(--gold);">랭킹 변화</div>
+      <div style="display:flex; align-items:center; gap:14px;">
+        <span style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:20px; color:var(--muted);">7위</span>
+        <span style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:18px; color:var(--muted);">→</span>
+        <span style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; font-size:24px; color:var(--gold);">5위</span>
+        <span style="background:var(--gold); color:white; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">+2</span>
+      </div>
+    </div>
+
+    <div class="weak-section">
+      <div class="weak-title">부족한 <span class="pt">부분</span></div>
+      <div class="weak-sub">정답률 70% 미만이에요. 추가 문제로 복습할 수 있어요</div>
+      <div class="weak-list">
+        <div class="weak-item">
+          <div class="weak-num">M</div>
+          <div class="weak-info">
+            <div class="weak-name">Mastery — 감각동사 영작 함정</div>
+            <div class="weak-detail">부사/형용사 구분</div>
+          </div>
+          <div class="weak-percent">40%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn-secondary" onclick="navTo('difficulty')">다시 풀기</button>
+      <button class="btn-accent" onclick="navTo('extra')">추가 문제 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 추가 문제 -->
+<!-- ========================================== -->
+<div class="page" id="page-extra">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">추가 문제</span></div>
+  </div>
+  <div class="quiz-wrap">
+    <div style="background:linear-gradient(135deg, var(--rust) 0%, #C97056 100%); color:var(--paper); padding:24px; border-radius:18px; margin-bottom:20px;">
+      <h3 style="font-family:'Noto Serif KR'; font-size:20px; font-weight:800; margin-bottom:6px;">약했던 부분을 더 연습해봐요</h3>
+      <p style="font-size:13px; opacity:0.9;">영작 위주로 단원별 5문제씩 새로 준비했어요</p>
+    </div>
+
+    <div style="background:var(--paper); border:1.5px solid var(--rust); border-radius:14px; padding:20px; margin-bottom:16px;">
+      <div style="font-family:'Noto Serif KR'; font-weight:800; font-size:15px; margin-bottom:6px; color:var(--rust);">복습할 단원 (정답률 70% 미만)</div>
+      <div style="font-size:12px; color:var(--muted); margin-bottom:14px;">단원당 5문제 · 영작 3개 + 객관식/OX 2개로 구성</div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; font-size:13px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; color:var(--rust); width:28px;">8</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;">감각동사</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">영작 3 · 객관식 1 · OX 1</div>
+          </div>
+          <div style="color:var(--rust); font-weight:700;">40%</div>
+          <div style="background:var(--rust); color:white; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">5문제</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; font-size:13px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; color:var(--rust); width:28px;">14</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;">4형식 → 3형식 전치사</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">영작 3 · 빈칸 2</div>
+          </div>
+          <div style="color:var(--rust); font-weight:700;">33%</div>
+          <div style="background:var(--rust); color:white; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">5문제</div>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; padding:10px 14px; background:var(--bg); border-radius:8px; font-size:13px;">
+          <div style="font-family:'Cormorant Garamond'; font-style:italic; font-weight:700; color:var(--rust); width:28px;">24</div>
+          <div style="flex:1;">
+            <div style="font-weight:600;">사역동사</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">영작 3 · 오류찾기 2</div>
+          </div>
+          <div style="color:var(--rust); font-weight:700;">33%</div>
+          <div style="background:var(--rust); color:white; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:700;">5문제</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 영작 비중 시각화 -->
+    <div style="background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:14px 16px; margin-bottom:16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:12px;">
+        <span style="font-weight:700;">유형 구성 (총 15문제)</span>
+        <span style="color:var(--rust); font-weight:700;">영작 60%</span>
+      </div>
+      <div style="display:flex; height:24px; border-radius:6px; overflow:hidden; gap:2px;">
+        <div style="flex:9; background:var(--rust); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;">영작 9</div>
+        <div style="flex:6; background:var(--moss); color:white; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700;">기타 6</div>
+      </div>
+    </div>
+
+    <div class="quiz-bottom">
+      <button class="btn-secondary">더 쉽게</button>
+      <button class="btn-secondary">더 어렵게</button>
+      <button class="btn-primary" onclick="navTo('quiz-mastery')">시작 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 영상 강의 모달 -->
+<div class="video-modal" id="videoModal" onclick="closeVideoBg(event)">
+  <div class="video-modal-content" onclick="event.stopPropagation()">
+    <div class="video-modal-header">
+      <div class="video-modal-title">
+        문장의 5형식 — 전체 강의
+        <span class="sub">Complete Lecture</span>
+      </div>
+      <button class="video-modal-close" onclick="closeVideo()">×</button>
+    </div>
+    <div class="video-iframe-wrap">
+      <iframe 
+        id="videoIframe"
+        src=""
+        title="문장의 5형식 강의"
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+        allowfullscreen>
+      </iframe>
+    </div>
+    <div class="video-modal-footer">
+      <div>Hailey English · 원장님 강의</div>
+      <div class="progress-info">
+        <span class="progress-dot"></span>
+        <span>시청 진도 자동 저장</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const history_stack = ['main'];
+
+function navTo(page){
+  const current = history_stack[history_stack.length - 1];
+  if(current !== page) history_stack.push(page);
+  
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+page).classList.add('active');
+  
+  document.querySelectorAll('.sim-nav button').forEach(b => b.classList.remove('active'));
+  const pages = ['main','ranking','notes','learn-chapter','learn-quiz',
+                 'test-chapter','difficulty','quiz-mastery','result','extra'];
+  const idx = pages.indexOf(page);
+  if(idx >= 0) document.querySelectorAll('.sim-nav button')[idx].classList.add('active');
+  
+  window.scrollTo(0, 0);
+}
+
+function navBack(){
+  if(history_stack.length > 1){
+    history_stack.pop();
+    const prev = history_stack[history_stack.length - 1];
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-'+prev).classList.add('active');
+    document.querySelectorAll('.sim-nav button').forEach(b => b.classList.remove('active'));
+    const pages = ['main','ranking','notes','learn-chapter','learn-quiz',
+                   'test-chapter','difficulty','quiz-mastery','result','extra'];
+    const idx = pages.indexOf(prev);
+    if(idx >= 0) document.querySelectorAll('.sim-nav button')[idx].classList.add('active');
+    window.scrollTo(0, 0);
+  }
+}
+
+function switchRank(type, btn){
+  document.querySelectorAll('#page-main .rank-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rank-class').style.display = type === 'class' ? 'block' : 'none';
+  document.getElementById('rank-indi').style.display = type === 'indi' ? 'block' : 'none';
+}
+function switchRank2(type, btn){
+  document.querySelectorAll('#page-ranking .rank-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('rank2-class').style.display = type === 'class' ? 'block' : 'none';
+  document.getElementById('rank2-indi').style.display = type === 'indi' ? 'block' : 'none';
+}
+
+function selectOX(el){
+  el.parentElement.querySelectorAll('button').forEach(o => o.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function toggleAnswer(el){
+  el.classList.toggle('hidden');
+  el.classList.toggle('revealed');
+}
+
+// 영상 강의 (실제로는 원장님이 선생님 화면에서 입력한 유튜브 링크가 들어감)
+function openVideo(){
+  // 데모용: 샘플 유튜브 영상 (실제 배포 시엔 원장님이 업로드한 URL로 교체)
+  const videoUrl = 'https://www.youtube.com/embed/dQw4w9WgXcQ';
+  document.getElementById('videoIframe').src = videoUrl;
+  document.getElementById('videoModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeVideo(){
+  document.getElementById('videoIframe').src = '';
+  document.getElementById('videoModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function closeVideoBg(e){
+  if(e.target.id === 'videoModal') closeVideo();
+}
+function scrollTo(id){
+  const el = document.getElementById(id);
+  if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.back-bar').forEach(b => {
+    if(window.scrollY > 20) b.classList.add('scrolled');
+    else b.classList.remove('scrolled');
+  });
+});
+</script>
+
+</body>
+</html>
