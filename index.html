@@ -102,6 +102,9 @@ body {
   display: flex; align-items: center; gap: 14px;
   margin-bottom: 6px; flex-wrap: wrap;
 }
+.unit-btn-row {
+  display: inline-flex; gap: 14px; align-items: center;
+}
 .unit-title-main {
   font-family: 'Noto Serif KR', serif;
   font-size: 30px; font-weight: 800;
@@ -151,6 +154,40 @@ body {
 }
 .video-btn:hover .play-icon::after {
   border-left-color: var(--ink);
+}
+
+/* 선생님 설명 버튼 (v9) */
+.teacher-note-btn {
+  background: var(--moss); color: var(--paper); border: none;
+  padding: 10px 18px; border-radius: 22px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px; font-weight: 700; cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px -4px rgba(122,138,103,0.3);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.teacher-note-btn:hover {
+  background: var(--ink); transform: translateY(-2px);
+  box-shadow: 0 6px 16px -4px rgba(31,41,55,0.3);
+}
+.teacher-note-btn .t-icon {
+  width: 18px; height: 18px;
+  background: var(--paper); color: var(--moss);
+  border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 11px; font-weight: 700;
+}
+.teacher-note-btn:hover .t-icon { color: var(--ink); }
+
+/* Stage 4 카드 (v9) */
+.step-card.s4 {
+  background: linear-gradient(135deg, var(--paper) 0%, rgba(122,138,103,0.06) 100%);
+  border-color: var(--moss);
+}
+.step-card.s4 .step-num { color: var(--moss); }
+.step-card.s4:hover {
+  border-color: var(--moss);
+  box-shadow: 0 8px 24px -8px rgba(122,138,103,0.3);
 }
 
 /* 영상 모달 */
@@ -838,31 +875,1545 @@ body {
   .chapter-grid { grid-template-columns: 1fr; }
   .q-multi { grid-template-columns: repeat(2, 1fr); }
   .back-bar { padding: 10px 16px; top: 30px; }
-  .unit-header { gap: 10px; }
-  .unit-title-main { font-size: 22px; }
+  /* 모바일: 단원 타이틀 한 줄, 두 버튼 한 줄 */
+  .unit-header {
+    gap: 8px;
+    flex-wrap: nowrap;
+    align-items: center;
+  }
+  .unit-title-main { font-size: 20px; flex: 1 1 100%; }
+  /* 두 버튼 한 줄, 영상 강의 더 작게 */
+  .notes-btn {
+    padding: 7px 12px;
+    font-size: 12px;
+    border-radius: 16px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .video-btn {
+    padding: 7px 12px 7px 10px;
+    font-size: 12px;
+    border-radius: 16px;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .teacher-note-btn {
+    padding: 7px 12px 7px 10px;
+    font-size: 12px;
+    border-radius: 16px;
+    gap: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .teacher-note-btn .t-icon { width: 14px; height: 14px; font-size: 9px; }
+  .video-btn .play-icon { width: 13px; height: 13px; }
+  .video-btn .play-icon::after {
+    border-left-width: 5px;
+    border-top-width: 3px;
+    border-bottom-width: 3px;
+  }
+  /* unit-title-main을 위로, 두 버튼을 아래 한 줄로 묶기 */
+  .unit-btn-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: nowrap;
+    width: 100%;
+  }
   .notes-section { padding: 22px; }
   .notes-toc { padding: 14px; top: 80px; }
   .hall-of-fame { flex-direction: column; align-items: flex-start; }
   .trophy-legend { flex-wrap: wrap; }
-  .class-rank-row { grid-template-columns: 40px 1fr auto; gap: 10px; padding: 12px 14px; }
+/* ============ v10: 학습 문제 UI ============ */
+.lq-score-display {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--moss);
+  background: rgba(122,138,103,0.1);
+  padding: 6px 12px;
+  border-radius: 14px;
+  white-space: nowrap;
+}
+
+.lq-guide {
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--rust);
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  background: rgba(184,90,62,0.08);
+  border-radius: 6px;
+  display: inline-block;
+}
+
+.lq-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 16px 0;
+}
+.lq-option {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  padding: 14px 16px;
+  border-radius: 10px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.lq-option:hover {
+  border-color: var(--ink-soft);
+  background: var(--bg);
+}
+.lq-option.selected {
+  background: rgba(184,90,62,0.1);
+  border-color: var(--rust);
+  color: var(--rust);
+  font-weight: 700;
+}
+.lq-option.correct {
+  background: rgba(122,138,103,0.2);
+  border-color: var(--moss);
+  color: var(--moss);
+  font-weight: 800;
+}
+.lq-option.wrong {
+  background: rgba(220,80,80,0.15);
+  border-color: #d05050;
+  color: #b03030;
+  font-weight: 700;
+}
+.lq-option:disabled {
+  cursor: default;
+}
+.lq-opt-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background: var(--bg);
+  border-radius: 50%;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  flex-shrink: 0;
+}
+.lq-option.selected .lq-opt-letter {
+  background: var(--rust);
+  color: var(--paper);
+}
+.lq-option.correct .lq-opt-letter {
+  background: var(--moss);
+  color: var(--paper);
+}
+.lq-option.wrong .lq-opt-letter {
+  background: #d05050;
+  color: var(--paper);
+}
+
+/* 피드백 영역 */
+.lq-feedback {
+  margin-top: 18px;
+  padding: 16px 18px;
+  border-radius: 10px;
+  font-family: 'Gowun Batang', serif;
+  border-left: 4px solid;
+}
+.lq-feedback.good {
+  background: rgba(122,138,103,0.08);
+  border-left-color: var(--moss);
+}
+.lq-feedback.wrong {
+  background: rgba(220,80,80,0.06);
+  border-left-color: #d05050;
+}
+.fb-result {
+  font-size: 18px;
+  font-weight: 800;
+  margin-bottom: 8px;
+}
+.lq-feedback.good .fb-result { color: var(--moss); }
+.lq-feedback.wrong .fb-result { color: #b03030; }
+.fb-correct {
+  font-size: 14px;
+  margin-bottom: 6px;
+  color: var(--ink);
+}
+.fb-explain {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* 결과 화면 - 문제별 디테일 */
+.lq-detail-row {
+  display: grid;
+  grid-template-columns: 50px 30px 1fr;
+  gap: 8px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+  font-family: 'Gowun Batang', serif;
+  align-items: start;
+}
+.lq-detail-row:last-child { border-bottom: none; }
+.lq-detail-row .d-no {
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  color: var(--ink-soft);
+}
+.lq-detail-row .d-mark {
+  font-size: 18px;
+  font-weight: 800;
+}
+.lq-detail-row.ok .d-mark { color: var(--moss); }
+.lq-detail-row.no .d-mark { color: #b03030; }
+.lq-detail-row .d-q {
+  font-size: 13px;
+  color: var(--ink);
+  margin-bottom: 3px;
+  line-height: 1.4;
+}
+.lq-detail-row .d-a {
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+  .lq-options { grid-template-columns: 1fr; }
+}
+
+/* 단원 상세 페이지 헤더 */
+.unit-detail-header {
+  text-align: center;
+  padding: 30px 20px 24px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 22px;
+}
+.udh-no {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--rust);
+  letter-spacing: 0.2em;
+  margin-bottom: 8px;
+}
+.udh-title {
+  font-family: 'Gowun Batang', serif;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+.udh-sub {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+/* 이전/다음 단원 네비 */
+.unit-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 24px;
+  gap: 10px;
+}
+.un-btn {
+  flex: 1;
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+.un-btn:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+.un-btn span {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+}
+
+/* ============ v10: 24단원 그리드 메인 화면 ============ */
+
+/* 진행 상황 요약 */
+.progress-summary {
+  display: flex;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px 24px;
+  margin-bottom: 22px;
+  align-items: center;
+  justify-content: space-around;
+  gap: 12px;
+}
+.ps-item { text-align: center; flex: 1; }
+.ps-label {
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  color: var(--ink-soft);
+  margin-bottom: 4px;
+  letter-spacing: 0.05em;
+}
+.ps-value {
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  color: var(--ink);
+  font-weight: 700;
+}
+.ps-value .big-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--rust);
+  margin-right: 2px;
+}
+.ps-divider {
+  width: 1px;
+  height: 36px;
+  background: var(--line);
+}
+
+/* 24단원 그리드 */
+.unit-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.unit-cell {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  min-height: 96px;
+}
+.unit-cell:hover {
+  border-color: var(--rust);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px -8px rgba(184,90,62,0.25);
+}
+.unit-cell .uc-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  line-height: 1;
+  margin-bottom: 6px;
+}
+.unit-cell .uc-name {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.4;
+  flex: 1;
+}
+.unit-cell .uc-status {
+  margin-top: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+  display: inline-block;
+  align-self: flex-start;
+}
+.unit-cell.done {
+  background: rgba(122,138,103,0.06);
+  border-color: var(--moss);
+}
+.unit-cell.done .uc-num { color: var(--moss); }
+.unit-cell.done .uc-status {
+  background: var(--moss);
+  color: var(--paper);
+}
+.unit-cell.progress {
+  background: rgba(220,168,90,0.08);
+  border-color: var(--gold);
+}
+.unit-cell.progress .uc-num { color: var(--gold); }
+.unit-cell.progress .uc-status {
+  background: var(--gold);
+  color: var(--ink);
+}
+.unit-cell.todo .uc-status {
+  background: var(--bg);
+  color: var(--ink-soft);
+}
+.unit-cell .uc-score {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--moss);
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+/* Stage 가이드 */
+.stage-guide {
+  background: linear-gradient(135deg, var(--paper) 0%, rgba(184,90,62,0.04) 100%);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-bottom: 22px;
+}
+.sg-title {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  margin-bottom: 14px;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.sg-flow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.sg-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  font-family: 'Gowun Batang', serif;
+  flex: 1;
+  min-width: 80px;
+}
+.sg-step .sg-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--rust);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.sg-step b {
+  font-size: 14px;
+  color: var(--ink);
+}
+.sg-step span:not(.sg-num) {
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.sg-arrow {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  color: var(--line);
+  font-weight: 300;
+}
+
+/* Summit/Master용 영작 카드 */
+.sg-step.writing .sg-num { color: var(--moss); }
+
+/* 모바일 */
+@media (max-width: 600px) {
+  .unit-grid { grid-template-columns: repeat(2, 1fr); }
+  .progress-summary {
+    flex-wrap: wrap;
+    padding: 14px 16px;
+  }
+  .ps-divider { display: none; }
+  .ps-item { min-width: 30%; }
+  .sg-flow { flex-direction: column; gap: 4px; }
+  .sg-arrow { transform: rotate(90deg); }
+  .sg-step { flex-direction: row; gap: 10px; width: 100%; justify-content: flex-start; padding: 8px 0; }
+  .sg-step .sg-num { margin-bottom: 0; min-width: 28px; text-align: center; }
+}
+
+/* ============ 콘텐츠 관리 (v9) ============ */
+
+/* 선생님 설명 페이지 (PDF 뷰어) */
+.tnote-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 24px 80px;
+}
+.tnote-pdf-frame {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  min-height: 600px;
+  display: flex;
+  flex-direction: column;
+}
+.tnote-pdf-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.tnote-pdf-head .filename {
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.tnote-pdf-head .pdf-actions {
+  display: flex;
+  gap: 8px;
+}
+.tnote-pdf-head .pdf-actions button {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  cursor: pointer;
+}
+.tnote-pdf-body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 40px;
+  background: linear-gradient(180deg, #fafafa 0%, var(--paper) 100%);
+  position: relative;
+  min-height: 500px;
+}
+.tnote-pdf-mock {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 4px 24px -8px rgba(31,41,55,0.15);
+  max-width: 600px;
+  width: 100%;
+  padding: 40px 36px;
+  font-family: 'Gowun Batang', serif;
+}
+.tnote-pdf-mock h3 {
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 4px;
+  color: var(--ink);
+}
+.tnote-pdf-mock .pdf-sub {
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 14px;
+}
+.tnote-pdf-mock p {
+  font-size: 15px;
+  line-height: 1.8;
+  margin-bottom: 14px;
+}
+.tnote-pdf-mock .highlight {
+  background: rgba(220,168,90,0.25);
+  padding: 1px 5px;
+}
+.tnote-pdf-mock ul {
+  padding-left: 20px;
+  margin-bottom: 14px;
+}
+.tnote-pdf-mock li {
+  font-size: 15px;
+  line-height: 2;
+}
+.tnote-pdf-mock .ex-block {
+  background: var(--bg);
+  border-left: 3px solid var(--rust);
+  padding: 14px 18px;
+  margin: 18px 0;
+  border-radius: 4px;
+}
+.tnote-pdf-mock .ex-block .ex-label {
+  font-size: 12px;
+  color: var(--rust);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 4px;
+}
+.tnote-empty {
+  text-align: center;
+  padding: 80px 20px;
+  font-family: 'Gowun Batang', serif;
+}
+.tnote-empty .empty-icon {
+  font-size: 56px;
+  margin-bottom: 16px;
+}
+.tnote-empty h3 {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+.tnote-empty p {
+  color: var(--ink-soft);
+  font-size: 14px;
+}
+
+
+/* 자료 상태 표시 */
+.material-status {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  font-family: 'Gowun Batang', serif;
+}
+.material-status .ms-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--ink-soft);
+  margin-bottom: 8px;
+  letter-spacing: 0.05em;
+}
+.material-status .ms-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.material-status .ms-item {
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.material-status .ms-item.on {
+  background: rgba(122,138,103,0.18);
+  color: var(--moss);
+}
+.material-status .ms-item.off {
+  background: var(--bg);
+  color: var(--ink-soft);
+  opacity: 0.5;
+}
+
+/* 사진 업로드 영역 */
+.upload-zone {
+  background: var(--paper);
+  border: 2px dashed var(--line);
+  border-radius: 14px;
+  padding: 40px 24px;
+  text-align: center;
+  margin-bottom: 16px;
+  transition: all 0.2s;
+}
+.upload-zone:hover {
+  border-color: var(--moss);
+  background: rgba(122,138,103,0.04);
+}
+.upload-zone .up-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+.upload-zone h3 {
+  font-family: 'Gowun Batang', serif;
+  font-size: 16px;
+  font-weight: 800;
+  margin-bottom: 6px;
+}
+.upload-zone p {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.upload-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.upload-btn {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s;
+}
+.upload-btn:hover {
+  background: var(--moss);
+  transform: translateY(-2px);
+}
+.upload-btn.alt {
+  background: var(--paper);
+  color: var(--ink);
+  border: 1.5px solid var(--line);
+}
+.upload-btn.alt:hover {
+  border-color: var(--moss);
+  background: rgba(122,138,103,0.06);
+}
+.upload-btn .u-icon { font-size: 28px; }
+.upload-btn .u-text { font-size: 14px; }
+.upload-btn .u-sub { font-size: 11px; font-weight: 400; opacity: 0.7; }
+
+/* 업로드된 사진 미리보기 */
+.uploaded-preview {
+  background: var(--paper);
+  border: 1.5px solid var(--moss);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+.uploaded-preview .preview-img {
+  width: 100%;
+  height: 280px;
+  background: var(--bg);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Gowun Batang', serif;
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin-bottom: 12px;
+  background-image: linear-gradient(45deg, #ecebe6 25%, transparent 25%, transparent 75%, #ecebe6 75%, #ecebe6),
+                    linear-gradient(45deg, #ecebe6 25%, transparent 25%, transparent 75%, #ecebe6 75%, #ecebe6);
+  background-size: 16px 16px;
+  background-position: 0 0, 8px 8px;
+}
+.uploaded-preview .preview-name {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+.submit-btn {
+  width: 100%;
+  background: var(--moss);
+  color: var(--paper);
+  border: none;
+  padding: 16px;
+  border-radius: 12px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 16px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+.submit-btn:hover {
+  background: var(--ink);
+}
+
+
+/* 선생님 콘텐츠 관리 */
+.content-mgr-table {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.cmgr-row {
+  display: grid;
+  grid-template-columns: 60px 1.5fr 70px 70px 70px auto;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+}
+.cmgr-row:last-child { border-bottom: none; }
+.cmgr-row.head {
+  background: var(--bg);
+  font-weight: 800;
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.cmgr-row .unit-no {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--rust);
+}
+.cmgr-row .unit-nm { font-weight: 700; }
+.cmgr-row .status-cell {
+  text-align: center;
+  font-size: 16px;
+}
+.cmgr-row .status-cell.on { color: var(--moss); }
+.cmgr-row .status-cell.off { color: var(--line); }
+.cmgr-row .btn-cmgr-edit {
+  background: transparent;
+  border: 1.5px solid var(--line);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.cmgr-row .btn-cmgr-edit:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+/* 콘텐츠 편집 모달 */
+.cmgr-edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31,41,55,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+  overflow-y: auto;
+}
+.cmgr-edit-modal.show { display: flex; }
+.cmgr-edit-body {
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 560px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.cmgr-edit-body h3 {
+  font-family: 'Gowun Batang', serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.cmgr-edit-body .modal-sub {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 22px;
+}
+.cmgr-section {
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--line);
+}
+.cmgr-section:last-of-type { border-bottom: none; }
+.cmgr-section .sec-title {
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.cmgr-section .sec-title .sec-status {
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: 700;
+}
+.cmgr-section .sec-title .sec-status.on {
+  background: rgba(122,138,103,0.2);
+  color: var(--moss);
+}
+.cmgr-section .sec-title .sec-status.off {
+  background: var(--bg);
+  color: var(--ink-soft);
+}
+.cmgr-section textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  background: var(--bg);
+  min-height: 100px;
+  resize: vertical;
+}
+.cmgr-section input[type="text"] {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  background: var(--bg);
+}
+.cmgr-file-upload {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  background: var(--bg);
+  border-radius: 8px;
+  border: 1.5px dashed var(--line);
+}
+.cmgr-file-upload .file-icon { font-size: 22px; }
+.cmgr-file-upload .file-info {
+  flex: 1;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+}
+.cmgr-file-upload .file-info .fname { font-weight: 700; }
+.cmgr-file-upload .file-info .fsub { color: var(--ink-soft); font-size: 11px; }
+.cmgr-file-upload button {
+  background: var(--paper);
+  border: 1.5px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 6px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.auth-wrap {
+  max-width: 420px;
+  margin: 0 auto;
+  padding: 60px 24px 80px;
+}
+.auth-logo {
+  text-align: center;
+  margin-bottom: 36px;
+}
+.auth-logo h1 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 42px;
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  margin-bottom: 4px;
+}
+.auth-logo .sub {
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  color: var(--rust);
+  letter-spacing: 0.1em;
+}
+.auth-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px 28px;
+  box-shadow: 0 4px 20px -8px rgba(31,41,55,0.08);
+}
+.auth-card h2 {
+  font-family: 'Gowun Batang', serif;
+  font-size: 22px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  color: var(--ink);
+}
+.auth-field {
+  margin-bottom: 16px;
+}
+.auth-field label {
+  display: block;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+.auth-field input,
+.auth-field select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 10px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 15px;
+  background: var(--bg);
+  color: var(--ink);
+  transition: all 0.2s;
+}
+.auth-field input:focus,
+.auth-field select:focus {
+  outline: none;
+  border-color: var(--rust);
+  background: var(--paper);
+}
+.auth-btn-primary {
+  width: 100%;
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+  padding: 14px;
+  border-radius: 10px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: all 0.2s;
+}
+.auth-btn-primary:hover {
+  background: var(--rust);
+}
+.auth-link {
+  text-align: center;
+  margin-top: 18px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.auth-link a {
+  color: var(--rust);
+  font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
+}
+.auth-error {
+  background: rgba(184,90,62,0.1);
+  border: 1px solid var(--rust);
+  color: var(--rust);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 14px;
+  display: none;
+}
+.auth-error.show { display: block; }
+
+/* 승인 대기 */
+.waiting-wrap {
+  max-width: 460px;
+  margin: 0 auto;
+  padding: 80px 24px;
+  text-align: center;
+}
+.waiting-icon {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: rgba(184,90,62,0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+  font-size: 40px;
+}
+.waiting-wrap h2 {
+  font-family: 'Gowun Batang', serif;
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+.waiting-wrap p {
+  font-family: 'Gowun Batang', serif;
+  color: var(--ink-soft);
+  line-height: 1.7;
+  margin-bottom: 8px;
+}
+.waiting-info {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px;
+  margin-top: 28px;
+  text-align: left;
+}
+.waiting-info-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 0;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+}
+.waiting-info-row .lab { color: var(--ink-soft); }
+.waiting-info-row .val { color: var(--ink); font-weight: 700; }
+
+/* ============ 선생님 대시보드 ============ */
+.tdash-wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 30px 24px 80px;
+}
+.tdash-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.tdash-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.tdash-title .sub {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--rust);
+  margin-left: 10px;
+  font-weight: 700;
+}
+.tdash-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 24px;
+  border-bottom: 1.5px solid var(--line);
+  overflow-x: auto;
+}
+.tdash-tab {
+  background: transparent;
+  border: none;
+  padding: 12px 18px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  cursor: pointer;
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+  white-space: nowrap;
+  transition: all 0.2s;
+}
+.tdash-tab:hover { color: var(--ink); }
+.tdash-tab.active {
+  color: var(--rust);
+  border-bottom-color: var(--rust);
+}
+.tdash-tab .badge {
+  background: var(--rust);
+  color: var(--paper);
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 10px;
+  margin-left: 6px;
+  font-weight: 800;
+}
+
+/* 가입 신청 카드 */
+.signup-card {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+}
+.signup-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.signup-name {
+  font-family: 'Gowun Batang', serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.signup-meta {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-top: 3px;
+}
+.signup-date {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 13px;
+  color: var(--rust);
+}
+.signup-assign-row {
+  margin-bottom: 12px;
+}
+.assign-label {
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.assign-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.assign-chip {
+  background: var(--bg);
+  border: 1.5px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 16px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+}
+.assign-chip:hover { border-color: var(--ink-soft); }
+.assign-chip.on {
+  background: var(--ink);
+  color: var(--paper);
+  border-color: var(--ink);
+}
+.assign-chip.chap.on {
+  background: var(--rust);
+  border-color: var(--rust);
+}
+.signup-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.signup-actions .btn-approve {
+  background: var(--moss);
+  color: var(--paper);
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+.signup-actions .btn-reject {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1.5px solid var(--line);
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* 학생 관리 테이블 */
+.stud-search {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+.stud-search input,
+.stud-search select {
+  padding: 10px 14px;
+  border: 1.5px solid var(--line);
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+  background: var(--paper);
+}
+.stud-search input { flex: 1; min-width: 180px; }
+.stud-total {
+  margin-left: auto;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  align-self: center;
+}
+.stud-table {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.stud-row {
+  display: grid;
+  grid-template-columns: 1.4fr 0.8fr 1.4fr 1.4fr auto;
+  gap: 12px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  align-items: center;
+  font-family: 'Gowun Batang', serif;
+  font-size: 14px;
+}
+.stud-row:last-child { border-bottom: none; }
+.stud-row.head {
+  background: var(--bg);
+  font-weight: 800;
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.stud-row .name { font-weight: 800; }
+.stud-row .lvl-tags { display: flex; gap: 4px; flex-wrap: wrap; }
+.stud-row .lvl-tag {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.stud-row .lvl-tag.spark { background: rgba(220,168,90,0.18); border-color: var(--gold); }
+.stud-row .lvl-tag.path { background: rgba(122,138,103,0.18); border-color: var(--moss); }
+.stud-row .lvl-tag.climb { background: rgba(184,90,62,0.18); border-color: var(--rust); }
+.stud-row .btn-edit {
+  background: transparent;
+  border: 1.5px solid var(--line);
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.stud-row .btn-edit:hover {
+  border-color: var(--rust);
+  color: var(--rust);
+}
+
+/* 학생 수정 모달 */
+.edit-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(31,41,55,0.6);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  padding: 20px;
+}
+.edit-modal.show { display: flex; }
+.edit-modal-body {
+  background: var(--paper);
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 480px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.edit-modal-body h3 {
+  font-family: 'Gowun Batang', serif;
+  font-size: 20px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.edit-modal-body .modal-sub {
+  font-family: 'Gowun Batang', serif;
+  font-size: 13px;
+  color: var(--ink-soft);
+  margin-bottom: 20px;
+}
+.edit-modal-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 22px;
+  border-top: 1px solid var(--line);
+  padding-top: 18px;
+}
+.edit-modal-actions button {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  font-family: 'Gowun Batang', serif;
+  font-weight: 700;
+  cursor: pointer;
+  font-size: 14px;
+}
+.edit-modal-actions .btn-save {
+  background: var(--ink);
+  color: var(--paper);
+  border: none;
+}
+.edit-modal-actions .btn-cancel {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1.5px solid var(--line);
+}
+
+/* 모바일 */
+@media (max-width: 600px) {
+  .stud-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 14px;
+  }
+  .stud-row.head { display: none; }
+  .stud-row .label-m {
+    font-size: 11px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .tdash-title { font-size: 24px; }
+  .cmgr-row {
+    grid-template-columns: 40px 1fr auto;
+    gap: 8px;
+    padding: 12px 14px;
+  }
+  .cmgr-row.head { display: none; }
+  .cmgr-row .status-cell {
+    display: inline-block;
+    margin-right: 4px;
+  }
+  .upload-actions { grid-template-columns: 1fr; }
+  .tnote-pdf-mock { padding: 24px 20px; }
 }
 </style>
 </head>
 <body>
 
 <nav class="sim-nav">
-  <strong>SIM v7</strong>
+  <strong>SIM v9</strong>
+  <button onclick="navTo('login')">로그인</button>
+  <button onclick="navTo('signup')">회원가입</button>
+  <button onclick="navTo('waiting')">승인대기</button>
   <button onclick="navTo('main')" class="active">메인</button>
   <button onclick="navTo('ranking')">전체 랭킹</button>
   <button onclick="navTo('notes')">내용 정리</button>
-  <button onclick="navTo('learn-chapter')">학습-단원</button>
+  <button onclick="navTo('teacher-note')">선생님 설명</button>
+  <button onclick="navTo('unit-detail')">단원 상세</button>
   <button onclick="navTo('learn-quiz')">학습 문제</button>
+  <button onclick="navTo('learn-result')">학습 결과</button>
   <button onclick="navTo('test-chapter')">테스트-단원</button>
   <button onclick="navTo('difficulty')">난이도</button>
   <button onclick="navTo('quiz-mastery')">Mastery</button>
   <button onclick="navTo('result')">결과</button>
   <button onclick="navTo('extra')">추가 문제</button>
+  <button onclick="navTo('teacher-signups')" style="background:var(--rust); color:#fff;">👩‍🏫 가입신청</button>
+  <button onclick="navTo('teacher-students')" style="background:var(--rust); color:#fff;">학생관리</button>
+  <button onclick="navTo('teacher-results')" style="background:var(--rust); color:#fff;">학습결과</button>
+  <button onclick="navTo('teacher-tests')" style="background:var(--rust); color:#fff;">테스트결과</button>
+  <button onclick="navTo('teacher-content')" style="background:var(--rust); color:#fff;">콘텐츠관리</button>
 </nav>
+
+<!-- ========================================== -->
+<!-- 0-1. 로그인 -->
+<!-- ========================================== -->
+<div class="page" id="page-login">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>Hailey's Grammar</h1>
+      <div class="sub">EVERY SENTENCE COUNTS</div>
+    </div>
+    <div class="auth-card">
+      <h2>로그인</h2>
+      <div class="auth-error" id="login-error">아이디 또는 비밀번호가 올바르지 않습니다</div>
+      <div class="auth-field">
+        <label>아이디</label>
+        <input type="text" id="login-id" placeholder="아이디 입력" autocomplete="username">
+      </div>
+      <div class="auth-field">
+        <label>비밀번호</label>
+        <input type="password" id="login-pw" placeholder="비밀번호 입력" autocomplete="current-password">
+      </div>
+      <button class="auth-btn-primary" onclick="navTo('main')">로그인</button>
+      <div class="auth-link">
+        아직 계정이 없나요? <a onclick="navTo('signup')">회원가입</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 0-2. 회원가입 -->
+<!-- ========================================== -->
+<div class="page" id="page-signup">
+  <div class="auth-wrap">
+    <div class="auth-logo">
+      <h1>Hailey's Grammar</h1>
+      <div class="sub">회원가입</div>
+    </div>
+    <div class="auth-card">
+      <h2>가입 신청</h2>
+      <div class="auth-field">
+        <label>이름</label>
+        <input type="text" placeholder="실명 입력 (예: 김민준)">
+      </div>
+      <div class="auth-field">
+        <label>반</label>
+        <select>
+          <option value="">반을 선택하세요</option>
+          <option>초5</option>
+          <option>초6</option>
+          <option>중1A</option>
+          <option>중1B</option>
+          <option>중2A</option>
+          <option selected>중2B</option>
+          <option>중2C</option>
+          <option>중3A</option>
+          <option>중3B</option>
+          <option>중3C</option>
+          <option>고등부</option>
+        </select>
+      </div>
+      <div class="auth-field">
+        <label>아이디</label>
+        <input type="text" placeholder="영문/숫자 4~12자">
+      </div>
+      <div class="auth-field">
+        <label>비밀번호</label>
+        <input type="password" placeholder="4자 이상">
+      </div>
+      <button class="auth-btn-primary" onclick="navTo('waiting')">가입 신청하기</button>
+      <div class="auth-link">
+        이미 계정이 있나요? <a onclick="navTo('login')">로그인</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 0-3. 승인 대기 -->
+<!-- ========================================== -->
+<div class="page" id="page-waiting">
+  <div class="waiting-wrap">
+    <div class="waiting-icon">⏳</div>
+    <h2>선생님 승인 대기 중</h2>
+    <p>가입 신청이 접수되었습니다.</p>
+    <p>선생님이 확인 후 승인하시면 로그인할 수 있어요.</p>
+
+    <div class="waiting-info">
+      <div class="waiting-info-row"><span class="lab">이름</span><span class="val">김민준</span></div>
+      <div class="waiting-info-row"><span class="lab">반</span><span class="val">중2B</span></div>
+      <div class="waiting-info-row"><span class="lab">아이디</span><span class="val">minjun01</span></div>
+      <div class="waiting-info-row"><span class="lab">신청일</span><span class="val">2026. 5. 26</span></div>
+      <div class="waiting-info-row"><span class="lab">상태</span><span class="val" style="color:var(--rust);">승인 대기</span></div>
+    </div>
+
+    <button class="auth-btn-primary" style="margin-top:24px; max-width:200px;" onclick="navTo('login')">로그인 화면으로</button>
+  </div>
+</div>
 
 <!-- ========================================== -->
 <!-- 1. 메인 -->
@@ -877,42 +2428,54 @@ body {
           <span class="trophy bronze">3</span>
         </span>
       </div>
-      <button class="icon-btn">로그아웃</button>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
     </div>
 
+    <!-- 챕터 헤더 -->
     <div class="unit-header">
       <div class="unit-title-main">문장의 <span class="pt">5형식</span></div>
-      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
-      <button class="video-btn" onclick="openVideo()">
-        <span class="play-icon"></span> 영상 강의
-      </button>
+      <div class="unit-btn-row">
+        <button class="notes-btn" onclick="navTo('notes')">내용 정리</button>
+        <button class="teacher-note-btn" onclick="navTo('teacher-note')">
+          <span class="t-icon">✎</span> 선생님 설명
+        </button>
+        <button class="video-btn" onclick="openVideo()">
+          <span class="play-icon"></span> 영상 강의
+        </button>
+      </div>
     </div>
-    <div class="section-sub">Spark · Unit 01 · 24개 단원 학습 시스템</div>
+    <div class="section-sub">Climb · 24개 단원 학습 시스템 · 단원을 선택하세요</div>
 
-    <div class="step-grid">
-      <div class="step-card s1" onclick="navTo('learn-chapter')">
-        <div class="step-num">Ⅰ</div>
-        <div style="flex:1;">
-          <div class="step-tag">STAGE 1 <span class="step-badge" style="background:var(--moss);">반별 랭킹</span></div>
-          <div class="step-name">학습하기</div>
-          <div class="step-desc">내용 확인용 객관식 + OX 문제<br>우리 반 평균 정답률이 랭킹에 반영돼요</div>
-        </div>
+    <!-- 진행 상황 요약 -->
+    <div class="progress-summary">
+      <div class="ps-item">
+        <div class="ps-label">완료한 단원</div>
+        <div class="ps-value"><span class="big-num">5</span> / 24</div>
       </div>
-      <div class="step-card s2" onclick="navTo('test-chapter')">
-        <div class="step-num">Ⅱ</div>
-        <div style="flex:1;">
-          <div class="step-tag">STAGE 2 <span class="step-badge">개별 랭킹</span></div>
-          <div class="step-name">테스트 보기</div>
-          <div class="step-desc">Foundation · Bridge · Mastery 3단계<br>개인 실력 평가 + 개별 순위 적립</div>
-        </div>
+      <div class="ps-divider"></div>
+      <div class="ps-item">
+        <div class="ps-label">평균 정답률</div>
+        <div class="ps-value"><span class="big-num">87</span>%</div>
       </div>
-      <div class="step-card s3" onclick="navTo('extra')">
-        <div class="step-num">Ⅲ</div>
-        <div style="flex:1;">
-          <div class="step-tag">STAGE 3</div>
-          <div class="step-name">추가 문제</div>
-          <div class="step-desc">테스트에서 약했던 단원만 자동 추출<br>비슷한 문제로 더 연습</div>
-        </div>
+      <div class="ps-divider"></div>
+      <div class="ps-item">
+        <div class="ps-label">반별 순위</div>
+        <div class="ps-value"><span class="big-num">3</span> / 8</div>
+      </div>
+    </div>
+
+    <!-- 24단원 그리드 (JS로 채워짐) -->
+    <div class="unit-grid" id="unit-grid"></div>
+
+    <!-- Stage 안내 (단원 선택 후 이어지는 흐름 설명) -->
+    <div class="stage-guide">
+      <div class="sg-title">단원을 선택하면 다음 3단계로 학습합니다</div>
+      <div class="sg-flow">
+        <div class="sg-step"><span class="sg-num">Ⅰ</span><b>학습하기</b><span>객관식 + OX</span></div>
+        <div class="sg-arrow">→</div>
+        <div class="sg-step"><span class="sg-num">Ⅱ</span><b>테스트 보기</b><span>3난이도</span></div>
+        <div class="sg-arrow">→</div>
+        <div class="sg-step"><span class="sg-num">Ⅲ</span><b>추가 문제</b><span>약점 보충</span></div>
       </div>
     </div>
 
@@ -1314,117 +2877,180 @@ body {
 </div>
 
 <!-- ========================================== -->
-<!-- 학습-단원 -->
+<!-- 선생님 설명 (PDF 뷰어) -->
 <!-- ========================================== -->
-<div class="page" id="page-learn-chapter">
+<div class="page" id="page-teacher-note">
   <div class="back-bar">
     <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
-    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">학습하기</span></div>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current">선생님 설명</span></div>
   </div>
-  <div class="main-wrap">
-    <div class="unit-header">
-      <div class="unit-title-main"><span class="pt">학습하기</span></div>
-      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
-      <button class="video-btn" onclick="openVideo()">
-        <span class="play-icon"></span> 영상 강의
-      </button>
+  <div class="tnote-wrap">
+    <div class="unit-header" style="margin-bottom:18px;">
+      <div class="unit-title-main" style="font-size:24px;">8단원 · <span class="pt">감각동사</span></div>
     </div>
-    <div class="section-sub">우리 반 평균 정답률이 반별 랭킹에 반영돼요</div>
+    <div class="section-sub" style="margin-bottom:20px;">선생님이 직접 정리하신 자료</div>
 
-    <div style="background:rgba(74,107,71,0.06); border:1px solid var(--moss); border-radius:10px; padding:10px 16px; margin-bottom:20px; display:flex; justify-content:space-between; align-items:center; font-size:13px;">
-      <div style="display:flex; gap:12px; align-items:center;">
-        <span style="font-size:11px; color:var(--moss); font-weight:700;">B반 정답률</span>
-        <span style="font-family:'Noto Serif KR'; font-weight:800; color:var(--moss);">87.8% · 2위</span>
+    <div class="tnote-pdf-frame">
+      <div class="tnote-pdf-head">
+        <div class="filename">📄 감각동사_정리.pdf</div>
+        <div class="pdf-actions">
+          <button>전체화면</button>
+          <button>다운로드</button>
+        </div>
       </div>
-      <span style="font-size:11px; color:var(--muted);">1위까지 4.6%</span>
-    </div>
+      <div class="tnote-pdf-body">
+        <!-- 실제로는 PDF 임베드. 데모용 모형 -->
+        <div class="tnote-pdf-mock">
+          <h3>감각동사 (Sense Verbs)</h3>
+          <div class="pdf-sub">Hailey English · 5형식 8단원</div>
 
-    <div class="area-header"><span>1형식 영역</span><span class="area-progress">4단원</span></div>
-    <div class="chapter-grid">
-      <div class="chapter-card completed" onclick="navTo('learn-quiz')">
-        <div class="ch-num">1</div>
-        <div class="ch-info"><div class="ch-title">8품사</div><div class="ch-meta">완료</div></div>
-        <div class="ch-status-dot"></div>
-      </div>
-      <div class="chapter-card completed" onclick="navTo('learn-quiz')">
-        <div class="ch-num">2</div>
-        <div class="ch-info"><div class="ch-title">수식어</div><div class="ch-meta">완료</div></div>
-        <div class="ch-status-dot"></div>
-      </div>
-      <div class="chapter-card in-progress" onclick="navTo('learn-quiz')">
-        <div class="ch-num">3</div>
-        <div class="ch-info"><div class="ch-title">1형식</div><div class="ch-meta">학습 중</div></div>
-        <div class="ch-status-dot"></div>
-      </div>
-      <div class="chapter-card" onclick="navTo('learn-quiz')">
-        <div class="ch-num">4</div>
-        <div class="ch-info"><div class="ch-title">1형식 동사 16개</div></div>
-        <div class="ch-status-dot"></div>
-      </div>
-    </div>
+          <p><span class="highlight">5개의 감각동사</span>를 꼭 외우자:</p>
+          <ul>
+            <li><b>look</b> ~처럼 보이다</li>
+            <li><b>sound</b> ~처럼 들리다</li>
+            <li><b>smell</b> ~한 냄새가 나다</li>
+            <li><b>taste</b> ~한 맛이 나다</li>
+            <li><b>feel</b> ~한 느낌이다</li>
+          </ul>
 
-    <div class="area-header"><span>2형식 영역</span><span class="area-progress">6단원</span></div>
-    <div class="chapter-grid">
-      <div class="chapter-card" onclick="navTo('learn-quiz')">
-        <div class="ch-num">5</div>
-        <div class="ch-info"><div class="ch-title">2형식</div></div>
-        <div class="ch-status-dot"></div>
-      </div>
-      <div class="chapter-card in-progress" onclick="navTo('learn-quiz')">
-        <div class="ch-num">8</div>
-        <div class="ch-info"><div class="ch-title">감각동사</div><div class="ch-meta">학습 중</div></div>
-        <div class="ch-status-dot"></div>
+          <p><span class="highlight">감각동사 뒤에는 형용사!</span> 부사가 아니야.</p>
+
+          <div class="ex-block">
+            <div class="ex-label">EXAMPLES</div>
+            She looks <b>beautiful</b>. (O)<br>
+            She looks <b>beautifully</b>. (X)
+          </div>
+
+          <p style="color:var(--rust); font-weight:700;">⚠️ 예외: like + 명사</p>
+          <p>명사를 쓰고 싶을 땐 <b>like</b>를 붙여서 1형식으로:</p>
+          <div class="ex-block">
+            She looks <b>like her mother</b>.<br>
+            <span style="font-size:13px; color:var(--ink-soft);">(like = 전치사, 전치사+명사 = 수식어 → 1형식)</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div style="font-size:12px; color:var(--muted); padding:14px; background:var(--paper); border:1px dashed var(--line); border-radius:10px; text-align:center; margin-top:20px;">
-      11~24단원도 동일한 방식
-    </div>
+    <button class="btn-primary" onclick="navBack()" style="max-width:300px; margin:24px auto 0; display:block;">← 학습 화면으로</button>
   </div>
 </div>
 
 <!-- ========================================== -->
-<!-- 학습 문제 (OX) -->
+<!-- v10: 단원 상세 페이지 (Stage 1/2/3 선택) -->
+<!-- ========================================== -->
+<div class="page" id="page-unit-detail">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">메인 <span class="sep">›</span> <span class="current"><span class="current-unit-no">8</span>단원 <span class="current-unit-name">감각동사</span></span></div>
+  </div>
+  <div class="main-wrap">
+    <!-- 단원 헤더 -->
+    <div class="unit-detail-header">
+      <div class="udh-no">UNIT <span class="current-unit-no">08</span></div>
+      <div class="udh-title current-unit-name">감각동사</div>
+      <div class="udh-sub">문장의 5형식 · Climb</div>
+    </div>
+
+    <!-- 단원별 자료 다시 보기 -->
+    <div class="material-status">
+      <div class="ms-title">단원 자료</div>
+      <div class="ms-items">
+        <span class="ms-item on" onclick="navTo('notes')" style="cursor:pointer;">📝 내용 정리</span>
+        <span class="ms-item on" onclick="navTo('teacher-note')" style="cursor:pointer;">📄 선생님 설명</span>
+        <span class="ms-item on" onclick="openVideo()" style="cursor:pointer;">📹 영상 강의</span>
+      </div>
+    </div>
+
+    <!-- Stage 1/2/3 카드 -->
+    <div class="step-grid" style="margin-top: 18px;">
+      <div class="step-card s1" onclick="startLearnQuiz(CURRENT_UNIT_NO)">
+        <div class="step-num">Ⅰ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 1 <span class="step-badge" style="background:var(--moss);">반별 랭킹</span></div>
+          <div class="step-name">학습하기</div>
+          <div class="step-desc">내용 확인용 객관식 + OX 문제<br>우리 반 평균 정답률이 랭킹에 반영돼요</div>
+        </div>
+      </div>
+      <div class="step-card s2" onclick="navTo('difficulty')">
+        <div class="step-num">Ⅱ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 2 <span class="step-badge">개별 랭킹</span></div>
+          <div class="step-name">테스트 보기</div>
+          <div class="step-desc">Foundation · Bridge · Mastery 3단계<br>개인 실력 평가 + 개별 순위 적립</div>
+        </div>
+      </div>
+      <div class="step-card s3" onclick="navTo('extra')">
+        <div class="step-num">Ⅲ</div>
+        <div style="flex:1;">
+          <div class="step-tag">STAGE 3</div>
+          <div class="step-name">추가 문제</div>
+          <div class="step-desc">테스트에서 약했던 단원만 자동 추출<br>비슷한 문제로 더 연습</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 이전/다음 단원 -->
+    <div class="unit-nav">
+      <button class="un-btn" onclick="prevUnit()"><span>‹</span> 이전 단원</button>
+      <button class="un-btn" onclick="nextUnit()">다음 단원 <span>›</span></button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ========================================== -->
+<!-- v10: 학습 문제 (기초 5문제 풀이) -->
 <!-- ========================================== -->
 <div class="page" id="page-learn-quiz">
   <div class="back-bar">
     <button class="back-btn" onclick="navBack()"><span class="arrow">‹</span> 뒤로</button>
-    <div class="breadcrumb">학습하기 <span class="sep">›</span> 8단원 <span class="sep">›</span> <span class="current">문제 풀이</span></div>
+    <div class="breadcrumb">단원 상세 <span class="sep">›</span> <span class="current">학습 문제</span></div>
   </div>
   <div class="quiz-wrap">
     <div class="context-bar">
-      <div class="crumb">8단원 · <strong>감각동사</strong></div>
+      <div class="crumb"><span class="lq-unit-no">8</span>단원 · <strong class="lq-unit-name">감각동사</strong></div>
       <div style="color:var(--moss); font-weight:700;">학습 문제 · 반별 랭킹 반영</div>
     </div>
 
     <div class="quiz-topbar">
-      <div class="quiz-count">5 <span class="total">/ 6</span></div>
-      <div class="quiz-progress"><div style="width:83%; background:var(--moss);"></div></div>
-      <div class="timer-ring">
-        <svg width="60" height="60">
-          <circle class="bg" cx="30" cy="30" r="26" stroke-width="4" fill="none"/>
-          <circle class="fg" cx="30" cy="30" r="26" stroke-width="4" fill="none" stroke-dasharray="163.36" stroke-dashoffset="100" style="stroke:var(--moss);"/>
-        </svg>
-        <div class="timer-num">12</div>
-      </div>
+      <div class="quiz-count" id="lq-count">1 <span class="total">/ 5</span></div>
+      <div class="quiz-progress"><div id="lq-progress" style="width:20%; background:var(--moss);"></div></div>
+      <div class="lq-score-display" id="lq-score-display">점수: 0/5</div>
     </div>
 
-    <div class="q-card">
-      <div class="q-tag">학습 문제 [OX] <span class="type-label learn">CHECK</span></div>
-      <div class="q-text">다음 문장이 어법상 옳으면 O, 틀리면 X를 선택하세요.</div>
-      <div class="q-sentence-box">She looks beautifully today.</div>
-      <div class="q-ox">
-        <button class="o" onclick="selectOX(this)">O</button>
-        <button class="x selected" onclick="selectOX(this)">X</button>
-      </div>
-      <div class="q-helper">
-        look은 감각동사. 뒤에 부사가 아닌 형용사가 와야 합니다.
-      </div>
+    <!-- 문제 카드 (JS가 채움) -->
+    <div id="lq-question-area"></div>
+
+    <div class="quiz-bottom" id="lq-bottom">
+      <button class="btn-secondary" id="lq-skip-btn" onclick="lqSkip()">건너뛰기</button>
+      <button class="btn-primary" id="lq-submit-btn" onclick="lqSubmit()" disabled>채점하기</button>
+      <button class="btn-primary" id="lq-next-btn" onclick="lqNext()" style="display:none;">다음 문제 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- 학습 문제 결과 페이지 -->
+<div class="page" id="page-learn-result">
+  <div class="back-bar">
+    <button class="back-btn" onclick="navTo('main')"><span class="arrow">‹</span> 뒤로</button>
+    <div class="breadcrumb">학습 문제 <span class="sep">›</span> <span class="current">결과</span></div>
+  </div>
+  <div class="result-wrap">
+    <div class="blank-score-card" id="lq-final-card">
+      <div class="unit-info"><span class="lq-unit-no">8</span>단원 · <span class="lq-unit-name">감각동사</span> · 학습 문제</div>
+      <div class="big-score"><span id="lq-final-score">0</span><span class="total"> / 5</span></div>
+      <div class="stars" id="lq-final-stars">★★★★★</div>
+      <div class="ai-criteria">정답률 <span id="lq-final-rate">0</span>% · 반별 랭킹에 반영됨</div>
     </div>
 
-    <div class="quiz-bottom">
-      <button class="btn-secondary">건너뛰기</button>
-      <button class="btn-primary" onclick="navTo('main')">완료 →</button>
+    <div class="feedback-card good">
+      <h4>📊 문제별 결과</h4>
+      <div id="lq-detail-list"></div>
+    </div>
+
+    <div class="result-actions">
+      <button class="retry" onclick="lqRetry()">🔄 다시 풀기</button>
+      <button class="done" onclick="navTo('unit-detail')">완료 →</button>
     </div>
   </div>
 </div>
@@ -1440,10 +3066,15 @@ body {
   <div class="main-wrap">
     <div class="unit-header">
       <div class="unit-title-main"><span class="pt">테스트</span> 보기</div>
-      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
-      <button class="video-btn" onclick="openVideo()">
+      <div class="unit-btn-row">
+        <button class="notes-btn" onclick="navTo('notes')">내용 정리</button>
+        <button class="teacher-note-btn" onclick="navTo('teacher-note')">
+          <span class="t-icon">✎</span> 선생님 설명
+        </button>
+        <button class="video-btn" onclick="openVideo()">
         <span class="play-icon"></span> 영상 강의
       </button>
+      </div>
     </div>
     <div class="section-sub">개인 점수가 개별 랭킹에 반영돼요. 신중하게 풀어주세요</div>
 
@@ -1492,10 +3123,15 @@ body {
   <div class="main-wrap">
     <div class="unit-header">
       <div class="unit-title-main"><span class="pt">난이도</span> 선택</div>
-      <button class="notes-btn" onclick="navTo('notes')">내용 정리 확인</button>
-      <button class="video-btn" onclick="openVideo()">
+      <div class="unit-btn-row">
+        <button class="notes-btn" onclick="navTo('notes')">내용 정리</button>
+        <button class="teacher-note-btn" onclick="navTo('teacher-note')">
+          <span class="t-icon">✎</span> 선생님 설명
+        </button>
+        <button class="video-btn" onclick="openVideo()">
         <span class="play-icon"></span> 영상 강의
       </button>
+      </div>
     </div>
     <div class="section-sub">8단원 감각동사</div>
 
@@ -1760,21 +3396,889 @@ body {
   </div>
 </div>
 
+<!-- ========================================== -->
+<!-- 11. 선생님 - 가입 신청 -->
+<!-- ========================================== -->
+<div class="page" id="page-teacher-signups">
+  <div class="tdash-wrap">
+    <div class="tdash-header">
+      <div class="tdash-title">선생님 대시보드 <span class="sub">Hailey</span></div>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
+    </div>
+    <div class="tdash-tabs">
+      <button class="tdash-tab active" onclick="navTo('teacher-signups')">가입 신청 <span class="badge">3</span></button>
+      <button class="tdash-tab" onclick="navTo('teacher-students')">학생 관리</button>
+      <button class="tdash-tab" onclick="navTo('teacher-results')">학습 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-tests')">테스트 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-content')">콘텐츠 관리</button>
+    </div>
+
+    <div style="font-family:'Gowun Batang',serif; font-size:13px; color:var(--ink-soft); margin-bottom:14px;">
+      새로운 가입 신청 학생에게 레벨과 챕터를 배정해서 승인해주세요.
+    </div>
+
+    <!-- 가입 신청 카드 1 -->
+    <div class="signup-card">
+      <div class="signup-card-head">
+        <div>
+          <div class="signup-name">김민준</div>
+          <div class="signup-meta">중2B · 아이디 minjun01</div>
+        </div>
+        <div class="signup-date">신청일 5/26</div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">레벨 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip on" onclick="toggleChip(this)">Spark</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Path</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Climb</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Summit</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Master</div>
+        </div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">챕터 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip chap on" onclick="toggleChip(this)">문장의 5형식</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">시제</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">조동사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">수동태</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">to부정사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">동명사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">분사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">접속사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사절</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사·부사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">비교급</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">가정법</div>
+        </div>
+      </div>
+      <div class="signup-actions">
+        <button class="btn-approve">승인하기</button>
+        <button class="btn-reject">거절</button>
+      </div>
+    </div>
+
+    <!-- 가입 신청 카드 2 -->
+    <div class="signup-card">
+      <div class="signup-card-head">
+        <div>
+          <div class="signup-name">박지호</div>
+          <div class="signup-meta">중3A · 아이디 jiho99</div>
+        </div>
+        <div class="signup-date">신청일 5/26</div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">레벨 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip" onclick="toggleChip(this)">Spark</div>
+          <div class="assign-chip on" onclick="toggleChip(this)">Path</div>
+          <div class="assign-chip on" onclick="toggleChip(this)">Climb</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Summit</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Master</div>
+        </div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">챕터 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip chap on" onclick="toggleChip(this)">문장의 5형식</div>
+          <div class="assign-chip chap on" onclick="toggleChip(this)">시제</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">조동사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">수동태</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">to부정사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">동명사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">분사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">접속사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사절</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사·부사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">비교급</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">가정법</div>
+        </div>
+      </div>
+      <div class="signup-actions">
+        <button class="btn-approve">승인하기</button>
+        <button class="btn-reject">거절</button>
+      </div>
+    </div>
+
+    <!-- 가입 신청 카드 3 -->
+    <div class="signup-card">
+      <div class="signup-card-head">
+        <div>
+          <div class="signup-name">윤서아</div>
+          <div class="signup-meta">초6 · 아이디 seoa2014</div>
+        </div>
+        <div class="signup-date">신청일 5/26</div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">레벨 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip on" onclick="toggleChip(this)">Spark</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Path</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Climb</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Summit</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Master</div>
+        </div>
+      </div>
+      <div class="signup-assign-row">
+        <div class="assign-label">챕터 배정 (여러 개 선택 가능)</div>
+        <div class="assign-chips">
+          <div class="assign-chip chap on" onclick="toggleChip(this)">문장의 5형식</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">시제</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">조동사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">수동태</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">to부정사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">동명사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">분사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">접속사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사절</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사·부사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">비교급</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">가정법</div>
+        </div>
+      </div>
+      <div class="signup-actions">
+        <button class="btn-approve">승인하기</button>
+        <button class="btn-reject">거절</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 12. 선생님 - 학생 관리 -->
+<!-- ========================================== -->
+<div class="page" id="page-teacher-students">
+  <div class="tdash-wrap">
+    <div class="tdash-header">
+      <div class="tdash-title">선생님 대시보드 <span class="sub">Hailey</span></div>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
+    </div>
+    <div class="tdash-tabs">
+      <button class="tdash-tab" onclick="navTo('teacher-signups')">가입 신청 <span class="badge">3</span></button>
+      <button class="tdash-tab active" onclick="navTo('teacher-students')">학생 관리</button>
+      <button class="tdash-tab" onclick="navTo('teacher-results')">학습 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-tests')">테스트 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-content')">콘텐츠 관리</button>
+    </div>
+
+    <div class="stud-search">
+      <input type="text" placeholder="이름 검색...">
+      <select>
+        <option>전체 반</option>
+        <option>초5</option><option>초6</option>
+        <option>중1A</option><option>중1B</option>
+        <option>중2A</option><option>중2B</option><option>중2C</option>
+        <option>중3A</option><option>중3B</option><option>중3C</option>
+        <option>고등부</option>
+      </select>
+      <select>
+        <option>전체 레벨</option>
+        <option>Spark</option><option>Path</option>
+        <option>Climb</option><option>Summit</option><option>Master</option>
+      </select>
+      <div class="stud-total">총 24명</div>
+    </div>
+
+    <div class="stud-table">
+      <div class="stud-row head">
+        <div>이름</div>
+        <div>반</div>
+        <div>레벨</div>
+        <div>챕터</div>
+        <div></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">김민준</div>
+        <div>중2B</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag spark">Spark</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">문장의 5형식</div>
+        <div><button class="btn-edit" onclick="openEditModal('김민준')">수정</button></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">박지호</div>
+        <div>중3A</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag path">Path</span>
+          <span class="lvl-tag climb">Climb</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">5형식, 시제</div>
+        <div><button class="btn-edit" onclick="openEditModal('박지호')">수정</button></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">윤서아</div>
+        <div>중2A</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag climb">Climb</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">5형식, 조동사, 시제</div>
+        <div><button class="btn-edit" onclick="openEditModal('윤서아')">수정</button></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">이수진</div>
+        <div>중2A</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag spark">Spark</span>
+          <span class="lvl-tag path">Path</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">5형식, 시제</div>
+        <div><button class="btn-edit" onclick="openEditModal('이수진')">수정</button></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">최우진</div>
+        <div>중2C</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag spark">Spark</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">문장의 5형식</div>
+        <div><button class="btn-edit" onclick="openEditModal('최우진')">수정</button></div>
+      </div>
+      <div class="stud-row">
+        <div class="name">정하늘</div>
+        <div>중1A</div>
+        <div class="lvl-tags">
+          <span class="lvl-tag spark">Spark</span>
+        </div>
+        <div style="font-size:12px; color:var(--ink-soft);">문장의 5형식</div>
+        <div><button class="btn-edit" onclick="openEditModal('정하늘')">수정</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 학생 수정 모달 -->
+  <div class="edit-modal" id="editModal" onclick="closeEditBg(event)">
+    <div class="edit-modal-body">
+      <h3 id="edit-modal-name">학생 정보 수정</h3>
+      <div class="modal-sub">레벨과 챕터를 변경하실 수 있어요</div>
+
+      <div class="signup-assign-row">
+        <div class="assign-label">레벨</div>
+        <div class="assign-chips">
+          <div class="assign-chip on" onclick="toggleChip(this)">Spark</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Path</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Climb</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Summit</div>
+          <div class="assign-chip" onclick="toggleChip(this)">Master</div>
+        </div>
+      </div>
+
+      <div class="signup-assign-row">
+        <div class="assign-label">챕터</div>
+        <div class="assign-chips">
+          <div class="assign-chip chap on" onclick="toggleChip(this)">문장의 5형식</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">시제</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">조동사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">수동태</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">to부정사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">동명사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">분사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">접속사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사절</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">형용사·부사</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">비교급</div>
+          <div class="assign-chip chap" onclick="toggleChip(this)">가정법</div>
+        </div>
+      </div>
+
+      <div class="edit-modal-actions">
+        <button class="btn-cancel" onclick="closeEditModal()">취소</button>
+        <button class="btn-save" onclick="closeEditModal()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 13. 선생님 - 학습 결과 (간단 플레이스홀더) -->
+<!-- ========================================== -->
+<div class="page" id="page-teacher-results">
+  <div class="tdash-wrap">
+    <div class="tdash-header">
+      <div class="tdash-title">선생님 대시보드 <span class="sub">Hailey</span></div>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
+    </div>
+    <div class="tdash-tabs">
+      <button class="tdash-tab" onclick="navTo('teacher-signups')">가입 신청 <span class="badge">3</span></button>
+      <button class="tdash-tab" onclick="navTo('teacher-students')">학생 관리</button>
+      <button class="tdash-tab active" onclick="navTo('teacher-results')">학습 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-tests')">테스트 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-content')">콘텐츠 관리</button>
+    </div>
+    <div style="background:var(--paper); border:1px dashed var(--line); border-radius:14px; padding:60px 24px; text-align:center; font-family:'Gowun Batang',serif;">
+      <div style="font-size:48px; margin-bottom:16px;">📊</div>
+      <div style="font-size:18px; font-weight:800; margin-bottom:8px;">학습 결과 페이지</div>
+      <div style="font-size:14px; color:var(--ink-soft);">시트 연동 이후 실제 데이터로 구현 예정</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 14. 선생님 - 테스트 결과 (간단 플레이스홀더) -->
+<!-- ========================================== -->
+<div class="page" id="page-teacher-tests">
+  <div class="tdash-wrap">
+    <div class="tdash-header">
+      <div class="tdash-title">선생님 대시보드 <span class="sub">Hailey</span></div>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
+    </div>
+    <div class="tdash-tabs">
+      <button class="tdash-tab" onclick="navTo('teacher-signups')">가입 신청 <span class="badge">3</span></button>
+      <button class="tdash-tab" onclick="navTo('teacher-students')">학생 관리</button>
+      <button class="tdash-tab" onclick="navTo('teacher-results')">학습 결과</button>
+      <button class="tdash-tab active" onclick="navTo('teacher-tests')">테스트 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-content')">콘텐츠 관리</button>
+    </div>
+    <div style="background:var(--paper); border:1px dashed var(--line); border-radius:14px; padding:60px 24px; text-align:center; font-family:'Gowun Batang',serif;">
+      <div style="font-size:48px; margin-bottom:16px;">📝</div>
+      <div style="font-size:18px; font-weight:800; margin-bottom:8px;">테스트 결과 페이지</div>
+      <div style="font-size:14px; color:var(--ink-soft);">시트 연동 이후 실제 데이터로 구현 예정<br>카톡 일괄 전송 기능 포함</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================== -->
+<!-- 15. 선생님 - 콘텐츠 관리 -->
+<!-- ========================================== -->
+<div class="page" id="page-teacher-content">
+  <div class="tdash-wrap">
+    <div class="tdash-header">
+      <div class="tdash-title">선생님 대시보드 <span class="sub">Hailey</span></div>
+      <button class="icon-btn" onclick="navTo('login')">로그아웃</button>
+    </div>
+    <div class="tdash-tabs">
+      <button class="tdash-tab" onclick="navTo('teacher-signups')">가입 신청 <span class="badge">3</span></button>
+      <button class="tdash-tab" onclick="navTo('teacher-students')">학생 관리</button>
+      <button class="tdash-tab" onclick="navTo('teacher-results')">학습 결과</button>
+      <button class="tdash-tab" onclick="navTo('teacher-tests')">테스트 결과</button>
+      <button class="tdash-tab active" onclick="navTo('teacher-content')">콘텐츠 관리</button>
+    </div>
+
+    <div style="font-family:'Gowun Batang',serif; font-size:13px; color:var(--ink-soft); margin-bottom:14px;">
+      단원별로 내용 정리·선생님 설명·영상 강의를 관리하세요. 
+      <b style="color:var(--moss);">📝 내용정리</b>, 
+      <b style="color:var(--rust);">📄 선생님설명 PDF</b>, 
+      <b style="color:var(--gold);">📹 영상강의</b> 자료가 모두 갖춰질수록 AI 채점이 정확해져요.
+    </div>
+
+    <!-- 챕터 선택 -->
+    <div style="display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;">
+      <button class="assign-chip on">문장의 5형식</button>
+      <button class="assign-chip">시제</button>
+      <button class="assign-chip">조동사</button>
+      <button class="assign-chip">수동태</button>
+      <button class="assign-chip">to부정사</button>
+      <button class="assign-chip">+ 더보기</button>
+    </div>
+
+    <!-- 단원 리스트 -->
+    <div class="content-mgr-table">
+      <div class="cmgr-row head">
+        <div>단원</div>
+        <div>이름</div>
+        <div>내용정리</div>
+        <div>선생님설명</div>
+        <div>영상</div>
+        <div></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">1</div>
+        <div class="unit-nm">8품사</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('1단원 · 8품사')">편집</button></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">2</div>
+        <div class="unit-nm">수식어</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('2단원 · 수식어')">편집</button></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">3</div>
+        <div class="unit-nm">1형식</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell on">📹 ✓</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('3단원 · 1형식')">편집</button></div>
+      </div>
+      <div class="cmgr-row" style="background:rgba(122,138,103,0.04);">
+        <div class="unit-no">8</div>
+        <div class="unit-nm">감각동사</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell on">📄 ✓</div>
+        <div class="status-cell on">📹 ✓</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('8단원 · 감각동사')">편집</button></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">9</div>
+        <div class="unit-nm">3형식</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('9단원 · 3형식')">편집</button></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">14</div>
+        <div class="unit-nm">4형식 → 3형식 전치사</div>
+        <div class="status-cell on">📝 ✓</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('14단원 · 4형식 → 3형식 전치사')">편집</button></div>
+      </div>
+      <div class="cmgr-row">
+        <div class="unit-no">24</div>
+        <div class="unit-nm">사역동사</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div class="status-cell off">—</div>
+        <div><button class="btn-cmgr-edit" onclick="openCmgrModal('24단원 · 사역동사')">편집</button></div>
+      </div>
+    </div>
+
+    <div style="text-align:center; margin-top:14px; font-family:'Gowun Batang',serif; font-size:12px; color:var(--ink-soft);">
+      자료가 하나도 없는 단원도 AI 일반 영문법 지식으로 채점은 가능해요.<br>
+      자료를 추가할수록 채점이 정확해집니다.
+    </div>
+  </div>
+
+  <!-- 콘텐츠 편집 모달 -->
+  <div class="cmgr-edit-modal" id="cmgrModal" onclick="closeCmgrBg(event)">
+    <div class="cmgr-edit-body">
+      <h3 id="cmgr-modal-title">단원 콘텐츠 편집</h3>
+      <div class="modal-sub">자료가 있는 만큼만 채워주시면 돼요.</div>
+
+      <!-- 내용 정리 -->
+      <div class="cmgr-section">
+        <div class="sec-title">
+          📝 내용 정리
+          <span class="sec-status on">등록됨</span>
+        </div>
+        <textarea>핵심 정리: look, sound, smell, taste, feel
+
+설명: 오감으로 느낀 바를 설명하는 동사. 감각동사 뒤에는 반드시 형용사가 와야 한다. 이 부분에서 학생들이 가장 많이 틀린다.
+
+예시:
+She looks beautiful. (O)
+She looks beautifully. (X)
+
+주의: like + 명사 (1형식)
+She looks like her mother.</textarea>
+      </div>
+
+      <!-- 선생님 설명 PDF -->
+      <div class="cmgr-section">
+        <div class="sec-title">
+          📄 선생님 설명 PDF
+          <span class="sec-status on">등록됨</span>
+        </div>
+        <div class="cmgr-file-upload">
+          <div class="file-icon">📄</div>
+          <div class="file-info">
+            <div class="fname">감각동사_정리.pdf</div>
+            <div class="fsub">1.2 MB · 5/26 업로드</div>
+          </div>
+          <button>교체</button>
+          <button>삭제</button>
+        </div>
+        <div style="font-size:11px; color:var(--ink-soft); margin-top:8px; font-family:'Gowun Batang',serif;">
+          굿노트에서 만든 PDF를 올려주세요. 학생이 [선생님 설명] 버튼으로 볼 수 있고, AI 채점에도 사용돼요.
+        </div>
+      </div>
+
+      <!-- 영상 강의 -->
+      <div class="cmgr-section">
+        <div class="sec-title">
+          📹 영상 강의
+          <span class="sec-status on">등록됨</span>
+        </div>
+        <input type="text" value="https://youtu.be/dQw4w9WgXcQ" placeholder="유튜브 링크">
+        <div style="font-size:11px; color:var(--ink-soft); margin-top:8px; font-family:'Gowun Batang',serif;">
+          유튜브에 업로드한 영상 링크를 붙여넣으세요.
+        </div>
+      </div>
+
+      <div class="edit-modal-actions">
+        <button class="btn-cancel" onclick="closeCmgrModal()">취소</button>
+        <button class="btn-save" onclick="closeCmgrModal()">저장</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
+// ============ v10: 5형식 데이터 임베드 ============
+const CHAPTER_5FORMS = {"chapter_id":"sentence_patterns","chapter_name":"문장의 5형식","units":[{"no":1,"name":"8품사","status":"done","score":95,"notes":[{"topic":"8품사","answer":"명사, 대명사, 동사, 형용사, 부사, 전치사, 접속사, 감탄사","question_format":"답: ____________________________________________ ___","description":["영어의 모든 단어는 여덟 가지 품사 중 하나에 속한다. 품사는 단어가 문장 안에서 어떤 역할을 할 수 있는지를 결정한다. 명사·대명사는 주어·목적어·보어 자리에, 동사는 문장의 형식을 결정하는 자리에, 형용사와 부사는 다른 말을 꾸며주는 자리에 들어간다. 품사를 모르면 문장의 형식을 따질 수 없으므로, 5형식을 공부하기 전에 반드시 익혀두어야 한다."],"examples":[],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 명사를 3개 고르세요.\n( book / run / happy / student / quickly / city )","answer":"book, student, city","explanation":"사람·사물·장소·개념의 이름을 나타내는 단어가 명사."},{"no":2,"level":"기초","question":"다음 중 동사를 3개 고르세요.\n( eat / beautiful / run / on / sleep / table )","answer":"eat, run, sleep","explanation":"동작이나 상태를 나타내는 단어가 동사."},{"no":3,"level":"기초","question":"다음 중 형용사를 3개 고르세요.\n( happy / quickly / kind / car / beautiful / sing )","answer":"happy, kind, beautiful","explanation":"명사를 꾸며주거나 상태를 설명하는 단어가 형용사."},{"no":4,"level":"기초","question":"다음 중 부사를 3개 고르세요.\n( slowly / dog / quickly / happy / well / pretty )","answer":"slowly, quickly, well","explanation":"동사·형용사·다른 부사·문장 전체를 꾸며주는 단어가 부사."},{"no":5,"level":"기초","question":"다음 중 전치사를 3개 고르세요.\n( on / and / in / he / under / very )","answer":"on, in, under","explanation":"명사 앞에 붙어 시간·장소·방법 등을 나타내는 단어가 전치사."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  is(2)  a beautifully(3)  girl(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / beautiful","explanation":"girl(명사)을 꾸미려면 형용사. beautifully(부사) → beautiful(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  runs(2)  very(3)  quick(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / quickly","explanation":"동사 runs를 꾸미는 자리. quick(형용사) → quickly(부사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe(1)  baby(2)  sleeps(3)  quiet(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / quietly","explanation":"동사 sleeps를 꾸미는 자리. quiet(형용사) → quietly(부사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  speaks(2)  English(3)  fluent(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / fluently","explanation":"동사 speaks를 꾸미는 부사 자리. fluent(형용사) → fluently(부사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  is(2)  a happily(3)  child(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / happy","explanation":"child(명사) 앞이므로 형용사. happily(부사) → happy(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happy / She / is / happily ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 행복하다.","answer":"She is happy. / 2형식","explanation":"happily(부사)는 보어가 될 수 없음. is + happy(형용사) → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ quickly / He / quick / runs ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 빨리 달린다.","answer":"He runs quickly. / 1형식","explanation":"quick(형용사)은 동사를 꾸밀 수 없음. quickly(부사) 사용 → 1형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ beautiful / sings / beautifully / She ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 아름답게 노래한다.","answer":"She sings beautifully. / 1형식","explanation":"beautiful(형용사)은 동사를 꾸밀 수 없음. beautifully(부사) → 1형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ kind / a / is / She / kindly / teacher ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 친절한 선생님이다.","answer":"She is a kind teacher. / 2형식","explanation":"kindly(부사)는 명사를 꾸밀 수 없음. kind(형용사) 사용 → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ loud / The / loudly / music / plays ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 음악은 시끄럽게 연주된다.","answer":"The music plays loudly. / 1형식","explanation":"loud(형용사)는 동사를 꾸밀 수 없음. loudly(부사) → 1형식."}]}},{"no":2,"name":"문장의 형식에 영향을 주지 않는 2가지 수식어","status":"done","score":88,"notes":[{"topic":"문장의 형식에 영향을 주지 않는 2가지 수식어(modifier)","answer":"형용사, 부사","question_format":"답: ____________ ___","description":["문장에는 형식을 결정하는 핵심 요소(주어·동사·목적어·보어)와, 의미를 풍부하게 해주지만 형식에는 영향을 주지 않는 수식어가 있다. 수식어에는 두 가지가 있다. 형용사는 명사를 꾸며주고, 부사는 동사·형용사·다른 부사·문장 전체를 꾸며준다."],"examples":[],"warnings":[]},{"topic":"문장의 형식을 판단할 때는 먼저 수식어를 가린 뒤 핵심 요소만 남겨서 본다.","answer":"","question_format":"","description":[],"examples":["She sings beautifully. → 부사 beautifully를 가리면 She sings만 남는다. 이것은 1형식이다."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 수식어에 해당하는 것을 2개 고르세요.\n( 명사 / 동사 / 부사 / 형용사 / 전치사+명사 / 보어 )","answer":"부사, 전치사+명사","explanation":"문장의 형식을 결정하지 않고 의미만 풍부하게 해주는 것이 수식어."},{"no":2,"level":"기초","question":"다음 문장에서 수식어를 고르세요.\n\"She sings beautifully.\"\n( She / sings / beautifully )","answer":"beautifully","explanation":"beautifully는 부사로 sings를 꾸미는 수식어."},{"no":3,"level":"기초","question":"다음 문장에서 전치사구를 고르세요.\n\"The cat sleeps on the sofa.\"\n( The cat / sleeps / on the sofa )","answer":"on the sofa","explanation":"on(전치사) + the sofa(명사) = 전치사구."},{"no":4,"level":"기초","question":"다음 중 수식어로 쓰일 수 없는 것을 고르세요.\n( 부사 / 전치사구 / 동사 )","answer":"동사","explanation":"동사는 문장의 핵심 요소이지 수식어가 아님."},{"no":5,"level":"기초","question":"다음 문장에서 수식어가 아닌 것을 고르세요.\n\"The little boy runs fast in the park.\"\n( The boy / little / fast / in the park )","answer":"The boy","explanation":"The boy는 주어(핵심 요소). little, fast, in the park는 모두 수식어."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe sun(1)  rises(2)  east(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the east","explanation":"rise는 1형식 동사로 목적어를 데려오지 않음. 장소 앞에 전치사 in 필요."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  arrived(2)  the station(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / at the station","explanation":"arrive는 1형식 동사. 장소 앞에 전치사 at 필요."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe dog(1)  runs(2)  the park(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the park","explanation":"run이 1형식으로 쓰일 때 장소 앞에 전치사 in 필요."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nBirds(1)  fly(2)  the sky(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the sky","explanation":"fly는 1형식 동사. 장소 앞에 전치사 in 필요."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  walks(2)  the morning(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the morning","explanation":"시간을 나타낼 때 전치사 in 필요. in the morning = 아침에."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ sleeps / on / The / the bed / cat / in ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 고양이는 침대 위에서 잔다.","answer":"The cat sleeps on the bed. / 1형식","explanation":"in은 함정. on the bed(전치사구)는 수식어 → 1형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ The sun / in / rises / the east / on ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 해는 동쪽에서 뜬다.","answer":"The sun rises in the east. / 1형식","explanation":"on은 함정. in the east(전치사구) → 수식어 → 1형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ in / He / the park / runs / fastly / fast ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 공원에서 빠르게 달린다.","answer":"He runs fast in the park. / 1형식","explanation":"fastly는 함정(없는 단어). fast(부사)와 in the park(전치사구) 모두 수식어 → 1형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ walks / She / slow / slowly / in the garden ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 정원에서 천천히 걷는다.","answer":"She walks slowly in the garden. / 1형식","explanation":"slow는 함정. slowly(부사) 사용 → 1형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ arrived / early / at the airport / lately / We ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 공항에 일찍 도착했다.","answer":"We arrived at the airport early. / 1형식","explanation":"lately는 함정(\"최근에\"의 뜻). early(부사)와 at the airport(전치사구) 모두 수식어 → 1형식."}]}},{"no":3,"name":"1형식","status":"done","score":92,"notes":[{"topic":"1형식","answer":"주어(S) + 동사(V)","question_format":"답: __________________ ___","description":["주어와 동사만으로 의미가 완성되는 가장 단순한 문장이다. 동사가 스스로 의미를 다 담고 있어서 뒤에 목적어나 보어가 필요 없다. 동사 뒤에 따라오는 말이 있어도 대부분 부사(구)이므로, 가리면 1형식임을 알 수 있다."],"examples":["Birds fly. The baby is sleeping. The sun rises in the east. → in the east는 부사구. 가리면 The sun rises만 남는다."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"1형식 문장의 구성을 고르세요.\n( S+V / S+V+O / S+V+C / S+V+O+O )","answer":"S+V","explanation":"주어와 동사만으로 의미가 완성되는 가장 단순한 문장."},{"no":2,"level":"기초","question":"다음 중 1형식 문장을 고르세요.\n① She sings.    ② She is a singer.    ③ She loves music.","answer":"①","explanation":"②는 2형식(S+V+SC), ③은 3형식(S+V+O)."},{"no":3,"level":"기초","question":"다음 중 1형식 문장을 고르세요.\n① Birds fly.    ② Birds eat worms.    ③ Birds are beautiful.","answer":"①","explanation":"Birds fly는 주어+동사만으로 완성. ②는 3형식, ③은 2형식."},{"no":4,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"The baby is sleeping.\"\n( 1형식 / 2형식 / 3형식 )","answer":"1형식","explanation":"is sleeping은 진행형 동사. 보어나 목적어 없이 주어+동사로 완성."},{"no":5,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"The sun rises in the east.\"\n( 1형식 / 2형식 / 3형식 )","answer":"1형식","explanation":"in the east는 전치사구(수식어). 가리면 The sun rises만 남음."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nA strange thing(1)  happen(2)  every day(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / happens","explanation":"주어 a strange thing은 단수이므로 동사도 단수형. happen → happens."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe cat(1)  sleeps(2)  quiet(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / quietly","explanation":"sleep은 1형식 동사. 동사를 꾸미는 부사 자리."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nBirds(1)  flies(2)  high(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / fly","explanation":"주어 Birds가 복수이므로 동사는 fly. flies(단수형)는 안 맞음."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  ran(2)  fastly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / fast","explanation":"fastly는 없는 단어. fast가 형용사·부사 모두로 쓰임."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe accident(1)  happened(2)  sudden(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / suddenly","explanation":"happen은 1형식 동사. 동사를 꾸미는 부사 자리. sudden(형용사) → suddenly(부사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ fly / Birds / high / highly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 새들은 높이 난다.","answer":"Birds fly high. / 1형식","explanation":"highly는 함정(\"매우\"의 뜻). \"높이\"는 high(부사) → 1형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happens / Strange things / happen / sometimes ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 이상한 일들이 가끔 일어난다.","answer":"Strange things happen sometimes. / 1형식","explanation":"happens는 함정. 주어 things가 복수이므로 동사는 happen. sometimes(부사) → 1형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ depart / at 9 / The train / departs ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 기차는 9시에 출발한다.","answer":"The train departs at 9. / 1형식","explanation":"depart(원형)는 함정. 주어 train은 단수이므로 departs. at 9(전치사구) → 1형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ disappear / The stars / disappears / at dawn ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 별들은 새벽에 사라진다.","answer":"The stars disappear at dawn. / 1형식","explanation":"disappears는 함정. 주어 stars가 복수이므로 disappear. at dawn(전치사구) → 1형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ stand / stands / in the garden / tall / The tree ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 나무는 정원에서 높이 서 있다.","answer":"The tree stands tall in the garden. / 1형식","explanation":"stand(원형)는 함정. 주어 tree는 단수이므로 stands. tall(부사적 용법), in the garden(전치사구) → 1형식."}]}},{"no":4,"name":"1형식 동사","status":"done","score":85,"notes":[{"topic":"1형식 동사 16개","answer":"go, come, run, walk, fly, swim, sit, stand, lie, sleep, arrive, depart, appear, disappear, happen, exist","question_format":"답: ____________________________________________________________________ ___","description":["1형식 동사는 움직임·위치·존재·발생을 나타낸다. 외울 때는 의미 묶음으로 익히면 쉽다."],"examples":[],"warnings":[]},{"topic":"움직임: go, come, run, walk, fly, swim","answer":"","question_format":"","description":[],"examples":[],"warnings":[]},{"topic":"자세: sit, stand, lie, sleep","answer":"","question_format":"","description":[],"examples":[],"warnings":[]},{"topic":"도착/출발: arrive, depart","answer":"","question_format":"","description":[],"examples":[],"warnings":[]},{"topic":"나타남/사라짐: appear, disappear","answer":"","question_format":"","description":[],"examples":[],"warnings":[]},{"topic":"발생/존재: happen, exist","answer":"","question_format":"","description":[],"examples":[],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 1형식에 쓰일 수 있는 동사를 3개 고르세요.\n( go / love / run / eat / fly / make )","answer":"go, run, fly","explanation":"움직임을 나타내는 1형식 동사."},{"no":2,"level":"기초","question":"다음 중 1형식에 쓰일 수 있는 동사를 3개 고르세요.\n( sit / give / stand / want / lie / buy )","answer":"sit, stand, lie","explanation":"자세를 나타내는 1형식 동사."},{"no":3,"level":"기초","question":"다음 중 1형식에 쓰일 수 있는 동사를 3개 고르세요.\n( arrive / give / depart / love / disappear / make )","answer":"arrive, depart, disappear","explanation":"도착·출발·사라짐을 나타내는 1형식 동사."},{"no":4,"level":"기초","question":"다음 중 1형식에 쓰일 수 있는 동사를 3개 고르세요.\n( happen / love / rise / make / occur / want )","answer":"happen, rise, occur","explanation":"발생·떠오름을 나타내는 1형식 동사."},{"no":5,"level":"기초","question":"다음 중 1형식에 쓰일 수 있는 동사를 3개 고르세요.\n( exist / love / appear / want / set / make )","answer":"exist, appear, set","explanation":"존재·나타남·(해가) 짐을 나타내는 1형식 동사."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe sun(1)  rises(2)  east(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the east","explanation":"rise는 1형식 동사로 목적어를 데려오지 않음. 장소 앞에 전치사 in 필요."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  arrived(2)  the airport(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / at the airport","explanation":"arrive는 1형식 동사. 장소 앞에 전치사 at 필요."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe meeting(1)  took place(2)  the room(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the room","explanation":"take place는 1형식. 장소 앞에 전치사 in 필요."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  swam(2)  the pool(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / in the pool","explanation":"swim은 1형식 동사. 장소 앞에 전치사 in 필요."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe dog(1)  disappear(2)  yesterday(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / disappeared","explanation":"시간 yesterday로 보아 과거시제. disappear → disappeared."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ at the station / arrived / We / arrive ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 역에 도착했다.","answer":"We arrived at the station. / 1형식","explanation":"arrive(원형)는 함정. 과거시제이므로 arrived. at the station(전치사구) → 1형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ in the east / rises / rise / The sun ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 해는 동쪽에서 뜬다.","answer":"The sun rises in the east. / 1형식","explanation":"rise(원형)는 함정. 주어 sun은 단수이므로 rises. in the east(전치사구) → 1형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ yesterday / occurred / occur / An accident ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 한 사고가 어제 발생했다.","answer":"An accident occurred yesterday. / 1형식","explanation":"occur(원형)는 함정. 과거시제이므로 occurred. yesterday(부사) → 1형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ disappeared / disappear / The magician / from the stage ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 마술사는 무대에서 사라졌다.","answer":"The magician disappeared from the stage. / 1형식","explanation":"disappear(원형)는 함정. 과거시제이므로 disappeared. from the stage(전치사구) → 1형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ under the tree / stood / stand / quietly / He ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 나무 아래에서 조용히 서 있었다.","answer":"He stood quietly under the tree. / 1형식","explanation":"stand(원형)는 함정. 과거시제이므로 stood. quietly(부사), under the tree(전치사구) → 1형식."}]}},{"no":5,"name":"2형식","status":"done","score":78,"notes":[{"topic":"2형식","answer":"주어(S) + 동사(V) + 주격보어(SC)","question_format":"답: ______________________________ ___","description":["동사 뒤에 \"주어를 설명해주는 말\"이 오는 문장이다. 이 설명해주는 말을 주격보어(subjective complement, SC)라고 한다. 보어와 주어 사이에는 \"주어 = 보어\"의 관계가 성립한다."],"examples":["She is a teacher. (She = a teacher) He looks tired. (He = tired 상태) The leaves turned red. (The leaves = red)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"2형식 문장의 구성을 고르세요.\n( S+V / S+V+O / S+V+SC / S+V+IO+DO )","answer":"S+V+SC","explanation":"주어+동사+주격보어. 보어는 주어를 설명하는 말."},{"no":2,"level":"기초","question":"주격보어와 주어의 관계로 알맞은 것을 고르세요.\n( 주어 = 보어 / 주어 ≠ 보어 / 주어 + 보어 )","answer":"주어 = 보어","explanation":"주격보어는 주어가 \"무엇인지\" 또는 \"어떤 상태인지\"를 알려주므로 주어 = 보어."},{"no":3,"level":"기초","question":"다음 중 2형식 문장을 고르세요.\n① She runs.    ② She is a teacher.    ③ She loves him.","answer":"②","explanation":"She = a teacher 관계가 성립 → 2형식."},{"no":4,"level":"기초","question":"다음 중 2형식 문장을 고르세요.\n① He looks tired.    ② He looks at me.    ③ He runs fast.","answer":"①","explanation":"He = tired 상태. ②는 look at(전치사구) → 1형식, ③도 1형식."},{"no":5,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"The leaves turned red.\"\n( 1형식 / 2형식 / 3형식 )","answer":"2형식","explanation":"The leaves = red 상태. turn은 변화동사로 형용사 보어를 데려옴."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  is(2)  beautifully(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / beautiful","explanation":"be동사의 보어 자리. 부사는 보어가 될 수 없음 → beautiful(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  became(2)  famously(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / famous","explanation":"become의 보어 자리. famously(부사) → famous(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe soup(1)  tastes(2)  deliciously(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / delicious","explanation":"taste는 감각동사로 형용사 보어. deliciously(부사) → delicious(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  looks(2)  happily(3)  today(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / happy","explanation":"look은 감각동사로 형용사 보어. happily(부사) → happy(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe leaves(1)  turned(2)  redly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / red","explanation":"turn은 변화동사로 형용사 보어. redly(부사) → red(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a teacher / She / teacher / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 선생님이다.","answer":"She is a teacher. / 2형식","explanation":"teacher(관사 없음)는 함정. 직업 명사 앞에 관사 a 필요. She = a teacher → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happily / happy / looks / He ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 행복해 보인다.","answer":"He looks happy. / 2형식","explanation":"happily(부사)는 함정. happy(형용사) → He = happy → 2형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ famous / She / famously / became ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 유명해졌다.","answer":"She became famous. / 2형식","explanation":"famously(부사)는 함정. became + famous(형용사) → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ red / redly / turned / The leaves ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 잎들은 빨갛게 변했다.","answer":"The leaves turned red. / 2형식","explanation":"redly(부사)는 함정. red(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ sweet / smells / sweetly / The flower ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 꽃은 달콤한 향이 난다.","answer":"The flower smells sweet. / 2형식","explanation":"sweetly(부사)는 함정. sweet(형용사) → 2형식."}]}},{"no":6,"name":"보어가 될 수 있는 품사 3개","status":"progress","score":70,"notes":[{"topic":"보어가 될 수 있는 품사 3개","answer":"명사, 대명사, 형용사","question_format":"답: ____________________ ___","description":["주격보어 자리에 올 수 있는 품사는 세 가지뿐이다. 부사는 보어가 될 수 없다는 점을 반드시 기억해야 한다."],"examples":[],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 보어가 될 수 있는 품사를 3개 고르세요.\n( 명사 / 동사 / 대명사 / 형용사 / 부사 / 전치사 )","answer":"명사, 대명사, 형용사","explanation":"보어가 될 수 있는 품사는 명사·대명사·형용사 셋뿐."},{"no":2,"level":"기초","question":"다음 중 보어가 될 수 없는 품사를 고르세요.\n( 명사 / 형용사 / 부사 )","answer":"부사","explanation":"부사는 수식어로만 쓰임. 보어가 될 수 없음."},{"no":3,"level":"기초","question":"다음 문장에서 보어의 품사를 고르세요.\n\"She is happy.\" → happy의 품사는?\n( 명사 / 형용사 / 부사 )","answer":"형용사","explanation":"happy는 형용사로 주어의 상태를 설명."},{"no":4,"level":"기초","question":"다음 문장에서 보어의 품사를 고르세요.\n\"She is a doctor.\" → a doctor의 품사는?\n( 명사 / 형용사 / 부사 )","answer":"명사","explanation":"a doctor는 명사로 주어가 누구인지 알려줌."},{"no":5,"level":"기초","question":"다음 문장에서 보어의 품사를 고르세요.\n\"It is me.\" → me의 품사는?\n( 명사 / 대명사 / 부사 )","answer":"대명사","explanation":"me는 I의 목적격 대명사. 보어 자리에 대명사도 올 수 있음."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe students(1)  are(2)  smartly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / smart","explanation":"be동사의 보어 자리. 부사 불가 → smart(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe music(1)  sounds(2)  loudly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / loud","explanation":"sound(감각동사)의 보어 자리. loudly(부사) → loud(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe cake(1)  tastes(2)  sweetly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / sweet","explanation":"taste(감각동사)의 보어 자리. sweetly(부사) → sweet(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe room(1)  remained(2)  silently(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / silent","explanation":"remain은 2형식 유지동사. silently(부사) → silent(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe story(1)  sounds(2)  interestingly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / interesting","explanation":"sound(감각동사)의 보어 자리. interestingly(부사) → interesting(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happy / She / happily / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 행복하다.","answer":"She is happy. / 2형식","explanation":"happily(부사)는 함정. happy(형용사) → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ doctor / a / She / doctorly / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 의사이다.","answer":"She is a doctor. / 2형식","explanation":"doctorly는 함정(없는 단어). 명사 보어 a doctor → 2형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ kind / kindly / is / He / very ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 매우 친절하다.","answer":"He is very kind. / 2형식","explanation":"kindly(부사)는 함정. very는 형용사를 꾸미는 부사로 가능. kind(형용사) → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ tired / tiredly / look / looks / You ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 너는 피곤해 보인다.","answer":"You look tired. / 2형식","explanation":"주어 You에는 look(원형). tiredly(부사) 보어 불가 → tired(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ famous / famously / singer / a / She / became ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 유명한 가수가 되었다.","answer":"She became a famous singer. / 2형식","explanation":"famously(부사)는 함정(명사 수식 불가). famous(형용사)가 singer 수식. She = a famous singer → 2형식."}]}},{"no":7,"name":"3가지 품사를 보어로 데려올 수 있는 2형식 동사","status":"progress","score":60,"notes":[{"topic":"품사 3개를 보어로 데리고 올 수 있는 동사 2개","answer":"be, become","question_format":"답: ______________ ___","description":["6번에서 말한 세 가지 품사(명사·대명사·형용사) 모두를 보어로 데리고 올 수 있는 동사는 be와 become 두 개뿐이다.","2형식 동사 중 be, become을 제외한 나머지 동사들은 보어로 데리고 올 수 있는 품사가 제한되어 있다. 다음 8·9·10번에서 의미별로 묶어 살펴본다."],"examples":["She is happy. (형용사 보어) She is a doctor. (명사 보어) She became famous. (형용사 보어) She became a doctor. (명사 보어)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"명사·대명사·형용사 세 품사 모두를 보어로 데려올 수 있는 동사를 2개 고르세요.\n( be / look / become / taste / make / remain )","answer":"be, become","explanation":"be와 become은 명사·대명사·형용사 모두를 보어로 데려올 수 있음."},{"no":2,"level":"기초","question":"다음 중 be동사가 사용된 2형식 문장을 고르세요.\n① She is happy.    ② She runs fast.    ③ She loves music.","answer":"①","explanation":"She = happy 상태. be동사 + 형용사 보어 → 2형식."},{"no":3,"level":"기초","question":"다음 중 become이 사용된 2형식 문장을 고르세요.\n① He became a doctor.    ② He runs every day.    ③ He bought a car.","answer":"①","explanation":"He = a doctor 관계 성립. become + 명사 보어 → 2형식."},{"no":4,"level":"기초","question":"빈칸에 들어갈 수 있는 보어로 알맞은 것을 고르세요.\n\"She is ________.\"\n( beautiful / beautifully / quickly )","answer":"beautiful","explanation":"be동사 뒤에는 형용사·명사 보어. 부사는 보어가 될 수 없음."},{"no":5,"level":"기초","question":"다음 중 become의 보어로 올 수 없는 것을 고르세요.\n( a teacher / famous / quickly / kind )","answer":"quickly","explanation":"quickly는 부사로 보어가 될 수 없음. 나머지는 명사/형용사."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  is(2)  beautifully(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / beautiful","explanation":"be동사의 보어 자리. 부사 불가 → beautiful(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  became(2)  doctor(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / a doctor","explanation":"직업을 나타내는 명사 보어 앞에는 관사 a 필요."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe story(1)  is(2)  interestingly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / interesting","explanation":"be동사의 보어 자리. 부사 불가 → interesting(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  became(2)  famously(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / famous","explanation":"become의 보어 자리. 부사 불가 → famous(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  is(2)  teacher(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / a teacher","explanation":"단수 직업 명사 앞에는 관사 a 필요."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a / She / nurse / nursely / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 간호사이다.","answer":"She is a nurse. / 2형식","explanation":"nursely는 함정(없는 단어). 명사 보어 a nurse → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ became / He / a / pilot / pilotly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 조종사가 되었다.","answer":"He became a pilot. / 2형식","explanation":"pilotly는 함정. became + 명사 보어 a pilot → 2형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ smart / smartly / She / very / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 매우 똑똑하다.","answer":"She is very smart. / 2형식","explanation":"smartly(부사)는 함정. very는 형용사를 꾸미는 부사. smart(형용사) → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ rich / became / richly / They ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그들은 부자가 되었다.","answer":"They became rich. / 2형식","explanation":"richly(부사)는 함정. rich(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a / writer / famous / He / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 유명한 작가이다.","answer":"He is a famous writer. / 2형식","explanation":"famous(형용사)가 writer(명사)를 수식. He = a famous writer → 2형식."}]}},{"no":8,"name":"감각동사","status":"todo","score":null,"notes":[{"topic":"감각동사","answer":"look, sound, smell, taste, feel","question_format":"답: ________________________________ ___","description":["오감(시각·청각·후각·미각·촉각)으로 느낀 바를 설명하는 동사이다. 감각동사 뒤에는 반드시 형용사가 와야 한다. 이 부분에서 학생들이 가장 많이 틀린다."],"examples":["She looks beautiful. (O) She looks beautifully. (X) — \"아름답게\"라는 한국어 해석에 끌려 부사를 쓰면 안 된다."],"warnings":["감각동사 뒤에 명사를 쓰고 싶을 때는 like를 붙인다. She looks like her mother."]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 감각동사를 3개 고르세요.\n( look / become / sound / keep / smell / get )","answer":"look, sound, smell","explanation":"오감으로 느낀 바를 설명하는 동사가 감각동사."},{"no":2,"level":"기초","question":"다음 중 감각동사를 3개 고르세요.\n( taste / arrive / feel / make / look / happen )","answer":"taste, feel, look","explanation":"감각동사: look, sound, smell, taste, feel."},{"no":3,"level":"기초","question":"감각동사 뒤에 와야 하는 품사를 고르세요.\n( 부사 / 형용사 / 동사 )","answer":"형용사","explanation":"감각동사는 2형식 동사로 형용사 보어를 데려옴."},{"no":4,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"The cake smells ________.\"\n( good / well )","answer":"good","explanation":"smell(감각동사) 뒤에는 형용사. well은 부사."},{"no":5,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"This music sounds ________.\"\n( nice / nicely )","answer":"nice","explanation":"sound(감각동사) 뒤에는 형용사. nicely는 부사."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  looks(2)  beautifully(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / beautiful","explanation":"look(감각동사)의 보어 자리. 부사 불가 → beautiful(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe soup(1)  tastes(2)  deliciously(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / delicious","explanation":"taste(감각동사)의 보어 자리. 부사 불가 → delicious(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe flower(1)  smells(2)  sweetly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / sweet","explanation":"smell(감각동사)의 보어 자리. 부사 불가 → sweet(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe baby's skin(1)  feels(2)  softly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / soft","explanation":"feel(감각동사)의 보어 자리. 부사 불가 → soft(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe idea(1)  sounds(2)  interestingly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / interesting","explanation":"sound(감각동사)의 보어 자리. 부사 불가 → interesting(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ beautiful / She / looks / beautifully ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 아름다워 보인다.","answer":"She looks beautiful. / 2형식","explanation":"beautifully(부사)는 함정. look + beautiful(형용사) → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ his father / like / He / looks ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그의 아버지를 닮았다.","answer":"He looks like his father. / 1형식","explanation":"like는 전치사. like his father는 전치사구(수식어) → 1형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ tastes / sweetly / The cake / sweet ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 케이크는 달콤한 맛이 난다.","answer":"The cake tastes sweet. / 2형식","explanation":"sweetly(부사)는 함정. taste + sweet(형용사) → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ feels / The baby's skin / softly / soft ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 아기의 피부는 부드러운 느낌이다.","answer":"The baby's skin feels soft. / 2형식","explanation":"softly(부사)는 함정. feel + soft(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ singer / sounds / a / She / like ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 가수처럼 들린다.","answer":"She sounds like a singer. / 1형식","explanation":"like는 전치사. like a singer는 전치사구(수식어) → 1형식."}]}},{"no":9,"name":"유지동사","status":"todo","score":null,"notes":[{"topic":"유지동사","answer":"keep, stay, remain, hold","question_format":"답: ____________________________ ___","description":["어떤 상태가 그대로 유지된다는 의미의 2형식 동사이다."],"examples":["The weather stayed warm. He remained silent."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 유지동사를 3개 고르세요.\n( keep / become / stay / look / remain / get )","answer":"keep, stay, remain","explanation":"어떤 상태가 그대로 유지된다는 의미의 2형식 동사."},{"no":2,"level":"기초","question":"유지동사의 의미로 알맞은 것을 고르세요.\n( 상태가 변하다 / 상태가 유지되다 / 상태가 사라지다 )","answer":"상태가 유지되다","explanation":"keep, stay, remain은 모두 \"어떤 상태로 계속 있다\"는 의미."},{"no":3,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"The weather stayed ________.\"\n( warm / warmly )","answer":"warm","explanation":"stay(유지동사)는 2형식. 뒤에는 형용사 보어."},{"no":4,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"He remained ________.\"\n( silent / silently )","answer":"silent","explanation":"remain(유지동사)는 2형식. 뒤에는 형용사 보어."},{"no":5,"level":"기초","question":"다음 중 유지동사가 사용된 2형식 문장을 고르세요.\n① She kept quiet.    ② She kept the book.    ③ She runs fast.","answer":"①","explanation":"kept quiet = 조용한 상태를 유지함. ②의 kept는 \"보관하다\"(3형식)."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe weather(1)  stayed(2)  warmly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / warm","explanation":"stay(유지동사)의 보어 자리. 부사 불가 → warm(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  remained(2)  silently(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / silent","explanation":"remain(유지동사)의 보어 자리. 부사 불가 → silent(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nPlease(1)  keep(2)  quietly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / quiet","explanation":"keep(유지동사)의 보어 자리. 부사 불가 → quiet(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe room(1)  remained(2)  emptly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / empty","explanation":"emptly는 없는 단어. remain의 보어로 empty(형용사) 사용."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  stayed(2)  calmly(3)  during the storm(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / calm","explanation":"stay(유지동사)의 보어 자리. 부사 불가 → calm(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ warm / The weather / warmly / stayed ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 날씨는 따뜻하게 유지되었다.","answer":"The weather stayed warm. / 2형식","explanation":"warmly(부사)는 함정. stay + warm(형용사) → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ silent / He / silently / remained ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 침묵을 지켰다.","answer":"He remained silent. / 2형식","explanation":"silently(부사)는 함정. remain + silent(형용사) → 2형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ quiet / keep / Please / quietly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 조용히 해주세요.","answer":"Please keep quiet. / 2형식","explanation":"quietly(부사)는 함정. keep + quiet(형용사) → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ healthy / stay / She / healthily / wants to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 건강하게 있고 싶어한다.","answer":"She wants to stay healthy. / 2형식","explanation":"healthily(부사)는 함정. stay + healthy(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ calm / remained / calmly / The children ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 아이들은 침착함을 유지했다.","answer":"The children remained calm. / 2형식","explanation":"calmly(부사)는 함정. remain + calm(형용사) → 2형식."}]}},{"no":10,"name":"변화동사","status":"todo","score":null,"notes":[{"topic":"변화동사","answer":"become, get, turn, grow, go, come, fall, run","question_format":"답: __________________________________________________ ___","description":["상태가 다른 상태로 바뀐다는 의미의 2형식 동사이다. go, come, run은 1형식 동사로도 쓰이지만, 뒤에 형용사 보어를 데리고 오면 2형식이 된다. 같은 단어라도 어떤 자리에 무엇이 오느냐에 따라 형식이 달라진다."],"examples":["The milk went bad. (상하다) His face turned red. (빨개지다) She grew tired. (피곤해지다) My dreams came true. (이루어지다)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 변화동사를 3개 고르세요.\n( become / keep / get / stay / turn / remain )","answer":"become, get, turn","explanation":"상태가 다른 상태로 바뀐다는 의미의 2형식 동사."},{"no":2,"level":"기초","question":"다음 중 변화동사를 3개 고르세요.\n( grow / look / go / sound / come / smell )","answer":"grow, go, come","explanation":"변화동사: become, get, turn, grow, go, come, fall, run."},{"no":3,"level":"기초","question":"변화동사의 의미로 알맞은 것을 고르세요.\n( 상태가 유지되다 / 상태가 바뀌다 / 상태가 사라지다 )","answer":"상태가 바뀌다","explanation":"변화동사는 \"어떤 상태에서 다른 상태로 변하다\"는 의미."},{"no":4,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"The leaves turned ________.\"\n( red / redly )","answer":"red","explanation":"turn(변화동사)은 2형식. 뒤에는 형용사 보어."},{"no":5,"level":"기초","question":"빈칸에 알맞은 것을 고르세요.\n\"The milk went ________.\"\n( bad / badly )","answer":"bad","explanation":"go가 변화동사로 쓰일 때는 2형식. 뒤에는 형용사 보어. went bad = 상했다."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe leaves(1)  turned(2)  redly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / red","explanation":"turn(변화동사)의 보어 자리. 부사 불가 → red(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe milk(1)  went(2)  badly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / bad","explanation":"go(변화동사)의 보어 자리. 부사 불가 → bad(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHis face(1)  turned(2)  paley(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / pale","explanation":"paley는 없는 단어. turn + pale(형용사) = 창백해지다."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  grew(2)  tiredly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / tired","explanation":"grow(변화동사)의 보어 자리. 부사 불가 → tired(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nMy dreams(1)  came(2)  truly(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / true","explanation":"come(변화동사)의 보어 자리. 부사 불가 → true(형용사). came true = 이루어지다."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ red / turned / The leaves / redly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 잎들은 빨갛게 변했다.","answer":"The leaves turned red. / 2형식","explanation":"redly(부사)는 함정. turn + red(형용사) → 2형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ bad / went / The milk / badly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 우유는 상했다.","answer":"The milk went bad. / 2형식","explanation":"badly(부사)는 함정. go + bad(형용사) → 2형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ true / truly / came / My dreams ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 내 꿈들이 이루어졌다.","answer":"My dreams came true. / 2형식","explanation":"truly(부사)는 함정. come + true(형용사) = 이루어지다 → 2형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ tired / She / tiredly / grew ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 피곤해졌다.","answer":"She grew tired. / 2형식","explanation":"tiredly(부사)는 함정. grow + tired(형용사) → 2형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ cold / It / getting / coldly / is ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 날씨가 추워지고 있다.","answer":"It is getting cold. / 2형식","explanation":"coldly(부사)는 함정. get + cold(형용사) = 추워지다 → 2형식."}]}},{"no":11,"name":"3형식","status":"todo","score":null,"notes":[{"topic":"3형식","answer":"주어(S) + 동사(V) + 목적어(O)","question_format":"답: ____________________________ ___","description":["동사 뒤에 목적어가 오는 문장이다. 영어 문장의 가장 많은 비율을 차지하는 기본형이다."],"examples":["I love you. She wrote a letter. We finished the project."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"3형식 문장의 구성을 고르세요.\n( S+V / S+V+O / S+V+SC / S+V+IO+DO )","answer":"S+V+O","explanation":"주어+동사+목적어. 영어 문장의 가장 많은 비율을 차지하는 기본형."},{"no":2,"level":"기초","question":"다음 중 3형식 문장을 고르세요.\n① She sings.    ② She is a singer.    ③ She loves music.","answer":"③","explanation":"She가 music을 사랑함. love + 목적어(music) → 3형식."},{"no":3,"level":"기초","question":"다음 중 3형식 문장을 고르세요.\n① I love you.    ② I am happy.    ③ I went home.","answer":"①","explanation":"love + 목적어(you) → 3형식. ②는 2형식, ③은 1형식."},{"no":4,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"She wrote a letter.\"\n( 1형식 / 2형식 / 3형식 )","answer":"3형식","explanation":"wrote + 목적어(a letter) → 3형식."},{"no":5,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"We finished the project.\"\n( 1형식 / 2형식 / 3형식 )","answer":"3형식","explanation":"finished + 목적어(the project) → 3형식."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  love(2)  she(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / her","explanation":"목적어 자리이므로 목적격 대명사. she(주격) → her(목적격)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  wrote(2)  letter(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / a letter","explanation":"셀 수 있는 명사 단수 앞에는 관사 a 필요."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  buyed(2)  a car(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / bought","explanation":"buy의 과거형은 bought. buyed는 잘못된 형태."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  finished(2)  project(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / the project","explanation":"특정 프로젝트이므로 정관사 the 필요."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  meeted(2)  her friend(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / met","explanation":"meet의 과거형은 met. meeted는 잘못된 형태."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ love / I / her / she ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그녀를 사랑한다.","answer":"I love her. / 3형식","explanation":"she(주격)는 함정. 목적격 her → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a / wrote / letter / She ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 편지를 썼다.","answer":"She wrote a letter. / 3형식","explanation":"셀 수 있는 명사 단수 앞에 관사 a. wrote + 목적어 → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ him / They / they / met / yesterday ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그들은 어제 그를 만났다.","answer":"They met him yesterday. / 3형식","explanation":"목적어는 목적격 him. yesterday(부사·수식어) → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ bought / a / He / car / buyed ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 차를 샀다.","answer":"He bought a car. / 3형식","explanation":"buyed는 함정(없는 단어). buy의 과거형 bought + 목적어 → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ English / We / studied / studyed / hard ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 영어를 열심히 공부했다.","answer":"We studied English hard. / 3형식","explanation":"studyed는 함정. study의 과거형은 studied. + 목적어(English) → 3형식."}]}},{"no":12,"name":"자동사로 헷갈리기 쉬운 타동사 5개","status":"todo","score":null,"notes":[{"topic":"자동사로 헷갈리기 쉬운 타동사 5개","answer":"discuss, marry, enter, attend, resemble","question_format":"답: ________________________________________ ___","description":["한국어 해석에 \"~에 대해\", \"~와\", \"~에\"처럼 조사가 자연스럽게 붙어서 자동사로 착각하기 쉬운 타동사 다섯 개이다. 영어로는 전치사 없이 바로 목적어를 데리고 온다."],"examples":["We discussed the problem. (O) / We discussed about the problem. (X) He married her. (O) / He married with her. (X) She entered the room. (O) / She entered into the room. (X) I attended the meeting. (O) / I attended at the meeting. (X) He resembles his father. (O) / He resembles with his father. (X)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 자동사로 헷갈리기 쉬운 타동사를 3개 고르세요.\n( discuss / love / marry / make / enter / want )","answer":"discuss, marry, enter","explanation":"한국어 해석에 \"~에 대해, ~와, ~에\" 같은 조사가 붙어 자동사로 착각하기 쉬운 타동사."},{"no":2,"level":"기초","question":"다음 중 자동사로 헷갈리기 쉬운 타동사를 2개 고르세요.\n( attend / make / resemble / love / give / buy )","answer":"attend, resemble","explanation":"attend는 \"~에 참석하다\", resemble은 \"~와 닮다\"로 해석되어 자동사로 착각하기 쉬움."},{"no":3,"level":"기초","question":"다음 중 올바른 문장을 고르세요.\n① We discussed the problem.    ② We discussed about the problem.","answer":"①","explanation":"discuss는 타동사. 전치사 about 없이 바로 목적어를 데려옴."},{"no":4,"level":"기초","question":"다음 중 올바른 문장을 고르세요.\n① He married with her.    ② He married her.","answer":"②","explanation":"marry는 타동사. 전치사 with 없이 바로 목적어를 데려옴."},{"no":5,"level":"기초","question":"다음 중 올바른 문장을 고르세요.\n① She entered into the room.    ② She entered the room.","answer":"②","explanation":"enter는 타동사. 전치사 into 없이 바로 목적어를 데려옴."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  discussed(2)  about the problem(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / the problem","explanation":"discuss는 타동사. about을 빼고 바로 목적어 the problem."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  married(2)  with her(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / her","explanation":"marry는 타동사. with를 빼고 바로 목적어 her."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  entered(2)  into the room(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / the room","explanation":"enter는 타동사. into를 빼고 바로 목적어 the room."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  attended(2)  at the meeting(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / the meeting","explanation":"attend는 타동사. at을 빼고 바로 목적어 the meeting."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  resembles(2)  with his father(3).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / his father","explanation":"resemble은 타동사. with를 빼고 바로 목적어 his father."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ the problem / about / discussed / We ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 그 문제에 대해 토론했다.","answer":"We discussed the problem. / 3형식","explanation":"about은 함정. discuss는 타동사로 전치사 불필요 → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ her / with / married / He ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀와 결혼했다.","answer":"He married her. / 3형식","explanation":"with는 함정. marry는 타동사 → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ the room / into / She / entered ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 방으로 들어갔다.","answer":"She entered the room. / 3형식","explanation":"into는 함정. enter는 타동사 → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ the meeting / I / at / attended ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그 회의에 참석했다.","answer":"I attended the meeting. / 3형식","explanation":"at은 함정. attend는 타동사 → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ his father / with / He / resembles ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그의 아버지를 닮았다.","answer":"He resembles his father. / 3형식","explanation":"with는 함정. resemble은 타동사 → 3형식."}]}},{"no":13,"name":"4형식","status":"todo","score":null,"notes":[{"topic":"4형식","answer":"주어(S) + 동사(V) + 간접목적어(IO) + 직접목적어(DO)","question_format":"답: ____________________________________________ ___","description":["\"~에게 ~을 해주다\"의 의미를 갖는 문장이다. 동사 뒤에 목적어가 두 개 온다. 사람(또는 대상)을 나타내는 간접목적어(IO)가 먼저 오고, 사물을 나타내는 직접목적어(DO)가 뒤에 온다. 4형식 동사를 흔히 \"수여동사\"라고 부른다."],"examples":["She gave me a book. (me = IO, a book = DO) He told us an interesting story. My mother bought me a coat."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"4형식 문장의 구성을 고르세요.\n( S+V / S+V+O / S+V+SC / S+V+IO+DO )","answer":"S+V+IO+DO","explanation":"주어+동사+간접목적어+직접목적어. \"~에게 ~을 해주다\"의 의미."},{"no":2,"level":"기초","question":"4형식에서 먼저 오는 목적어를 고르세요.\n( 사람(IO) / 사물(DO) )","answer":"사람(IO)","explanation":"간접목적어(사람)가 먼저, 직접목적어(사물)가 뒤에 옴."},{"no":3,"level":"기초","question":"4형식 동사를 부르는 다른 이름을 고르세요.\n( 감각동사 / 수여동사 / 사역동사 / 지각동사 )","answer":"수여동사","explanation":"\"~에게 ~을 주다\"는 의미가 있어 수여동사라고 부름."},{"no":4,"level":"기초","question":"다음 중 4형식 문장을 고르세요.\n① She gave me a book.    ② She is a teacher.    ③ She loves music.","answer":"①","explanation":"gave + 사람(me) + 사물(a book) → 4형식."},{"no":5,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"My mother bought me a coat.\"\n( 3형식 / 4형식 / 5형식 )","answer":"4형식","explanation":"bought + 사람(me) + 사물(a coat) → 4형식."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  gave(2)  a book(3)  me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"어순 틀림 / She gave me a book.","explanation":"4형식은 사람(me)이 먼저, 사물(a book)이 뒤에 옴."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  told(2)  we(3)  a story(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / us","explanation":"간접목적어 자리는 목적격. we(주격) → us(목적격)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  showed(2)  I(3)  the picture(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / me","explanation":"간접목적어 자리는 목적격. I(주격) → me(목적격)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nMy mother(1)  buyed(2)  me(3)  a coat(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / bought","explanation":"buy의 과거형은 bought. buyed는 잘못된 형태."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  sended(2)  her(3)  a letter(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / sent","explanation":"send의 과거형은 sent. sended는 잘못된 형태."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a book / She / gave / me / I ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 책 한 권을 주었다.","answer":"She gave me a book. / 4형식","explanation":"I(주격)는 함정. 간접목적어는 목적격 me. 사람(me) + 사물(a book) → 4형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a story / He / us / told / we ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 우리에게 이야기를 해주었다.","answer":"He told us a story. / 4형식","explanation":"we(주격)는 함정. 목적격 us. 사람(us) + 사물(a story) → 4형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ the picture / showed / She / me / I ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 그 그림을 보여주었다.","answer":"She showed me the picture. / 4형식","explanation":"I(주격)는 함정. 목적격 me. 사람 + 사물 → 4형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a coat / My mother / me / bought / buyed ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리 어머니는 나에게 코트를 사 주셨다.","answer":"My mother bought me a coat. / 4형식","explanation":"buyed는 함정. bought + 사람(me) + 사물(a coat) → 4형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a letter / He / her / sent / sended ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀에게 편지를 보냈다.","answer":"He sent her a letter. / 4형식","explanation":"sended는 함정. sent + 사람(her) + 사물(a letter) → 4형식."}]}},{"no":14,"name":"4형식 → 3형식 전환에 쓰는 전치사 3개","status":"todo","score":null,"notes":[{"topic":"4형식에서 3형식으로 바꿀 때 쓸 수 있는 전치사 3개","answer":"","question_format":"","description":["4형식 문장은 직접목적어를 앞으로 보내고 간접목적어 앞에 전치사를 붙여서 3형식으로 바꿀 수 있다. 이때 어떤 전치사를 쓰는지는 동사에 따라 정해져 있다."],"examples":[],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"4형식을 3형식으로 바꿀 때 쓰는 전치사 3개를 모두 고르세요.\n( to / for / with / of / about / in )","answer":"to, for, of","explanation":"동사에 따라 to, for, of 중 하나를 씀."},{"no":2,"level":"기초","question":"다음 중 to를 쓰는 동사를 고르세요.\n( give / make / ask / cook )","answer":"give","explanation":"give는 to. make/cook은 for, ask는 of."},{"no":3,"level":"기초","question":"다음 중 for를 쓰는 동사를 고르세요.\n( show / make / tell / ask )","answer":"make","explanation":"make는 for. show/tell은 to, ask는 of."},{"no":4,"level":"기초","question":"다음 중 of를 쓰는 동사를 고르세요.\n( give / make / ask / send )","answer":"ask","explanation":"ask만 of를 씀. 나머지는 to나 for."},{"no":5,"level":"기초","question":"\"She gave me a book.\"을 3형식으로 바꿀 때 들어갈 전치사를 고르세요.\n( to / for / of )","answer":"to","explanation":"give → to. She gave a book to me."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe gave(1)  a book(2)  for(3)  me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / to","explanation":"give 동사는 to를 씀. for → to."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe made(1)  a cake(2)  to(3)  me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / for","explanation":"make 동사는 for를 씀. to → for."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe asked(1)  a question(2)  to(3)  me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / of","explanation":"ask 동사는 of를 씀. to → of."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe told(1)  a story(2)  for(3)  us(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / to","explanation":"tell 동사는 to를 씀. for → to."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe bought(1)  a present(2)  to(3)  her(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / for","explanation":"buy 동사는 for를 씀. to → for."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / She / a book / me / gave / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 책을 주었다.","answer":"She gave a book to me. / 3형식","explanation":"for는 함정. give는 to. gave + 목적어(a book) + 전치사구(to me) → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / She / a cake / me / made / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 케이크를 만들어 주었다.","answer":"She made a cake for me. / 3형식","explanation":"to는 함정. make는 for → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / She / a question / me / asked / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 질문을 했다.","answer":"She asked a question of me. / 3형식","explanation":"to는 함정. ask는 of → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / He / us / told / a story / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 우리에게 이야기를 해주었다.","answer":"He told a story to us. / 3형식","explanation":"for는 함정. tell은 to → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / He / a present / her / bought / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀에게 선물을 사 주었다.","answer":"He bought a present for her. / 3형식","explanation":"to는 함정. buy는 for → 3형식."}]}},{"no":15,"name":"전치사 to를 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"전치사 14-1(to)을 데리고 오는 동사 9개","answer":"give, tell, send, show, teach, lend, write, bring, pass","question_format":"답: ________________________________________________ ___","description":["단순히 \"건네주는\" 의미의 동사들이다. 받는 사람이 반드시 있어야 의미가 성립한다."],"examples":["She gave me a book. → She gave a book to me. He sent his friend a letter. → He sent a letter to his friend."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 전치사 to를 데려오는 동사를 3개 고르세요.\n( give / make / send / cook / show / buy )","answer":"give, send, show","explanation":"단순히 \"건네주는\" 의미의 동사들은 to를 씀."},{"no":2,"level":"기초","question":"다음 중 전치사 to를 데려오는 동사를 3개 고르세요.\n( tell / make / teach / cook / write / buy )","answer":"tell, teach, write","explanation":"tell, teach, write 모두 \"전달하는\" 의미로 to를 씀."},{"no":3,"level":"기초","question":"다음 중 전치사 to를 데려오는 동사를 3개 고르세요.\n( lend / make / bring / cook / pass / buy )","answer":"lend, bring, pass","explanation":"lend, bring, pass 모두 \"건네주는\" 의미로 to를 씀."},{"no":4,"level":"기초","question":"빈칸에 알맞은 전치사를 고르세요.\n\"She sent a letter ________ her friend.\"\n( to / for / of )","answer":"to","explanation":"send는 to를 씀."},{"no":5,"level":"기초","question":"빈칸에 알맞은 전치사를 고르세요.\n\"He showed the picture ________ me.\"\n( to / for / of )","answer":"to","explanation":"show는 to를 씀."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  sent(2)  a letter(3)  for her friend(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to her friend","explanation":"send는 to를 씀. for → to."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  showed(2)  the picture(3)  for me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to me","explanation":"show는 to를 씀. for → to."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  taught(2)  English(3)  for us(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to us","explanation":"teach는 to를 씀. for → to."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  lended(2)  some money(3)  to me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / lent","explanation":"lend의 과거형은 lent. lended는 잘못된 형태."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  writed(2)  a letter(3)  to her mother(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / wrote","explanation":"write의 과거형은 wrote. writed는 잘못된 형태."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / She / a letter / her friend / sent / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 친구에게 편지를 보냈다.","answer":"She sent a letter to her friend. / 3형식","explanation":"for는 함정. send는 to → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / showed / He / me / the picture / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 나에게 그 그림을 보여주었다.","answer":"He showed the picture to me. / 3형식","explanation":"for는 함정. show는 to → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / taught / She / us / English / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 우리에게 영어를 가르쳤다.","answer":"She taught English to us. / 3형식","explanation":"for는 함정. teach는 to → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / He / me / lent / some money / lended ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 나에게 돈을 빌려주었다.","answer":"He lent some money to me. / 3형식","explanation":"lended는 함정. lent + 목적어 + 전치사구 → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to / wrote / She / a letter / her mother / writed ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 어머니에게 편지를 썼다.","answer":"She wrote a letter to her mother. / 3형식","explanation":"writed는 함정. wrote + 목적어 + 전치사구 → 3형식."}]}},{"no":16,"name":"전치사 for를 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"전치사 14-2(for)을 데리고 오는 동사 6개","answer":"make, buy, cook, get, find, build","question_format":"답: __________________________________ ___","description":["\"~를 위해 무언가를 만들거나 구해주는\" 의미의 동사들이다. 받는 사람이 없어도 행위 자체는 성립한다. 만들기·사기·요리하기·구하기·짓기는 받는 사람 없이도 가능하기 때문에 to가 아닌 for를 쓴다고 이해하면 쉽다."],"examples":["She made me a cake. → She made a cake for me. My father built me a treehouse. → My father built a treehouse for me."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 전치사 for를 데려오는 동사를 3개 고르세요.\n( make / give / buy / send / cook / show )","answer":"make, buy, cook","explanation":"\"~를 위해 만들거나 구해주는\" 의미의 동사. 받는 사람 없이도 행위 자체는 성립."},{"no":2,"level":"기초","question":"다음 중 전치사 for를 데려오는 동사를 3개 고르세요.\n( get / give / find / show / build / tell )","answer":"get, find, build","explanation":"get, find, build 모두 받는 사람 없이도 가능하므로 for를 씀."},{"no":3,"level":"기초","question":"for를 쓰는 동사의 공통적인 특징을 고르세요.\n( 받는 사람이 반드시 필요함 / 받는 사람 없이도 행위 성립 / 항상 명령문에 쓰임 )","answer":"받는 사람 없이도 행위 성립","explanation":"만들기·사기·요리하기·구하기·짓기는 받는 사람 없이도 가능하기 때문에 for."},{"no":4,"level":"기초","question":"빈칸에 알맞은 전치사를 고르세요.\n\"She made a cake ________ me.\"\n( to / for / of )","answer":"for","explanation":"make는 for를 씀."},{"no":5,"level":"기초","question":"빈칸에 알맞은 전치사를 고르세요.\n\"My father built a treehouse ________ me.\"\n( to / for / of )","answer":"for","explanation":"build는 for를 씀."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  made(2)  a cake(3)  to me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / for me","explanation":"make는 for를 씀. to → for."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  bought(2)  a present(3)  to her(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / for her","explanation":"buy는 for를 씀. to → for."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  cooked(2)  dinner(3)  to us(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / for us","explanation":"cook은 for를 씀. to → for."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nMy father(1)  builded(2)  a treehouse(3)  for me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / built","explanation":"build의 과거형은 built. builded는 잘못된 형태."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  finded(2)  a book(3)  for me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / found","explanation":"find의 과거형은 found. finded는 잘못된 형태."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / She / a cake / me / made / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 케이크를 만들어 주었다.","answer":"She made a cake for me. / 3형식","explanation":"to는 함정. make는 for → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / He / a present / her / bought / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀에게 선물을 사 주었다.","answer":"He bought a present for her. / 3형식","explanation":"to는 함정. buy는 for → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / She / dinner / us / cooked / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 우리에게 저녁을 요리해 주었다.","answer":"She cooked dinner for us. / 3형식","explanation":"to는 함정. cook은 for → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / My father / built / a treehouse / me / builded ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리 아버지는 나를 위해 나무집을 지어 주셨다.","answer":"My father built a treehouse for me. / 3형식","explanation":"builded는 함정. built + for → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ for / She / a book / me / found / finded ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 책을 찾아 주었다.","answer":"She found a book for me. / 3형식","explanation":"finded는 함정. found + for → 3형식."}]}},{"no":17,"name":"전치사 of를 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"전치사 14-3(of)을 데리고 오는 동사 1개","answer":"","question_format":"","description":["of를 쓰는 동사는 ask 하나뿐이다."],"examples":["She asked me a question. → She asked a question of me."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"4형식을 3형식으로 바꿀 때 전치사 of를 쓰는 동사를 고르세요.\n( give / make / ask / send )","answer":"ask","explanation":"ask만 of를 씀. 나머지는 to나 for."},{"no":2,"level":"기초","question":"빈칸에 알맞은 전치사를 고르세요.\n\"She asked a question ________ me.\"\n( to / for / of )","answer":"of","explanation":"ask는 of를 씀."},{"no":3,"level":"기초","question":"다음 중 올바른 문장을 고르세요.\n① She asked a question to me.    ② She asked a question of me.","answer":"②","explanation":"ask는 of를 씀. ①은 잘못됨."},{"no":4,"level":"기초","question":"\"She asked me a question.\"을 3형식으로 바꿀 때 들어갈 전치사를 고르세요.\n( to / for / of )","answer":"of","explanation":"ask → of. She asked a question of me."},{"no":5,"level":"기초","question":"다음 중 ask에 어울리는 전치사를 고르세요.\n( with / about / of / by )","answer":"of","explanation":"4형식 → 3형식 전환 시 ask는 of를 씀."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  asked(2)  a question(3)  to me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / of me","explanation":"ask는 of를 씀. to → of."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  asked(2)  a favor(3)  for her(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / of her","explanation":"ask는 of를 씀. for → of."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  askes(2)  a question(3)  of me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"2번 / asks","explanation":"ask의 3인칭 단수 현재형은 asks. askes는 잘못된 형태."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe teacher(1)  asked(2)  many questions(3)  to us(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / of us","explanation":"ask는 of를 씀. to → of."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nHe(1)  asked(2)  some advice(3)  from me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / of me","explanation":"ask는 of를 씀. from → of."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / She / a question / me / asked / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 질문을 했다.","answer":"She asked a question of me. / 3형식","explanation":"to는 함정. ask는 of → 3형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / He / a favor / her / asked / for ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀에게 부탁을 했다.","answer":"He asked a favor of her. / 3형식","explanation":"for는 함정. ask는 of → 3형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / The teacher / questions / us / asked / many / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 선생님은 우리에게 많은 질문을 했다.","answer":"The teacher asked many questions of us. / 3형식","explanation":"to는 함정. ask는 of → 3형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / advice / She / asked / me / from ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 나에게 조언을 구했다.","answer":"She asked advice of me. / 3형식","explanation":"from은 함정. ask는 of → 3형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ of / He / asked / a question / her / to ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그는 그녀에게 질문을 했다.","answer":"He asked a question of her. / 3형식","explanation":"to는 함정. ask는 of → 3형식."}]}},{"no":18,"name":"5형식","status":"todo","score":null,"notes":[{"topic":"5형식","answer":"주어(S) + 동사(V) + 목적어(O) + 목적격보어(OC)","question_format":"답: ____________________________________________ ___","description":["동사 뒤에 \"목적어\"와 \"목적어를 설명해주는 말\"이 함께 오는 문장이다. 이 설명해주는 말을 목적격보어(objective complement, OC)라고 한다. 5형식 문장의 핵심은 \"목적어 = 목적격보어\"의 관계가 성립한다는 점이다."],"examples":["We call him a hero. (him = a hero) I found the movie boring. (the movie = boring)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"5형식 문장의 구성을 고르세요.\n( S+V+O / S+V+SC / S+V+IO+DO / S+V+O+OC )","answer":"S+V+O+OC","explanation":"주어+동사+목적어+목적격보어. 목적격보어는 목적어를 설명해주는 말."},{"no":2,"level":"기초","question":"목적격보어와 목적어의 관계로 알맞은 것을 고르세요.\n( 주어 = 보어 / 목적어 = 보어 / 동사 = 보어 )","answer":"목적어 = 보어","explanation":"목적격보어는 목적어가 \"무엇인지\" 또는 \"어떤 상태인지\"를 알려주므로 목적어 = 보어."},{"no":3,"level":"기초","question":"다음 중 5형식 문장을 고르세요.\n① We call him a hero.    ② She is happy.    ③ He runs fast.","answer":"①","explanation":"him = a hero. call + 목적어 + 목적격보어 → 5형식."},{"no":4,"level":"기초","question":"다음 중 5형식 문장을 고르세요.\n① She loves music.    ② I found the movie boring.    ③ He sleeps well.","answer":"②","explanation":"the movie = boring. find + 목적어 + 목적격보어 → 5형식."},{"no":5,"level":"기초","question":"다음 문장의 형식을 고르세요.\n\"They named the baby Emma.\"\n( 3형식 / 4형식 / 5형식 )","answer":"5형식","explanation":"the baby = Emma. name + 목적어 + 목적격보어 → 5형식."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  call(2)  he(3)  a hero(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / him","explanation":"목적어 자리는 목적격. he(주격) → him(목적격)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  found(2)  the movie(3)  boredly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / boring","explanation":"목적격보어 자리에 부사 불가 → boring(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThey(1)  named(2)  the baby(3)  beautifully(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / Emma (또는 다른 이름)","explanation":"목적격보어 자리는 형용사나 명사. beautifully(부사)는 불가."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe news(1)  made(2)  I(3)  happy(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / me","explanation":"목적어 자리는 목적격. I(주격) → me(목적격)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  considers(2)  he(3)  a true friend(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / him","explanation":"목적어 자리는 목적격. he → him."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a hero / We / him / he / call ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 그를 영웅이라고 부른다.","answer":"We call him a hero. / 5형식","explanation":"he(주격)는 함정. 목적격 him. him = a hero → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ boring / I / boredly / the movie / found ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그 영화가 지루하다고 생각했다.","answer":"I found the movie boring. / 5형식","explanation":"boredly(부사)는 함정. boring(형용사). the movie = boring → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ Emma / They / the baby / named ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그들은 그 아기를 Emma라고 이름지었다.","answer":"They named the baby Emma. / 5형식","explanation":"the baby = Emma → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happy / The news / I / me / made ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 소식이 나를 행복하게 만들었다.","answer":"The news made me happy. / 5형식","explanation":"I(주격)는 함정. 목적격 me. me = happy → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a true friend / She / he / him / considers ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그를 진정한 친구로 여긴다.","answer":"She considers him a true friend. / 5형식","explanation":"he(주격)는 함정. 목적격 him. him = a true friend → 5형식."}]}},{"no":19,"name":"5형식 목적격보어가 될 수 있는 것 4가지","status":"todo","score":null,"notes":[{"topic":"5형식 목적격 보어가 될 수 있는 것 4개","answer":"명사","question_format":"답: 19-1. ________ ___ 19-2. ________ ___ 19-3. ____________ ___ 19-4. ____________________________________ ___","description":["5형식이 복잡해 보이는 이유는 어떤 동사가 어떤 종류의 보어를 데리고 오는지가 동사별로 정해져 있기 때문이다. 동사를 보어 종류별로 묶어서 외워야 한다. 다음 20·21·22·23·24번에서 보어 종류별로 동사를 정리한다."],"examples":[],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"5형식 목적격보어가 될 수 있는 것을 4개 모두 고르세요.\n( 명사 / 부사 / 형용사 / 동사원형 / 전치사 / to부정사 )","answer":"명사, 형용사, 동사원형, to부정사","explanation":"목적격보어가 될 수 있는 것: 명사, 형용사, to부정사, 동사원형(또는 분사)."},{"no":2,"level":"기초","question":"다음 중 목적격보어가 될 수 없는 것을 고르세요.\n( 명사 / 형용사 / 부사 / to부정사 )","answer":"부사","explanation":"부사는 보어가 될 수 없음."},{"no":3,"level":"기초","question":"\"We call him a hero.\"에서 목적격보어의 품사를 고르세요.\n( 명사 / 형용사 / 부사 )","answer":"명사","explanation":"a hero는 명사. him = a hero."},{"no":4,"level":"기초","question":"\"I found the movie boring.\"에서 목적격보어의 품사를 고르세요.\n( 명사 / 형용사 / 부사 )","answer":"형용사","explanation":"boring은 형용사. the movie = boring 상태."},{"no":5,"level":"기초","question":"\"She wants me to study.\"에서 목적격보어의 형태를 고르세요.\n( 명사 / to부정사 / 동사원형 )","answer":"to부정사","explanation":"to study는 to부정사. want는 to부정사를 목적격보어로 데려옴."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  call(2)  him(3)  heroically(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / a hero","explanation":"목적격보어 자리에 부사 불가. 명사 a hero 사용."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  found(2)  the movie(3)  boredly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / boring","explanation":"목적격보어 자리에 부사 불가. 형용사 boring 사용."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  wants(2)  me(3)  study(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to study","explanation":"want의 목적격보어는 to부정사. study → to study."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe teacher(1)  told(2)  us(3)  be quiet(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to be quiet","explanation":"tell의 목적격보어는 to부정사. be quiet → to be quiet."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  saw(2)  him(3)  to cross the street(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / cross the street","explanation":"지각동사 see의 목적격보어는 동사원형. to cross → cross."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a hero / We / heroically / him / call ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 그를 영웅이라고 부른다.","answer":"We call him a hero. / 5형식","explanation":"heroically(부사)는 함정. 명사 a hero. him = a hero → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ boring / I / boredly / the movie / found ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그 영화가 지루하다고 생각했다.","answer":"I found the movie boring. / 5형식","explanation":"boredly(부사)는 함정. boring(형용사). the movie = boring → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to study / study / wants / She / me ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 내가 공부하기를 원한다.","answer":"She wants me to study. / 5형식","explanation":"study(원형)는 함정. want는 to부정사 보어 → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to be / be / told / The teacher / quiet / us ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 선생님은 우리에게 조용히 하라고 말씀하셨다.","answer":"The teacher told us to be quiet. / 5형식","explanation":"be(원형)는 함정. tell은 to부정사 보어 → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ cross / to cross / saw / I / him / the street ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그가 길을 건너는 것을 보았다.","answer":"I saw him cross the street. / 5형식","explanation":"to cross는 함정. 지각동사 see는 동사원형 보어 → 5형식."}]}},{"no":20,"name":"명사를 목적격보어로 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"19-1(명사)을 목적격 보어로 데리고 오는 동사 5개","answer":"call, name, elect, make, consider","question_format":"답: ____________________________________ ___","description":["\"목적어를 ~라고 부르다·이름짓다·뽑다·만들다·여기다\"의 의미를 갖는 동사들이다."],"examples":["We call him a genius. They named the baby Emma. The students elected her president. She considers him a true friend."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 명사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( call / want / name / tell / elect / ask )","answer":"call, name, elect","explanation":"\"~라고 부르다·이름짓다·뽑다\"는 의미의 동사들."},{"no":2,"level":"기초","question":"다음 중 명사를 목적격보어로 데려오는 동사를 2개 고르세요.\n( make / want / consider / give / send / ask )","answer":"make, consider","explanation":"make는 \"~로 만들다\", consider는 \"~로 여기다\"."},{"no":3,"level":"기초","question":"\"They elected her ________.\"의 빈칸에 알맞은 것을 고르세요.\n( president / presidentially / to be president )","answer":"president","explanation":"elect는 명사 보어를 데려옴. president(명사)."},{"no":4,"level":"기초","question":"\"We named the baby ________.\"의 빈칸에 알맞은 것을 고르세요.\n( beautifully / Emma / to be Emma )","answer":"Emma","explanation":"name은 명사 보어를 데려옴. Emma(이름·명사)."},{"no":5,"level":"기초","question":"다음 중 명사 보어가 사용된 5형식 문장을 고르세요.\n① We call him a genius.    ② She wants me to study.    ③ I saw him run.","answer":"①","explanation":"a genius는 명사 보어. him = a genius → 5형식."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  call(2)  he(3)  a genius(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / him","explanation":"목적어 자리는 목적격. he → him."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThey(1)  named(2)  the baby(3)  beautifully(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / Emma (또는 다른 이름)","explanation":"name은 명사 보어. 부사 불가."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe students(1)  elected(2)  she(3)  president(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / her","explanation":"목적어 자리는 목적격. she → her."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  considers(2)  he(3)  a true friend(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / him","explanation":"목적어 자리는 목적격. he → him."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe award(1)  made(2)  she(3)  a star(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"3번 / her","explanation":"목적어 자리는 목적격. she → her."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a genius / We / him / he / call ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 그를 천재라고 부른다.","answer":"We call him a genius. / 5형식","explanation":"he는 함정. 목적격 him. him = a genius → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ Emma / They / the baby / beautifully / named ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그들은 그 아기를 Emma라고 이름지었다.","answer":"They named the baby Emma. / 5형식","explanation":"beautifully(부사)는 함정. 명사 Emma. the baby = Emma → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ president / The students / her / she / elected ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 학생들은 그녀를 회장으로 뽑았다.","answer":"The students elected her president. / 5형식","explanation":"she는 함정. 목적격 her. her = president → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a true friend / him / She / considers / he ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그를 진정한 친구로 여긴다.","answer":"She considers him a true friend. / 5형식","explanation":"he는 함정. 목적격 him. him = a true friend → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ a star / The award / her / she / made ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 상이 그녀를 스타로 만들었다.","answer":"The award made her a star. / 5형식","explanation":"she는 함정. 목적격 her. her = a star → 5형식."}]}},{"no":21,"name":"형용사를 목적격보어로 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"19-2(형용사)를 목적격 보어로 데리고 오는 동사 6개","answer":"make, keep, find, think, leave, consider","question_format":"답: ________________________________________ ___","description":["\"목적어를 ~한 상태로 만들다·유지하다·여기다\"의 의미를 갖는 동사들이다. make와 consider는 명사·형용사 둘 다 보어로 데리고 올 수 있다."],"examples":["The news made me happy. Please keep the door open. I found the test difficult. Don't leave the window open."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 형용사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( make / want / keep / tell / find / ask )","answer":"make, keep, find","explanation":"\"목적어를 ~한 상태로 만들다·유지하다·여기다\"의 의미."},{"no":2,"level":"기초","question":"다음 중 형용사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( think / want / leave / tell / consider / ask )","answer":"think, leave, consider","explanation":"think, leave, consider 모두 형용사 보어 가능."},{"no":3,"level":"기초","question":"\"The news made me ________.\"의 빈칸에 알맞은 것을 고르세요.\n( happy / happily / to be happy )","answer":"happy","explanation":"make + 목적어 + 형용사 보어. happy(형용사)."},{"no":4,"level":"기초","question":"\"Please keep the door ________.\"의 빈칸에 알맞은 것을 고르세요.\n( opens / open / openly )","answer":"open","explanation":"keep + 목적어 + 형용사 보어. open(형용사)."},{"no":5,"level":"기초","question":"\"I found the test ________.\"의 빈칸에 알맞은 것을 고르세요.\n( difficulty / difficult / difficultly )","answer":"difficult","explanation":"find + 목적어 + 형용사 보어. difficult(형용사)."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe news(1)  made(2)  me(3)  happily(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / happy","explanation":"make의 목적격보어 자리. 부사 불가 → happy(형용사)."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nPlease(1)  keep(2)  the door(3)  openly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / open","explanation":"keep의 목적격보어 자리. 부사 불가 → open(형용사)."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  found(2)  the test(3)  difficultly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / difficult","explanation":"find의 목적격보어 자리. 부사 불가 → difficult(형용사)."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nDon't(1)  leave(2)  the window(3)  openly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / open","explanation":"leave의 목적격보어 자리. 부사 불가 → open(형용사)."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  thinks(2)  the book(3)  interestingly(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / interesting","explanation":"think의 목적격보어 자리. 부사 불가 → interesting(형용사)."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ happy / The news / me / happily / made ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 소식이 나를 행복하게 만들었다.","answer":"The news made me happy. / 5형식","explanation":"happily(부사)는 함정. happy(형용사). me = happy → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ open / Please / the door / keep / openly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 문을 열어 두세요.","answer":"Please keep the door open. / 5형식","explanation":"openly(부사)는 함정. open(형용사). the door = open → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ difficult / I / the test / difficultly / found ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그 시험이 어렵다고 느꼈다.","answer":"I found the test difficult. / 5형식","explanation":"difficultly(부사)는 함정. difficult(형용사). the test = difficult → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ open / Don't / the window / leave / openly ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 창문을 열어 두지 마라.","answer":"Don't leave the window open. / 5형식","explanation":"openly(부사)는 함정. open(형용사). the window = open → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ interesting / She / the book / interestingly / thinks ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그 책이 흥미롭다고 생각한다.","answer":"She thinks the book interesting. / 5형식","explanation":"interestingly(부사)는 함정. interesting(형용사). the book = interesting → 5형식."}]}},{"no":22,"name":"to부정사를 목적격보어로 데려오는 동사","status":"todo","score":null,"notes":[{"topic":"19-3(to부정사)을 목적격 보어로 데리고 오는 동사 10개","answer":"want, ask, tell, expect, allow, advise, order, encourage, force, enable","question_format":"답: __________________________________________________________________ ___","description":["\"목적어가 ~하기를 원하다·시키다·허락하다\"의 의미를 공유하는 동사들이다. 모두 \"목적어 + to부정사\" 구조를 갖는다."],"examples":["My parents want me to study harder. The teacher told us to be quiet. She allowed her son to go out. The medicine enabled him to walk again."],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 to부정사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( want / make / ask / let / tell / see )","answer":"want, ask, tell","explanation":"\"목적어가 ~하기를 원하다·시키다\"의 의미. to부정사 보어를 데려옴."},{"no":2,"level":"기초","question":"다음 중 to부정사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( expect / make / allow / let / advise / see )","answer":"expect, allow, advise","explanation":"expect, allow, advise 모두 목적어 + to부정사 구조."},{"no":3,"level":"기초","question":"다음 중 to부정사를 목적격보어로 데려오는 동사를 3개 고르세요.\n( order / make / encourage / let / force / see )","answer":"order, encourage, force","explanation":"order, encourage, force 모두 목적어 + to부정사 구조."},{"no":4,"level":"기초","question":"\"My parents want me ________ harder.\"의 빈칸에 알맞은 것을 고르세요.\n( study / to study / studying )","answer":"to study","explanation":"want는 to부정사 보어. me to study."},{"no":5,"level":"기초","question":"\"The teacher told us ________ quiet.\"의 빈칸에 알맞은 것을 고르세요.\n( be / to be / being )","answer":"to be","explanation":"tell은 to부정사 보어. us to be quiet."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nMy parents(1)  want(2)  me(3)  study harder(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to study harder","explanation":"want의 목적격보어는 to부정사. study → to study."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe teacher(1)  told(2)  us(3)  be quiet(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to be quiet","explanation":"tell의 목적격보어는 to부정사. be → to be."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  allowed(2)  her son(3)  go out(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to go out","explanation":"allow의 목적격보어는 to부정사. go → to go."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe medicine(1)  enabled(2)  him(3)  walk again(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to walk again","explanation":"enable의 목적격보어는 to부정사. walk → to walk."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nThe coach(1)  encouraged(2)  us(3)  try harder(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to try harder","explanation":"encourage의 목적격보어는 to부정사. try → to try."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to study / want / My parents / me / study / harder ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리 부모님은 내가 더 열심히 공부하기를 원하신다.","answer":"My parents want me to study harder. / 5형식","explanation":"study(원형)는 함정. want는 to부정사 보어 → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to be / told / The teacher / us / be / quiet ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 선생님은 우리에게 조용히 하라고 말씀하셨다.","answer":"The teacher told us to be quiet. / 5형식","explanation":"be(원형)는 함정. tell은 to부정사 보어 → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to go / allowed / She / her son / go / out ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그녀의 아들이 밖에 나가도록 허락했다.","answer":"She allowed her son to go out. / 5형식","explanation":"go(원형)는 함정. allow는 to부정사 보어 → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to walk / enabled / The medicine / him / walk / again ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 약이 그가 다시 걸을 수 있게 해주었다.","answer":"The medicine enabled him to walk again. / 5형식","explanation":"walk(원형)는 함정. enable은 to부정사 보어 → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to try / encouraged / The coach / us / try / harder ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그 코치는 우리가 더 열심히 노력하도록 격려했다.","answer":"The coach encouraged us to try harder. / 5형식","explanation":"try(원형)는 함정. encourage는 to부정사 보어 → 5형식."}]}},{"no":23,"name":"지각동사","status":"todo","score":null,"notes":[{"topic":"19-4(동사원형 또는 분사)를 목적격 보어로 데리고 오는 동사 — 지각동사","answer":"see, watch, look at, hear, listen to, feel, notice, observe","question_format":"답: ____________________________________________________ ___","description":["보고·듣고·느끼는 행위를 나타내는 동사들이다. 지각동사는 목적격보어 자리에 동사원형을 쓴다. 다만 진행 중인 장면을 강조할 때는 -ing를, 목적어가 동작을 당하는 입장일 때는 과거분사(p.p.)를 쓴다."],"examples":["I saw him cross the street. (그가 길을 건너는 것을 처음부터 끝까지 봤다) I saw him crossing the street. (건너고 있는 중간 장면을 봤다) I heard my name called. (내 이름이 불려지는 것을 들었다)"],"warnings":[]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 지각동사를 3개 고르세요.\n( see / want / hear / tell / feel / ask )","answer":"see, hear, feel","explanation":"보고·듣고·느끼는 행위를 나타내는 동사가 지각동사."},{"no":2,"level":"기초","question":"다음 중 지각동사를 3개 고르세요.\n( watch / make / listen to / let / notice / take )","answer":"watch, listen to, notice","explanation":"watch, listen to, notice 모두 지각동사."},{"no":3,"level":"기초","question":"지각동사의 목적격보어 자리에 기본적으로 오는 것을 고르세요.\n( to부정사 / 동사원형 / 분사 )","answer":"동사원형","explanation":"지각동사는 목적격보어 자리에 동사원형을 씀. 진행 강조 시 -ing, 수동의 의미일 때 p.p."},{"no":4,"level":"기초","question":"\"I saw him ________ the street.\"의 빈칸에 알맞은 것을 고르세요.\n( to cross / cross / crossed )","answer":"cross","explanation":"지각동사 see + 목적어 + 동사원형(cross)."},{"no":5,"level":"기초","question":"\"I heard my name ________.\"의 빈칸에 알맞은 것을 고르세요.\n( call / to call / called )","answer":"called","explanation":"목적어(my name)가 동작을 당하는 입장이므로 과거분사(called)."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  saw(2)  him(3)  to cross the street(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / cross the street","explanation":"지각동사 see의 보어는 동사원형. to cross → cross."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nWe(1)  heard(2)  the baby(3)  to cry(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / cry (또는 crying)","explanation":"지각동사 hear의 보어는 동사원형. to cry → cry."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  watched(2)  him(3)  to play soccer(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / play soccer (또는 playing soccer)","explanation":"지각동사 watch의 보어는 동사원형. to play → play."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  felt(2)  someone(3)  to touch my shoulder(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / touch my shoulder","explanation":"지각동사 feel의 보어는 동사원형. to touch → touch."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  heard(2)  my name(3)  call(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / called","explanation":"my name(이름)이 불려지는 입장(수동)이므로 과거분사 called."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ cross / saw / I / him / to cross / the street ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그가 길을 건너는 것을 보았다.","answer":"I saw him cross the street. / 5형식","explanation":"to cross는 함정. 지각동사 see는 동사원형 보어 → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ cry / heard / We / the baby / to cry ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리는 그 아기가 우는 것을 들었다.","answer":"We heard the baby cry. / 5형식","explanation":"to cry는 함정. 지각동사 hear는 동사원형 보어 → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ play / watched / She / him / to play / soccer ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그가 축구하는 것을 지켜봤다.","answer":"She watched him play soccer. / 5형식","explanation":"to play는 함정. 지각동사 watch는 동사원형 보어 → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ touch / felt / I / someone / to touch / my shoulder ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 누군가가 내 어깨를 만지는 것을 느꼈다.","answer":"I felt someone touch my shoulder. / 5형식","explanation":"to touch는 함정. 지각동사 feel은 동사원형 보어 → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ called / heard / I / my name / call ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 내 이름이 불리는 것을 들었다.","answer":"I heard my name called. / 5형식","explanation":"call(원형)은 함정. 이름은 불려지는 입장(수동)이므로 과거분사 called → 5형식."}]}},{"no":24,"name":"사역동사","status":"todo","score":null,"notes":[{"topic":"19-4(동사원형)을 목적격 보어로 데리고 오는 동사 — 사역동사 피라미드","answer":"","question_format":"","description":["사역동사는 \"~하게 하다, ~시키다\"의 의미이다. make·have·let은 동사원형을 보어로 데리고 오지만, get은 예외적으로 to부정사를 데리고 온다는 점이 가장 중요한 시험 포인트이다."],"examples":["My mom made me clean my room. I had the mechanic fix my car. She let her children play outside. I got him to help me with my homework. (to 주의)"],"warnings":["사역동사도 목적어가 동작을 당하는 입장이면 과거분사를 쓴다. I had my hair cut. (내 머리가 잘리도록 시켰다 — 미용사에게) She had her bag stolen. (그녀의 가방이 도난당했다)"]}],"quizzes":{"기초":[{"no":1,"level":"기초","question":"다음 중 사역동사를 4개 모두 고르세요.\n( make / want / have / tell / let / get )","answer":"make, have, let, get","explanation":"사역동사는 \"~하게 하다, ~시키다\"의 의미."},{"no":2,"level":"기초","question":"사역동사 중 강제력이 가장 강한 동사를 고르세요.\n( make / have / let / get )","answer":"make","explanation":"make는 \"강제로 ~하게 하다\"로 가장 강한 강제력."},{"no":3,"level":"기초","question":"사역동사 중 \"허락하다\"의 의미를 가진 동사를 고르세요.\n( make / have / let / get )","answer":"let","explanation":"let은 \"~하도록 허락하다\"의 의미. 가장 약한 강제력."},{"no":4,"level":"기초","question":"사역동사 중 유일하게 to부정사를 데려오는 동사를 고르세요.\n( make / have / let / get )","answer":"get","explanation":"get은 사역동사 중 유일하게 to부정사 보어를 데려옴."},{"no":5,"level":"기초","question":"\"My mom made me ________ my room.\"의 빈칸에 알맞은 것을 고르세요.\n( clean / to clean / cleaning )","answer":"clean","explanation":"make는 동사원형 보어. me clean."}],"중급":[{"no":1,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nMy mom(1)  made(2)  me(3)  to clean my room(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / clean my room","explanation":"make는 동사원형 보어. to clean → clean."},{"no":2,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  had(2)  the mechanic(3)  to fix my car(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / fix my car","explanation":"have는 동사원형 보어. to fix → fix."},{"no":3,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  let(2)  her children(3)  to play outside(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / play outside","explanation":"let은 동사원형 보어. to play → play."},{"no":4,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nI(1)  got(2)  him(3)  help me(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / to help me","explanation":"get은 사역동사 중 유일하게 to부정사. help → to help."},{"no":5,"level":"중급","question":"다음 문장에서 틀린 번호를 찾아 올바르게 고치세요.\nShe(1)  had(2)  her bag(3)  steal(4).\n→ 틀린 번호: (    )    고치기: ____________","answer":"4번 / stolen","explanation":"가방은 도난당하는 입장(수동)이므로 과거분사 stolen."}],"고급":[{"no":1,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ clean / My mom / me / to clean / made / my room ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 우리 엄마는 내가 방을 청소하게 시켰다.","answer":"My mom made me clean my room. / 5형식","explanation":"to clean은 함정. make는 동사원형 보어 → 5형식."},{"no":2,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ fix / had / I / the mechanic / to fix / my car ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 정비사에게 내 차를 고치도록 시켰다.","answer":"I had the mechanic fix my car. / 5형식","explanation":"to fix는 함정. have는 동사원형 보어 → 5형식."},{"no":3,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ play / She / let / her children / to play / outside ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 그녀는 그녀의 아이들이 밖에서 놀도록 허락했다.","answer":"She let her children play outside. / 5형식","explanation":"to play는 함정. let은 동사원형 보어 → 5형식."},{"no":4,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ to help / got / I / him / help / with my homework ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 그가 내 숙제를 도와주도록 했다.","answer":"I got him to help with my homework. / 5형식","explanation":"help(원형)는 함정. get은 사역동사 중 유일하게 to부정사 → 5형식."},{"no":5,"level":"고급","question":"아래의 단어 중 필요한 단어만 골라 영작하세요.\n[ cut / had / I / my hair / to cut ]\n→ 문장: ____________________________   형식: (   )형식\n→ 한국어: 나는 머리를 잘랐다 (머리카락이 잘리도록 시켰다).","answer":"I had my hair cut. / 5형식","explanation":"to cut은 함정. 머리는 잘리는 입장(수동)이므로 과거분사 cut → 5형식."}]}}]};
+
+// 단원 그리드 렌더링
+function renderUnitGrid() {
+  const grid = document.getElementById('unit-grid');
+  if (!grid) return;
+  
+  grid.innerHTML = '';
+  CHAPTER_5FORMS.units.forEach(u => {
+    const cell = document.createElement('div');
+    cell.className = 'unit-cell ' + u.status;
+    cell.onclick = () => openUnit(u.no);
+    
+    const statusText = u.status === 'done' ? '완료'
+                     : u.status === 'progress' ? '진행중'
+                     : '미시작';
+    
+    cell.innerHTML = `
+      <div class="uc-num">${String(u.no).padStart(2,'0')}</div>
+      ${u.score ? `<div class="uc-score">${u.score}점</div>` : ''}
+      <div class="uc-name">${u.name}</div>
+      <div class="uc-status">${statusText}</div>
+    `;
+    grid.appendChild(cell);
+  });
+}
+
+// 단원 클릭 → Stage 진입 (학습-단원 페이지로)
+let CURRENT_UNIT_NO = 1;
+function openUnit(no) {
+  CURRENT_UNIT_NO = no;
+  updateUnitDetailHeader(no);
+  navTo('unit-detail');
+}
+
+function updateUnitDetailHeader(no) {
+  const unit = CHAPTER_5FORMS.units.find(u => u.no === no);
+  if (!unit) return;
+  document.querySelectorAll('.current-unit-no').forEach(el => {
+    el.textContent = String(no).padStart(2, '0');
+  });
+  document.querySelectorAll('.current-unit-name').forEach(el => {
+    el.textContent = unit.name;
+  });
+}
+
+function prevUnit() {
+  if (CURRENT_UNIT_NO > 1) {
+    CURRENT_UNIT_NO -= 1;
+    updateUnitDetailHeader(CURRENT_UNIT_NO);
+  }
+}
+
+function nextUnit() {
+  if (CURRENT_UNIT_NO < 24) {
+    CURRENT_UNIT_NO += 1;
+    updateUnitDetailHeader(CURRENT_UNIT_NO);
+  }
+}
+
+// 페이지 로드시 그리드 렌더
+window.addEventListener('DOMContentLoaded', () => {
+  renderUnitGrid();
+});
+
+// ============ v10: 학습 문제 (기초 5문제) ============
+let LQ_STATE = {
+  unitNo: 1,
+  questions: [],
+  currentIdx: 0,
+  selections: [],   // 각 문제에서 사용자가 고른 답
+  results: [],      // 각 문제 정답 여부 (true/false)
+  showingFeedback: false,
+};
+
+// 학습 문제 시작 (단원 상세에서 호출)
+function startLearnQuiz(unitNo) {
+  const unit = CHAPTER_5FORMS.units.find(u => u.no === unitNo);
+  if (!unit) return;
+  
+  LQ_STATE = {
+    unitNo: unitNo,
+    questions: unit.quizzes['기초'] || [],
+    currentIdx: 0,
+    selections: [],
+    results: [],
+    showingFeedback: false,
+  };
+  
+  // 헤더 업데이트
+  document.querySelectorAll('.lq-unit-no').forEach(el => el.textContent = unitNo);
+  document.querySelectorAll('.lq-unit-name').forEach(el => el.textContent = unit.name);
+  
+  navTo('learn-quiz');
+  renderLqQuestion();
+}
+
+// 문제 텍스트에서 선택지 파싱
+function parseLqOptions(questionText) {
+  // 패턴 1: ( a / b / c )
+  // 패턴 2: 빈칸 ________ 다음에 ( good / well )
+  const match = questionText.match(/\(\s*([^()]+?)\s*\)\s*$/m);
+  if (!match) return null;
+  
+  const optionStr = match[1];
+  const options = optionStr.split('/').map(s => s.trim()).filter(s => s);
+  
+  // 문제 본문은 ( ... ) 제거한 부분
+  const questionBody = questionText.replace(match[0], '').trim();
+  
+  return { options, questionBody };
+}
+
+// 정답에서 N개 골라야 하는지 판단
+function lqNeedCount(answer) {
+  // "look, sound, smell" → 3개
+  // "형용사" → 1개
+  // "good" → 1개
+  if (!answer) return 1;
+  const parts = answer.split(',').map(s => s.trim()).filter(s => s);
+  return parts.length;
+}
+
+// 정답 배열 만들기
+function lqAnswerSet(answer) {
+  return answer.split(',').map(s => s.trim()).filter(s => s);
+}
+
+// 현재 문제 렌더
+function renderLqQuestion() {
+  const q = LQ_STATE.questions[LQ_STATE.currentIdx];
+  if (!q) return;
+  
+  const parsed = parseLqOptions(q.question);
+  const needCount = lqNeedCount(q.answer);
+  
+  // 진행 상태 업데이트
+  const idx = LQ_STATE.currentIdx;
+  const total = LQ_STATE.questions.length;
+  document.getElementById('lq-count').innerHTML = `${idx + 1} <span class="total">/ ${total}</span>`;
+  document.getElementById('lq-progress').style.width = `${(idx + 1) / total * 100}%`;
+  
+  // 점수 표시
+  const correct = LQ_STATE.results.filter(r => r).length;
+  document.getElementById('lq-score-display').textContent = `점수: ${correct}/${total}`;
+  
+  // 문제 카드
+  const area = document.getElementById('lq-question-area');
+  
+  if (!parsed) {
+    // 선택지 없는 경우 (드물게)
+    area.innerHTML = `
+      <div class="q-card">
+        <div class="q-tag">학습 문제 <span class="type-label learn">CHECK</span></div>
+        <div class="q-text">${escapeHtml(q.question)}</div>
+        <div class="q-helper">답을 직접 적어주세요 (정답: ${escapeHtml(q.answer)})</div>
+      </div>
+    `;
+    document.getElementById('lq-submit-btn').disabled = false;
+    return;
+  }
+  
+  // 선택지 UI
+  const guideText = needCount > 1 
+    ? `<div class="lq-guide">${needCount}개 선택하세요</div>` 
+    : `<div class="lq-guide">정답을 고르세요</div>`;
+  
+  const optionsHtml = parsed.options.map((opt, i) => `
+    <button class="lq-option" data-value="${escapeHtml(opt)}" onclick="lqToggleOption(this)">
+      <span class="lq-opt-letter">${String.fromCharCode(65 + i)}</span>
+      <span class="lq-opt-text">${escapeHtml(opt)}</span>
+    </button>
+  `).join('');
+  
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-tag">학습 문제 <span class="type-label learn">기초</span> · Q${q.no}</div>
+      <div class="q-text">${escapeHtml(parsed.questionBody).replace(/\n/g, '<br>')}</div>
+      ${guideText}
+      <div class="lq-options" data-need="${needCount}">
+        ${optionsHtml}
+      </div>
+      <div class="lq-feedback" style="display:none;"></div>
+    </div>
+  `;
+  
+  // 버튼 상태 초기화
+  document.getElementById('lq-submit-btn').style.display = '';
+  document.getElementById('lq-submit-btn').disabled = true;
+  document.getElementById('lq-submit-btn').textContent = '채점하기';
+  document.getElementById('lq-next-btn').style.display = 'none';
+  document.getElementById('lq-skip-btn').style.display = '';
+  
+  LQ_STATE.showingFeedback = false;
+}
+
+// 옵션 클릭 (다중선택 처리)
+function lqToggleOption(btn) {
+  if (LQ_STATE.showingFeedback) return;
+  
+  const container = btn.parentElement;
+  const needCount = parseInt(container.dataset.need);
+  
+  if (needCount === 1) {
+    // 단일 선택
+    container.querySelectorAll('.lq-option').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+  } else {
+    // 다중 선택
+    if (btn.classList.contains('selected')) {
+      btn.classList.remove('selected');
+    } else {
+      const cur = container.querySelectorAll('.lq-option.selected').length;
+      if (cur < needCount) {
+        btn.classList.add('selected');
+      }
+    }
+  }
+  
+  // submit 활성화 조건
+  const selectedCount = container.querySelectorAll('.lq-option.selected').length;
+  document.getElementById('lq-submit-btn').disabled = (selectedCount !== needCount);
+}
+
+// 채점
+function lqSubmit() {
+  const q = LQ_STATE.questions[LQ_STATE.currentIdx];
+  const container = document.querySelector('.lq-options');
+  if (!container) return;
+  
+  const selected = Array.from(container.querySelectorAll('.lq-option.selected'))
+    .map(b => b.dataset.value);
+  const correct = lqAnswerSet(q.answer);
+  
+  // 일치 여부 (순서 무관)
+  const isCorrect = (selected.length === correct.length) &&
+    correct.every(a => selected.includes(a));
+  
+  LQ_STATE.selections.push(selected);
+  LQ_STATE.results.push(isCorrect);
+  LQ_STATE.showingFeedback = true;
+  
+  // 각 옵션에 정답/오답 표시
+  container.querySelectorAll('.lq-option').forEach(b => {
+    const val = b.dataset.value;
+    if (correct.includes(val)) {
+      b.classList.add('correct');
+    } else if (b.classList.contains('selected')) {
+      b.classList.add('wrong');
+    }
+    b.disabled = true;
+  });
+  
+  // 피드백 표시
+  const feedback = document.querySelector('.lq-feedback');
+  feedback.style.display = 'block';
+  feedback.className = 'lq-feedback ' + (isCorrect ? 'good' : 'wrong');
+  feedback.innerHTML = `
+    <div class="fb-result">${isCorrect ? '✅ 정답!' : '❌ 오답'}</div>
+    <div class="fb-correct">정답: <b>${escapeHtml(q.answer)}</b></div>
+    ${q.explanation ? `<div class="fb-explain">💡 ${escapeHtml(q.explanation)}</div>` : ''}
+  `;
+  
+  // 점수 갱신
+  const correctCount = LQ_STATE.results.filter(r => r).length;
+  document.getElementById('lq-score-display').textContent = `점수: ${correctCount}/${LQ_STATE.questions.length}`;
+  
+  // 버튼 전환
+  document.getElementById('lq-submit-btn').style.display = 'none';
+  document.getElementById('lq-skip-btn').style.display = 'none';
+  
+  const nextBtn = document.getElementById('lq-next-btn');
+  nextBtn.style.display = '';
+  nextBtn.textContent = (LQ_STATE.currentIdx + 1 >= LQ_STATE.questions.length) 
+    ? '결과 보기 →' 
+    : '다음 문제 →';
+}
+
+// 다음 문제 또는 결과
+function lqNext() {
+  if (LQ_STATE.currentIdx + 1 >= LQ_STATE.questions.length) {
+    showLqResult();
+  } else {
+    LQ_STATE.currentIdx += 1;
+    renderLqQuestion();
+  }
+}
+
+// 건너뛰기 (틀린 것으로 처리)
+function lqSkip() {
+  LQ_STATE.selections.push([]);
+  LQ_STATE.results.push(false);
+  lqNext();
+}
+
+// 결과 화면
+function showLqResult() {
+  const total = LQ_STATE.questions.length;
+  const correct = LQ_STATE.results.filter(r => r).length;
+  const rate = Math.round(correct / total * 100);
+  
+  document.getElementById('lq-final-score').textContent = correct;
+  document.getElementById('lq-final-rate').textContent = rate;
+  
+  // 별점
+  const stars = Math.round(rate / 20);
+  document.getElementById('lq-final-stars').textContent = 
+    '★'.repeat(stars) + '☆'.repeat(5 - stars);
+  
+  // 문제별 결과
+  const detailHtml = LQ_STATE.questions.map((q, i) => {
+    const r = LQ_STATE.results[i];
+    const sel = LQ_STATE.selections[i].join(', ') || '(건너뜀)';
+    return `
+      <div class="lq-detail-row ${r ? 'ok' : 'no'}">
+        <span class="d-no">Q${q.no}</span>
+        <span class="d-mark">${r ? '✓' : '✗'}</span>
+        <span class="d-content">
+          <div class="d-q">${escapeHtml(q.question.split('\\n')[0])}</div>
+          <div class="d-a">내 답: ${escapeHtml(sel)} / 정답: ${escapeHtml(q.answer)}</div>
+        </span>
+      </div>
+    `;
+  }).join('');
+  
+  document.getElementById('lq-detail-list').innerHTML = detailHtml;
+  
+  navTo('learn-result');
+}
+
+// 다시 풀기
+function lqRetry() {
+  startLearnQuiz(LQ_STATE.unitNo);
+}
+
+// HTML 이스케이프 헬퍼
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
+
 const history_stack = ['main'];
+const SIM_PAGES = ['login','signup','waiting','main','ranking','notes','teacher-note',
+               'unit-detail','learn-quiz','learn-result',
+               'test-chapter','difficulty','quiz-mastery','result','extra',
+               'teacher-signups','teacher-students','teacher-results','teacher-tests','teacher-content'];
 
 function navTo(page){
   const current = history_stack[history_stack.length - 1];
   if(current !== page) history_stack.push(page);
   
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.getElementById('page-'+page).classList.add('active');
+  const target = document.getElementById('page-'+page);
+  if(target) target.classList.add('active');
   
   document.querySelectorAll('.sim-nav button').forEach(b => b.classList.remove('active'));
-  const pages = ['main','ranking','notes','learn-chapter','learn-quiz',
-                 'test-chapter','difficulty','quiz-mastery','result','extra'];
-  const idx = pages.indexOf(page);
+  const idx = SIM_PAGES.indexOf(page);
   if(idx >= 0) document.querySelectorAll('.sim-nav button')[idx].classList.add('active');
+  
+  // v10: 학습 문제 페이지 진입 시 데이터 없으면 자동 로드
+  if (page === 'learn-quiz' && (!LQ_STATE || LQ_STATE.questions.length === 0)) {
+    setTimeout(() => startLearnQuiz(CURRENT_UNIT_NO || 8), 50);
+    return;
+  }
   
   window.scrollTo(0, 0);
 }
@@ -1786,9 +4290,7 @@ function navBack(){
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     document.getElementById('page-'+prev).classList.add('active');
     document.querySelectorAll('.sim-nav button').forEach(b => b.classList.remove('active'));
-    const pages = ['main','ranking','notes','learn-chapter','learn-quiz',
-                   'test-chapter','difficulty','quiz-mastery','result','extra'];
-    const idx = pages.indexOf(prev);
+    const idx = SIM_PAGES.indexOf(prev);
     if(idx >= 0) document.querySelectorAll('.sim-nav button')[idx].classList.add('active');
     window.scrollTo(0, 0);
   }
@@ -1835,6 +4337,40 @@ function closeVideoBg(e){
 function scrollTo(id){
   const el = document.getElementById(id);
   if(el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// 선생님 페이지: 칩 토글
+function toggleChip(el){
+  el.classList.toggle('on');
+}
+
+// 학생 정보 수정 모달
+function openEditModal(name){
+  document.getElementById('edit-modal-name').textContent = name + ' 학생 정보 수정';
+  document.getElementById('editModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeEditModal(){
+  document.getElementById('editModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function closeEditBg(e){
+  if(e.target.id === 'editModal') closeEditModal();
+}
+
+
+// 콘텐츠 관리 모달
+function openCmgrModal(title){
+  document.getElementById('cmgr-modal-title').textContent = title;
+  document.getElementById('cmgrModal').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+function closeCmgrModal(){
+  document.getElementById('cmgrModal').classList.remove('show');
+  document.body.style.overflow = '';
+}
+function closeCmgrBg(e){
+  if(e.target.id === 'cmgrModal') closeCmgrModal();
 }
 
 window.addEventListener('scroll', () => {
