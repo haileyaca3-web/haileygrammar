@@ -4295,6 +4295,42 @@ body {
   .wq-korean-row .wq-korean { font-size: 18px; }
 }
 
+
+/* ============ v10: 정리 - 답 토글 ============ */
+.nb-answer {
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  user-select: none;
+}
+.nb-answer.hidden-answer {
+  color: transparent;
+  background: rgba(0,0,0,0.04);
+  border: 1.5px dashed rgba(184,90,62,0.4);
+  text-align: center;
+}
+.nb-answer.hidden-answer::before {
+  content: '답 ';
+  color: var(--rust);
+  opacity: 0.6;
+}
+.nb-answer.hidden-answer::after {
+  content: '👆 클릭해서 답 보기';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Gowun Batang', serif;
+  font-size: 12px;
+  color: var(--rust);
+  font-weight: 700;
+  pointer-events: none;
+}
+.nb-answer.revealed {
+  background: rgba(122,138,103,0.08);
+  border-left: 3px solid var(--moss);
+}
+
 </style>
 </head>
 <body>
@@ -5462,10 +5498,8 @@ body {
       </div>
     </div>
 
-    <div class="quiz-bottom">
-      <button class="btn-secondary">더 쉽게</button>
-      <button class="btn-secondary">더 어렵게</button>
-      <button class="btn-primary" onclick="navTo('quiz-mastery')">시작 →</button>
+    <div class="quiz-bottom" style="grid-template-columns: 1fr;">
+      <button class="btn-primary" onclick="navTo('quiz-mastery')" style="width:100%; padding:18px;">시작하기 →</button>
     </div>
   </div>
 </div>
@@ -5901,18 +5935,9 @@ She looks like her mother.</textarea>
       <button class="td-back" onclick="navTo('all')">←</button>
       <div class="td-title">전체 테스트</div>
     </div>
-    <div class="td-intro">난이도를 선택하세요</div>
+    <div class="td-intro">테스트 난이도를 선택하세요</div>
     
     <div class="td-options">
-      <button class="td-opt td-basic" onclick="startAllTestByDifficulty('기초')">
-        <div class="td-opt-badge">🟢</div>
-        <div class="td-opt-info">
-          <div class="td-opt-title">기초</div>
-          <div class="td-opt-desc">개념 확인 · 24단원 × 5문제</div>
-          <div class="td-opt-count">총 120문제</div>
-        </div>
-      </button>
-      
       <button class="td-opt td-mid" onclick="startAllTestByDifficulty('중급')">
         <div class="td-opt-badge">🟡</div>
         <div class="td-opt-info">
@@ -5933,7 +5958,7 @@ She looks like her mother.</textarea>
     </div>
     
     <div class="td-note">
-      난이도별로 24단원 전체 문제를 풀어볼 수 있어요.
+      💡 기초 문제는 [전체 학습하기]에서 연습할 수 있어요.
     </div>
   </div>
 </div>
@@ -7037,7 +7062,7 @@ function renderNoteBlock(n) {
     html += `<div class="nb-question">${escapeHtml(n.question_format)}</div>`;
   }
   if (n.answer) {
-    html += `<div class="nb-answer">${escapeHtml(n.answer)}</div>`;
+    html += `<div class="nb-answer hidden-answer" onclick="toggleAnswer(this)">${escapeHtml(n.answer)}</div>`;
   }
   
   // 설명
@@ -7936,6 +7961,13 @@ function showTeacherLogin(){
     idInput.value = 'hailey';
     if (pwInput) pwInput.focus();
   }
+}
+
+
+// v10: 정리 답 토글
+function toggleAnswer(elem){
+  elem.classList.remove('hidden-answer');
+  elem.classList.add('revealed');
 }
 
 window.navTo = function(page){
