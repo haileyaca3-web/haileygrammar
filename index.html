@@ -5969,6 +5969,208 @@ const CLIMB_MASTER = {"level":"Climb","level_name":"중등부","total_chapters":
 
 // 현재 선택된 챕터 (기본: 5형식)
 let CURRENT_CHAPTER_IDX = 0;
+
+
+// ============================================================
+// v11: 실제 데이터 로더
+// ============================================================
+window.HAILEY_LEVEL_DATA = window.HAILEY_LEVEL_DATA || {};
+
+// 현재 활성 챕터 (학습/테스트 시 사용)
+let CURRENT_CHAPTER = null;
+let CURRENT_UNIT = null;
+
+// 레벨별 데이터 파일 로드 (1회만)
+const _loadedLevels = new Set();
+async function loadLevelData(level){
+  if (_loadedLevels.has(level)) return window.HAILEY_LEVEL_DATA[level] || [];
+  
+  try {
+    // 같은 폴더의 data_js/ 하위
+    const res = await fetch(`data_js/${level}.js`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const text = await res.text();
+    // text는 "window.HAILEY_LEVEL_DATA = ...; window.HAILEY_LEVEL_DATA['xxx'] = [...]"
+    // eval로 실행 (간단하게)
+    eval(text);
+    _loadedLevels.add(level);
+    return window.HAILEY_LEVEL_DATA[level] || [];
+  } catch(err) {
+    console.error(`레벨 ${level} 로드 실패:`, err);
+    return [];
+  }
+}
+
+// 학생 배정 레벨/챕터에 따라 데이터 로드 + 챕터 칩 렌더
+async function loadStudentChapters(){
+  if (!currentUser) return [];
+  
+  // 학생: levels 배열 (예: ['spark', 'path_climb'])
+  // 선생님(ALL): 모든 레벨 로드
+  let levels = currentUser.levels;
+  if (levels === 'ALL') levels = ['spark', 'path_climb', 'summit_1', 'summit_2'];
+  if (!Array.isArray(levels)) levels = [];
+  
+  // 모든 레벨 데이터 로드
+  const all = [];
+  for (const lv of levels) {
+    const chs = await loadLevelData(lv);
+    chs.forEach(ch => {
+      // 배정받은 챕터만 (chapter id 비교, 또는 "level::ch_id" 형식)
+      const fullId = `${lv}::${ch.chapter_id}`;
+      const myChapters = currentUser.chapters;
+      if (myChapters === 'ALL' || 
+          (Array.isArray(myChapters) && (myChapters.includes(fullId) || myChapters.includes(ch.chapter_id)))) {
+        all.push({ ...ch, _level: lv, _fullId: fullId });
+      }
+    });
+  }
+  
+  return all;
+}
+
+// 현재 학생에게 배정된 챕터 목록 (캐시)
+let MY_CHAPTERS = [];
+
+// 메인 화면 진입 시 호출
+async function initStudentMain(){
+  if (!currentUser || currentUser.isTeacher) return;
+  
+  MY_CHAPTERS = await loadStudentChapters();
+  
+  if (MY_CHAPTERS.length === 0) {
+    // 배정된 챕터 없음
+    const chipsContainer = document.getElementById('chapter-chips');
+    if (chipsContainer) {
+      chipsContainer.innerHTML = '<div style="color:var(--ink-soft); padding:10px;">배정된 챕터가 없습니다. 선생님께 문의하세요.</div>';
+    }
+    return;
+  }
+  
+  renderChapterChips();
+  
+  // 첫 챕터 자동 선택
+  if (MY_CHAPTERS.length > 0) {
+    selectChapter(MY_CHAPTERS[0]._fullId);
+  }
+}
+
+// 챕터 칩 렌더링 (메인 상단)
+function renderChapterChips(){
+  const container = document.getElementById('chapter-chips');
+  if (!container) return;
+  
+  container.innerHTML = MY_CHAPTERS.map(ch => `
+    <button class="ch-chip" data-chid="${ch._fullId}" onclick="selectChapter('${ch._fullId}')">
+      ${escapeHtml(ch.chapter_name)}
+    </button>
+  `).join('');
+}
+
+// 챕터 선택 시
+function selectChapter(fullId){
+  const ch = MY_CHAPTERS.find(c => c._fullId === fullId);
+  if (!ch) return;
+  
+  CURRENT_CHAPTER = ch;
+  
+  // 칩 active 갱신
+  document.querySelectorAll('.ch-chip').forEach(c => {
+    c.classList.toggle('active', c.dataset.chid === fullId);
+  });
+  
+  // 메인 화면의 챕터 정보 갱신
+  updateMainChapterInfo();
+  
+  // 단원 그리드 갱신
+  renderUnitGrid();
+}
+
+function updateMainChapterInfo(){
+  if (!CURRENT_CHAPTER) return;
+  const ch = CURRENT_CHAPTER;
+  
+  // 메인 화면 곳곳의 챕터명 갱신
+  document.querySelectorAll('[data-cur-chapter]').forEach(el => {
+    el.textContent = ch.chapter_name;
+  });
+  
+  // 학습 단계 그리드의 제목 등 (있다면)
+  // 단원 수도 갱신
+  document.querySelectorAll('[data-cur-unit-count]').forEach(el => {
+    el.textContent = ch.units.length;
+  });
+  
+  // "전체 학습/테스트" 부제
+  const total_q_basic = ch.units.reduce((s, u) => s + (u.quizzes?.기초?.length || 0), 0)
+                       + (ch.chapter_quizzes?.기초?.length || 0);
+  const total_q_mid = ch.units.reduce((s, u) => s + (u.quizzes?.중급?.length || 0), 0)
+                     + (ch.chapter_quizzes?.중급?.length || 0);
+  const total_q_adv = ch.units.reduce((s, u) => s + (u.quizzes?.고급?.length || 0), 0)
+                     + (ch.chapter_quizzes?.고급?.length || 0);
+  
+  document.querySelectorAll('[data-cur-basic]').forEach(el => el.textContent = total_q_basic);
+  document.querySelectorAll('[data-cur-mid]').forEach(el => el.textContent = total_q_mid);
+  document.querySelectorAll('[data-cur-adv]').forEach(el => el.textContent = total_q_adv);
+}
+
+// 단원 그리드 렌더링
+function renderUnitGrid(){
+  const grid = document.getElementById('unit-grid');
+  if (!grid || !CURRENT_CHAPTER) return;
+  
+  const ch = CURRENT_CHAPTER;
+  grid.innerHTML = ch.units.map((u, idx) => `
+    <div class="unit-card" data-unit-no="${u.unit_no}" onclick="onUnitClick(${u.unit_no})">
+      <div class="uc-num">${u.unit_no}</div>
+      <div class="uc-name">${escapeHtml(u.unit_name)}</div>
+      <input type="checkbox" class="uc-check" onclick="event.stopPropagation(); toggleUnitSelect(${u.unit_no}, this.checked)">
+    </div>
+  `).join('');
+}
+
+function onUnitClick(unitNo){
+  if (!CURRENT_CHAPTER) return;
+  const unit = CURRENT_CHAPTER.units.find(u => u.unit_no === unitNo);
+  if (!unit) return;
+  CURRENT_UNIT = unit;
+  // 단원 상세 페이지로
+  if (typeof navTo === 'function') navTo('unit-detail');
+  // 단원 정보 갱신은 다음 단계에서
+}
+
+// 선택된 단원들 추적
+let SELECTED_UNITS = new Set();
+function toggleUnitSelect(no, checked){
+  if (checked) SELECTED_UNITS.add(no);
+  else SELECTED_UNITS.delete(no);
+  
+  // 선택 바 표시 / 숨김
+  const bar = document.getElementById('selection-bar');
+  const countEl = document.getElementById('sb-count');
+  if (bar) {
+    bar.style.display = SELECTED_UNITS.size > 0 ? 'flex' : 'none';
+  }
+  if (countEl) countEl.textContent = SELECTED_UNITS.size;
+}
+
+function clearSelection(){
+  SELECTED_UNITS.clear();
+  document.querySelectorAll('.uc-check').forEach(c => c.checked = false);
+  const bar = document.getElementById('selection-bar');
+  if (bar) bar.style.display = 'none';
+}
+
+// HTML escape (이미 있을 가능성 있어서 안전 처리)
+if (typeof escapeHtml === 'undefined') {
+  window.escapeHtml = function(s){
+    if (s === null || s === undefined) return '';
+    return String(s).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
+  };
+}
+
 let CHAPTER_5FORMS = CLIMB_MASTER.chapters[CURRENT_CHAPTER_IDX];
 
 // 챕터 전환 함수
@@ -7721,9 +7923,9 @@ async function doLogin(){
     await loadPendingList();
     navTo('teacher-signups');
   } else {
-    // 학생 → 메인 화면
-    // 학생 이름 갱신
+    // 학생 → 데이터 로드 + 메인 화면
     document.querySelectorAll('.student-name').forEach(el => el.textContent = r.name);
+    await initStudentMain();
     navTo('main');
   }
 }
